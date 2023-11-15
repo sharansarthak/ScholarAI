@@ -9,6 +9,19 @@ from recordVideo import record_video
 app = Flask(__name__)
 from moviepy.editor import VideoFileClip, AudioFileClip
 from speechToText import extract_audio_from_video, transcribe_audio
+from openai import OpenAI
+import os
+
+
+# Read the API key from a file
+with open("APIKEY", "r") as file:
+    api_key = file.read().strip()
+
+# Set the API key as an environment variable
+os.environ["OPENAI_API_KEY"] = api_key
+
+client = OpenAI()
+
 
 @app.route('/process_media', methods=['POST'])
 def process_media():
@@ -23,3 +36,16 @@ def process_media():
 
     return jsonify({"transcription": transcription})
 
+@app.route('/request_chatgpt', methods=['POST'])
+def chatgpt():
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Who won the world series in 2020?"},
+            {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
+            {"role": "user", "content": "Where was it played?"}
+        ]
+    )
+
+    print(response.choices[0].message.content)
