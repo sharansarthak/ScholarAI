@@ -45,10 +45,10 @@ export default function TrackingPage() {
 
   useEffect(() => {
     // Checks for token in storage, indicating signed in.
-    // if (localStorage.getItem("token") == null) {
-    //   window.location.href = "http://localhost:3000/login";
-    // }
-    // getLists();
+    if (localStorage.getItem("token") == null) {
+      window.location.href = "http://localhost:3000/login";
+    }
+    getLists();
   }, []);
 
   async function getLists() {
