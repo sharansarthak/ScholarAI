@@ -1,13 +1,13 @@
 
 import threading
-from moviepy.editor import VideoFileClip, AudioFileClip
+# from moviepy.editor import VideoFileClip, AudioFileClip
 from flask import Flask, request, jsonify
 import os
-from speechToText import transcribe_audio
-from recordAudio import record_audio
-from recordVideo import record_video   
-from moviepy.editor import VideoFileClip, AudioFileClip
-from speechToText import extract_audio_from_video, transcribe_audio
+# from speechToText import transcribe_audio
+# from recordAudio import record_audio
+# from recordVideo import record_video   
+# from moviepy.editor import VideoFileClip, AudioFileClip
+#from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
 
@@ -24,18 +24,18 @@ os.environ["OPENAI_API_KEY"] = api_key
 client = OpenAI()
 
 
-@app.route('/process_media', methods=['POST'])
-def process_media():
-    media_path = request.json.get('media_path')
-    audio_path = media_path.replace('.mp4', '.wav')  # Assuming .mp4, adjust as necessary
+# @app.route('/process_media', methods=['POST'])
+# def process_media():
+#     media_path = request.json.get('media_path')
+#     audio_path = media_path.replace('.mp4', '.wav')  # Assuming .mp4, adjust as necessary
 
-    # Extract audio from the video
-    extract_audio_from_video(media_path, audio_path)
+#     # Extract audio from the video
+#     extract_audio_from_video(media_path, audio_path)
 
-    # Now you can call your transcription function
-    transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
+#     # Now you can call your transcription function
+#     transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
 
-    return jsonify({"transcription": transcription})
+#     return jsonify({"transcription": transcription})
 
 @app.route('/request_chatgpt', methods=['POST'])
 def chatgpt():
@@ -53,13 +53,73 @@ def chatgpt():
 
     write_chat(username, messages)
 
-def write_chat(username, request):    
-    for message in request:
-        db.collection('users').document(username).collection('chat').add({'message':message})
+@app.route('/add_scholarship', methods=['POST'])
+def add_scholarship():
+    # Get JSON data from the request
+    data = request.json
+    
+    # Extract username and scholarships from the JSON data
+    username = data.get('username')
+    scholarships = data.get('scholarships', [])
 
-def read_chat(username):
+    # Validate that both username and scholarships are present
+    if not username or not scholarships:
+        return jsonify({'error': 'Invalid request. Missing username or scholarships.'}), 400
+
+    # Add scholarships to the database
+    for scholarship in scholarships:
+        db.collection('users').document(username).collection('scholarship').add(scholarship)
+
+    return jsonify({'success': True})
+
+@app.route('/get_all_scholarship', methods=['GET'])
+def get_all_scholarship():
+    # Get username from the query parameters
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    # Retrieve scholarships from the database
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = [doc.to_dict() for doc in docs]
+
+    return jsonify(result)
+
+@app.route('/write_chat', methods=['POST'])
+def write_chat():
+    # Get JSON data from the request
+    data = request.json
+    
+    # Extract username and messages from the JSON data
+    username = data.get('username')
+    messages = data.get('messages', [])
+
+    # Validate that both username and messages are present
+    if not username or not messages:
+        return jsonify({'error': 'Invalid request. Missing username or messages.'}), 400
+
+    # Add messages to the chat in the database
+    for message in messages:
+        db.collection('users').document(username).collection('chat').add({'message': message})
+
+    return jsonify({'success': True})
+
+@app.route('/read_chat', methods=['GET'])
+def read_chat():
+    # Get username from the query parameters
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    # Retrieve messages from the chat in the database
     docs = db.collection('users').document(username).collection('chat').get()
-    result = []
-    for doc in docs:
-        result.append(doc.to_dict()['message'])
-    return result
+    result = [doc.to_dict()['message'] for doc in docs]
+
+    return jsonify(result)
+
+if __name__ == '__main__':
+    app.run(debug=True)
