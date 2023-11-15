@@ -2,7 +2,6 @@ import cv2
 import pyaudio
 import wave
 import threading
-import datetime
 
 def record_audio(filename, duration):
     # Audio recording settings
@@ -74,4 +73,19 @@ video_thread.start()
 audio_thread.join()
 video_thread.join()
 
-# Post-processing to synchronize audio and video can be done here
+
+def combine_audio_video(audio_filename, video_filename, output_filename):
+    # Load the audio file
+    audio_clip = AudioFileClip(audio_filename)
+
+    # Load the video file
+    video_clip = VideoFileClip(video_filename)
+
+    # Set the audio of the video clip as the audio file
+    final_clip = video_clip.set_audio(audio_clip)
+
+    # Write the result to a file
+    final_clip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
+
+# Example usage
+combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4')
