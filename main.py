@@ -128,6 +128,7 @@ def get_all_scholarships_brief():
         # Remove "Questions" and "Answers" fields if they exist
         scholarship_data.pop('Questions', None)
         scholarship_data.pop('Answers', None)
+        scholarship_data.pop('Description', None)
         result.append(scholarship_data)
 
     return jsonify(result)
