@@ -203,21 +203,26 @@ def update_scholarship_answer():
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
+        print(data)
+
         # Validate required fields
         if not username or not scholarship_title or index is None or updated_answer is None:
             return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
 
         # Retrieve the scholarship document
         scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
-        scholarship_doc = scholarship_ref.get()
-
+        scholarship_doc = scholarship_ref.get().to_dict()
+        print(scholarship_doc)
         # Check if the scholarship exists
         if not scholarship_doc.exists:
             return jsonify({'error': 'Scholarship not found.'}), 404
 
         # Update the 'Answers' field at the specified index
+        print("poop5")
         current_answers = scholarship_doc.get('Answers', [])
+        print("poop")
         if 0 <= index < len(current_answers):
+            print(index)
             current_answers[index] = updated_answer
             scholarship_ref.update({'Answers': current_answers})
             return jsonify({'success': True})

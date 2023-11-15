@@ -4,7 +4,7 @@ import Axios from 'axios';
 import "../Styles/ApplicationReview.css";
 
 export default function ApplicationReview() {
-  const [scholarshipName, setscholarshipName] = useState("");
+  const [scholarshipName, setscholarshipName] = useState("Community Leadership Scholarship");
   const [scholarshipDescription, setscholarshipDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
@@ -16,16 +16,25 @@ export default function ApplicationReview() {
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
-          setscholarshipDescription(jsonData[0].Description);
-          setscholarshipName(jsonData[0].Title);
-          setQuestions(jsonData[0].Questions);
-          setResponses(jsonData[0].Answers);
-        };
+          // Find the element with title "Scholarshipname"
+          const scholarshipData = jsonData.find(item => item.Title === scholarshipName);
+          console.log(jsonData);
+          console.log(scholarshipData);
+          if (scholarshipData) {
+            setscholarshipDescription(scholarshipData.Description);
+            setscholarshipName(scholarshipData.Title);
+            setQuestions(scholarshipData.Questions);
+            setResponses(scholarshipData.Answers);
+          } else {
+            console.error("Scholarship with title 'Scholarshipname' not found in jsonData");
+          }
+        }
       })
       .catch((error) => {
         console.error("Error fetching scholarship description:", error);
       });
   }, []);
+  
 
   const handleEditClick = (index) => {
     setEditingIndex(index);
@@ -46,8 +55,9 @@ export default function ApplicationReview() {
     try {
       await Axios.post("http://127.0.0.1:5000/update_scholarship_answer", {
         username: "zeeshan",
-        questionIndex: index, // Assuming the server expects the question index
-        answer: editedText,
+        title: scholarshipName,
+        index: index, // Assuming the server expects the question index
+        updated_answer: editedText,
       });
 
       // Handle success if needed
