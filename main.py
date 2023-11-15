@@ -53,39 +53,6 @@ def chatgpt():
 
     write_chat(username, messages)
 
-@app.route('/add_scholarship', methods=['POST'])
-def add_scholarship():
-    # Get JSON data from the request
-    data = request.json
-    
-    # Extract username and scholarships from the JSON data
-    username = data.get('username')
-    scholarships = data.get('scholarships', [])
-
-    # Validate that both username and scholarships are present
-    if not username or not scholarships:
-        return jsonify({'error': 'Invalid request. Missing username or scholarships.'}), 400
-
-    # Add scholarships to the database
-    for scholarship in scholarships:
-        db.collection('users').document(username).collection('scholarship').add(scholarship)
-
-    return jsonify({'success': True})
-
-@app.route('/get_all_scholarship', methods=['GET'])
-def get_all_scholarship():
-    # Get username from the query parameters
-    username = request.args.get('username')
-
-    # Validate that username is present
-    if not username:
-        return jsonify({'error': 'Invalid request. Missing username.'}), 400
-
-    # Retrieve scholarships from the database
-    docs = db.collection('users').document(username).collection('scholarship').get()
-    result = [doc.to_dict() for doc in docs]
-
-    return jsonify(result)
 
 @app.route('/write_chat', methods=['POST'])
 def write_chat():
