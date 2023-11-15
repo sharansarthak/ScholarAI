@@ -1,98 +1,25 @@
-import cv2
-import pyaudio
-import wave
+
 import threading
 from moviepy.editor import VideoFileClip, AudioFileClip
-import datetime
-
-def record_audio(filename, duration):
-    # Audio recording settings
-    chunk = 1024
-    fmt = pyaudio.paInt16
-    channels = 1
-    sample_rate = 44100
-
-    # Initialize PyAudio
-    audio = pyaudio.PyAudio()
-
-    # Open stream
-    stream = audio.open(format=fmt, channels=channels, rate=sample_rate, input=True, frames_per_buffer=chunk)
-
-    print("Recording audio...")
-    frames = []
-
-    # Record for the set duration
-    for i in range(0, int(sample_rate / chunk * duration)):
-        data = stream.read(chunk)
-        frames.append(data)
-
-    # Stop and close the stream
-    stream.stop_stream()
-    stream.close()
-    audio.terminate()
-
-    # Save the recorded data as a WAV file
-    with wave.open(filename, 'wb') as wf:
-        wf.setnchannels(channels)
-        wf.setsampwidth(audio.get_sample_size(fmt))
-        wf.setframerate(sample_rate)
-        wf.writeframes(b''.join(frames))
-
-def record_video(filename, duration=10):
-    # Initialize the video capture object
-    cap = cv2.VideoCapture(0)
-
-    # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V') # Using MP4 format
-    out = cv2.VideoWriter(filename, fourcc, 30.0, (640, 480)) # Adjusted to 30 fps
-
-    start_time = datetime.datetime.now()
-    print("Recording video...")
-
-    while (datetime.datetime.now() - start_time).seconds < duration:
-        ret, frame = cap.read()
-        if ret:
-            out.write(frame)
-            cv2.imshow('Recording...', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-        else:
-            break
-
-    # Release everything
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
-
-# Run audio and video recording in parallel
-duration = 10  # seconds
-audio_thread = threading.Thread(target=record_audio, args=('output_audio.wav', duration))
-video_thread = threading.Thread(target=record_video, args=('output_video.mp4', duration))
-
-audio_thread.start()
-video_thread.start()
-
-audio_thread.join()
-video_thread.join()
-
+from flask import Flask, request, jsonify
+import os
+from speechToText import transcribe_audio
+from recordAudio import record_audio
+from recordVideo import record_video   
+app = Flask(__name__)
 from moviepy.editor import VideoFileClip, AudioFileClip
+from speechToText import extract_audio_from_video, transcribe_audio
 
-def combine_audio_video(audio_filename, video_filename, output_filename, audio_delay=0):
-    # Load the audio and video files
-    audio_clip = AudioFileClip(audio_filename)
-    video_clip = VideoFileClip(video_filename)
+@app.route('/process_media', methods=['POST'])
+def process_media():
+    media_path = request.json.get('media_path')
+    audio_path = media_path.replace('.mp4', '.wav')  # Assuming .mp4, adjust as necessary
 
-    # Apply the audio delay
-    if audio_delay > 0:
-        audio_clip = audio_clip.set_start(audio_delay)
-    elif audio_delay < 0:
-        video_clip = video_clip.set_start(-audio_delay)
+    # Extract audio from the video
+    extract_audio_from_video(media_path, audio_path)
 
-    # Set the audio of the video clip as the modified audio file
-    final_clip = video_clip.set_audio(audio_clip)
+    # Now you can call your transcription function
+    transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
 
-    # Write the result to a file
-    final_clip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
+    return jsonify({"transcription": transcription})
 
-# Example usage with a 1.5-second delay
-combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=2.0)
