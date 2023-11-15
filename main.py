@@ -95,4 +95,4 @@ def combine_audio_video(audio_filename, video_filename, output_filename, audio_d
     final_clip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
 
 # Example usage with a 1.5-second delay
-combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=-1.5)
+combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=2.0)
