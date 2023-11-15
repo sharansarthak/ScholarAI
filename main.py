@@ -6,12 +6,13 @@ import os
 from speechToText import transcribe_audio
 from recordAudio import record_audio
 from recordVideo import record_video   
-app = Flask(__name__)
 from moviepy.editor import VideoFileClip, AudioFileClip
 from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
 
+
+app = Flask(__name__)
 
 # Read the API key from a file
 with open("APIKEY", "r") as file:
@@ -38,14 +39,27 @@ def process_media():
 
 @app.route('/request_chatgpt', methods=['POST'])
 def chatgpt():
+
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+    messages_to_send = read_chat(username) + [request_message_formatted]
+
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": "Who won the world series in 2020?"},
-            {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
-            {"role": "user", "content": "Where was it played?"}
-        ]
+        messages=messages_to_send
     )
 
-    print(response.choices[0].message.content)
+    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
+    messages = [request_message_formatted]+[response_message_formatted]
+
+    write_chat(username, messages)
+
+def write_chat(username, request):    
+    for message in request:
+        db.collection('users').document(username).collection('chat').add({'message':message})
+
+def read_chat(username):
+    docs = db.collection('users').document(username).collection('chat').get()
+    result = []
+    for doc in docs:
+        result.append(doc.to_dict()['message'])
+    return result
