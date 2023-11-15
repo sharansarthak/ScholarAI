@@ -43,27 +43,26 @@ export default function ApplicationReview() {
         //   window.location.href = "http://127.0.0.1:5000/login";
         // }
 
-        // Axios.get("http://127.0.0.1:5000/api/getScholarshipDescription", {})
-        // .then((res) => {
-        const res = exampleDataPopular;
-        const jsonData = res;
-    
-        if(jsonData.length > 0){
-            setscholarshipDescription(jsonData[0].description);
-            setscholarshipName(jsonData[0].scholarshipName);
-            setQuestions(jsonData[0].questions);
-            setResponses(jsonData[0].responses);
-            // console.log(scholarshipName,scholarshipDescription);
-        };
+        Axios.get("http://127.0.0.1:5000/get_all_scholarships", {})
+        .then((res) => {
+          const jsonData = res.data;
+      
+          if(jsonData.length > 0){
+              setscholarshipDescription(jsonData[0].Title);
+              setscholarshipName(jsonData[0].Title);
+              setQuestions(jsonData[0].Questions);
+              setResponses(jsonData[0].Answers);
+              console.log(scholarshipName,scholarshipDescription);
+          };
 
         // for (let i = 0; i < questions.length; i++){
         //     console.log(questions[i]);
         // };
 
-        // })
-        // .catch((error) => {
-        // console.error("Error fetching scholarship description:", error);
-        // });
+        })
+        .catch((error) => {
+        console.error("Error fetching scholarship description:", error);
+        });
 
 
     }, []);
