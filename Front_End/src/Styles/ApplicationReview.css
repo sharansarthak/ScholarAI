@@ -1,0 +1,33 @@
+/* Styles for ApplicationReview component */
+
+.card {
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 20px 10%;
+    padding: 0 5%;
+    gap: 5%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.dashboardSubHeader{
+    font-size: 35px;
+    font-family: 'Ubuntu';
+    padding-top: 3%;
+    padding-bottom: 1%;
+    color: rgb(80, 80, 80);
+}
+
+.questiondiv{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ColumnSubHeader{
+    font-family: 'Poppins';
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.589);
+  }
