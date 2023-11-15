@@ -1,0 +1,8 @@
+ace-axon-345319-373465ce4bf2.json
+APIKEY
+hhh2023-a2da1-firebase-adminsdk-h2zwt-5ae5f17a8b.json
+ace-axon-345319-373465ce4bf2.json
+
+# Ignore Python-related files
+*.pyc
+__pycache__/

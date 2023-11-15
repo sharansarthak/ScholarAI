@@ -1,76 +1,149 @@
-import cv2
-import pyaudio
-import wave
+
 import threading
+# from moviepy.editor import VideoFileClip, AudioFileClip
+from flask import Flask, request, jsonify
+import os
+# from speechToText import transcribe_audio
+# from recordAudio import record_audio
+# from recordVideo import record_video   
+# from moviepy.editor import VideoFileClip, AudioFileClip
+#from speechToText import extract_audio_from_video, transcribe_audio
+from openai import OpenAI
+import os
 
-def record_audio(filename, duration):
-    # Audio recording settings
-    chunk = 1024
-    fmt = pyaudio.paInt16
-    channels = 1
-    sample_rate = 44100
 
-    # Initialize PyAudio
-    audio = pyaudio.PyAudio()
+app = Flask(__name__)
 
-    # Open stream
-    stream = audio.open(format=fmt, channels=channels, rate=sample_rate, input=True, frames_per_buffer=chunk)
+# Read the API key from a file
+with open("APIKEY", "r") as file:
+    api_key = file.read().strip()
 
-    print("Recording audio...")
-    frames = []
+# Set the API key as an environment variable
+os.environ["OPENAI_API_KEY"] = api_key
 
-    # Record for the set duration
-    for i in range(0, int(sample_rate / chunk * duration)):
-        data = stream.read(chunk)
-        frames.append(data)
+client = OpenAI()
 
-    # Stop and close the stream
-    stream.stop_stream()
-    stream.close()
-    audio.terminate()
 
-    # Save the recorded data as a WAV file
-    with wave.open(filename, 'wb') as wf:
-        wf.setnchannels(channels)
-        wf.setsampwidth(audio.get_sample_size(fmt))
-        wf.setframerate(sample_rate)
-        wf.writeframes(b''.join(frames))
+# @app.route('/process_media', methods=['POST'])
+# def process_media():
+#     media_path = request.json.get('media_path')
+#     audio_path = media_path.replace('.mp4', '.wav')  # Assuming .mp4, adjust as necessary
 
-def record_video(filename, duration=10):
-    # Initialize the video capture object
-    cap = cv2.VideoCapture(0)
+#     # Extract audio from the video
+#     extract_audio_from_video(media_path, audio_path)
 
-    # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V') # Using MP4 format
-    out = cv2.VideoWriter(filename, fourcc, 30.0, (640, 480)) # Adjusted to 30 fps
+#     # Now you can call your transcription function
+#     transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
 
-    start_time = datetime.datetime.now()
-    print("Recording video...")
+#     return jsonify({"transcription": transcription})
 
-    while (datetime.datetime.now() - start_time).seconds < duration:
-        ret, frame = cap.read()
-        if ret:
-            out.write(frame)
-            cv2.imshow('Recording...', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+@app.route('/request_chatgpt', methods=['POST'])
+def chatgpt():
+
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+    messages_to_send = read_chat(username) + [request_message_formatted]
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages_to_send
+    )
+
+    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
+    messages = [request_message_formatted]+[response_message_formatted]
+
+    write_chat(username, messages)
+
+
+@app.route('/write_chat', methods=['POST'])
+def write_chat():
+    # Get JSON data from the request
+    data = request.json
+    
+    # Extract username and messages from the JSON data
+    username = data.get('username')
+    messages = data.get('messages', [])
+
+    # Validate that both username and messages are present
+    if not username or not messages:
+        return jsonify({'error': 'Invalid request. Missing username or messages.'}), 400
+
+    # Add messages to the chat in the database
+    for message in messages:
+        db.collection('users').document(username).collection('chat').add({'message': message})
+
+    return jsonify({'success': True})
+
+@app.route('/read_chat', methods=['GET'])
+def read_chat():
+    # Get username from the query parameters
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    # Retrieve messages from the chat in the database
+    docs = db.collection('users').document(username).collection('chat').get()
+    result = [doc.to_dict()['message'] for doc in docs]
+
+    return jsonify(result)
+
+@app.route('/add_scholarships', methods=['POST'])
+def add_scholarships():
+    data = request.json
+    
+    # Extract username and scholarships from the JSON data
+    username = data.get('username')
+    scholarships = data.get('scholarships', [])
+
+    # Validate that both username and scholarships are present
+    if not username or not scholarships:
+        return jsonify({'error': 'Invalid request. Missing username or scholarships.'}), 400
+
+    # Add scholarships to the database
+    for scholarship in scholarships:
+        title = scholarship.get('Title')
+        if title:
+            db.collection('users').document(username).collection('scholarship').document(title).set(scholarship)
         else:
-            break
+            return jsonify({'error': 'Invalid scholarship. Missing title.'}), 400
 
-    # Release everything
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+    return jsonify({'success': True})
 
-# Run audio and video recording in parallel
-duration = 10  # seconds
-audio_thread = threading.Thread(target=record_audio, args=('output_audio.wav', duration))
-video_thread = threading.Thread(target=record_video, args=('output_video.mp4', duration))
 
-audio_thread.start()
-video_thread.start()
+@app.route('/get_all_scholarships_brief', methods=['GET'])
+def get_all_scholarships_brief():
+    username = request.args.get('username')
 
-audio_thread.join()
-video_thread.join()
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
 
-# Post-processing to synchronize audio and video can be done here
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = []
+    for doc in docs:
+        scholarship_data = doc.to_dict()
+        # Remove "Questions" and "Answers" fields if they exist
+        scholarship_data.pop('Questions', None)
+        scholarship_data.pop('Answers', None)
+        result.append(scholarship_data)
+
+    return jsonify(result)
+
+
+@app.route('/get_all_scholarships', methods=['GET'])
+def get_all_scholarships():
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = [doc.to_dict() for doc in docs]
+
+    return jsonify(result)
+
+    
+if __name__ == '__main__':
+    app.run(debug=True)
