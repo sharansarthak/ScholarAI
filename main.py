@@ -2,6 +2,7 @@
 import threading
 # from moviepy.editor import VideoFileClip, AudioFileClip
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 # from speechToText import transcribe_audio
 # from recordAudio import record_audio
@@ -13,6 +14,7 @@ import os
 
 
 app = Flask(__name__)
+CORS(app)
 
 # Read the API key from a file
 with open("APIKEY", "r") as file:
