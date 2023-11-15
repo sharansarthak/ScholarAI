@@ -121,5 +121,62 @@ def read_chat():
 
     return jsonify(result)
 
+@app.route('/add_scholarships', methods=['POST'])
+def add_scholarships():
+    data = request.json
+    
+    # Extract username and scholarships from the JSON data
+    username = data.get('username')
+    scholarships = data.get('scholarships', [])
+
+    # Validate that both username and scholarships are present
+    if not username or not scholarships:
+        return jsonify({'error': 'Invalid request. Missing username or scholarships.'}), 400
+
+    # Add scholarships to the database
+    for scholarship in scholarships:
+        title = scholarship.get('Title')
+        if title:
+            db.collection('users').document(username).collection('scholarship').document(title).set(scholarship)
+        else:
+            return jsonify({'error': 'Invalid scholarship. Missing title.'}), 400
+
+    return jsonify({'success': True})
+
+
+@app.route('/get_all_scholarships_brief', methods=['GET'])
+def get_all_scholarships_brief():
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = []
+    for doc in docs:
+        scholarship_data = doc.to_dict()
+        # Remove "Questions" and "Answers" fields if they exist
+        scholarship_data.pop('Questions', None)
+        scholarship_data.pop('Answers', None)
+        result.append(scholarship_data)
+
+    return jsonify(result)
+
+
+@app.route('/get_all_scholarships', methods=['GET'])
+def get_all_scholarships():
+    username = request.args.get('username')
+
+    # Validate that username is present
+    if not username:
+        return jsonify({'error': 'Invalid request. Missing username.'}), 400
+
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = [doc.to_dict() for doc in docs]
+
+    return jsonify(result)
+
+    
 if __name__ == '__main__':
     app.run(debug=True)

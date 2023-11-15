@@ -34,8 +34,18 @@ def read_chat(username):
 
 def add_scholarship(username, scholarships):
     for scholarship in scholarships:
-        db.collection('users').document(username).collection('scholarship').add(scholarship)
+        db.collection('users').document(username).collection('scholarship').document(str(scholarship['Title'])).set(scholarship)
 
+def get_all_scholarship_brief(username):
+    docs = db.collection('users').document(username).collection('scholarship').get()
+    result = []
+    for doc in docs:
+        scholarship_data = doc.to_dict()
+        # Remove "questions" and "answers" fields if they exist
+        scholarship_data.pop('Questions', None)
+        scholarship_data.pop('Answers', None)
+        result.append(scholarship_data)
+    return result
 
 def get_all_scholarship(username):
     docs = db.collection('users').document(username).collection('scholarship').get()
@@ -59,7 +69,17 @@ scholarships = [
         "Number of Recipients": 10,
         "Estimated Completion Time": "30 minutes",
         "Title": "STEM Innovation Grant",
-        "Requirements": ["STEM", "Innovation", "Academic Excellence"]
+        "Requirements": ["STEM", "Innovation", "Academic Excellence"],
+        "Questions": [
+            "What is your experience in STEM?",
+            "How have you demonstrated innovation?",
+            "Describe your academic achievements."
+        ],
+        "Answers": [
+            "I participated in a STEM research project last year.",
+            "I developed a new technology for my school project.",
+            "I have consistently maintained a high GPA."
+        ]
     },
     {
         "Scholarship Amount": "$7,500",
@@ -67,7 +87,17 @@ scholarships = [
         "Number of Recipients": 5,
         "Estimated Completion Time": "45 minutes",
         "Title": "Community Leadership Scholarship",
-        "Requirements": ["Leadership", "Community Service", "High GPA"]
+        "Requirements": ["Leadership", "Community Service", "High GPA"],
+        "Questions": [
+            "Describe your leadership experience.",
+            "How have you contributed to your community?",
+            "What is your GPA and why is it important to you?"
+        ],
+        "Answers": [
+            "I led a community service project in my neighborhood.",
+            "I volunteered at a local food bank.",
+            "Maintaining a high GPA is important because..."
+        ]
     },
     {
         "Scholarship Amount": "$3,000",
@@ -75,7 +105,17 @@ scholarships = [
         "Number of Recipients": 15,
         "Estimated Completion Time": "25 minutes",
         "Title": "Diversity and Inclusion Award",
-        "Requirements": ["Diversity", "Inclusion", "Essay"]
+        "Requirements": ["Diversity", "Inclusion", "Essay"],
+        "Questions": [
+            "How have you promoted diversity and inclusion?",
+            "Why do you believe diversity is important?",
+            "Write an essay on your experiences related to diversity and inclusion."
+        ],
+        "Answers": [
+            "I organized a diversity awareness event at my school.",
+            "Diversity is important because it enriches perspectives.",
+            "In my essay, I will share personal experiences that highlight the importance of diversity."
+        ]
     },
     {
         "Scholarship Amount": "$6,000",
@@ -83,7 +123,17 @@ scholarships = [
         "Number of Recipients": 8,
         "Estimated Completion Time": "40 minutes",
         "Title": "Future Entrepreneur Scholarship",
-        "Requirements": ["Entrepreneurship", "Business Plan", "Innovation"]
+        "Requirements": ["Entrepreneurship", "Business Plan", "Innovation"],
+        "Questions": [
+            "What is your experience in entrepreneurship?",
+            "Describe your business plan.",
+            "How have you demonstrated innovation in your entrepreneurial pursuits?"
+        ],
+        "Answers": [
+            "I started my own small business in high school.",
+            "My business plan focuses on...",
+            "I introduced innovative strategies to increase business efficiency."
+        ]
     },
     {
         "Scholarship Amount": "$8,000",
@@ -91,7 +141,17 @@ scholarships = [
         "Number of Recipients": 3,
         "Estimated Completion Time": "50 minutes",
         "Title": "Environmental Stewardship Grant",
-        "Requirements": ["Environmental Conservation", "Sustainability", "Essay"]
+        "Requirements": ["Environmental Conservation", "Sustainability", "Essay"],
+        "Questions": [
+            "How have you contributed to environmental conservation?",
+            "Why is sustainability important to you?",
+            "Write an essay on your commitment to environmental stewardship."
+        ],
+        "Answers": [
+            "I organized a community clean-up event.",
+            "Sustainability is important because...",
+            "In my essay, I will elaborate on my dedication to environmental stewardship."
+        ]
     },
     {
         "Scholarship Amount": "$4,500",
@@ -99,10 +159,20 @@ scholarships = [
         "Number of Recipients": 12,
         "Estimated Completion Time": "35 minutes",
         "Title": "Merit Excellence Scholarship",
-        "Requirements": ["Academic Excellence", "High GPA", "Essay"]
+        "Requirements": ["Academic Excellence", "High GPA", "Essay"],
+        "Questions": [
+            "What achievements demonstrate your academic excellence?",
+            "Why is maintaining a high GPA important to you?",
+            "Write an essay on your academic journey and goals."
+        ],
+        "Answers": [
+            "I achieved the highest grades in my science courses.",
+            "Maintaining a high GPA is important because...",
+            "In my essay, I will reflect on my academic journey and outline my future goals."
+        ]
     }
 ]
 
-add_scholarship('zeeshan',scholarships)
+#add_scholarship('zeeshan',scholarships)
 
-print(get_all_scholarship('zeeshan'))
+print(get_all_scholarship_brief('zeeshan'))
