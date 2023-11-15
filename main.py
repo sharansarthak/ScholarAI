@@ -4,6 +4,7 @@ import wave
 import threading
 from moviepy.editor import VideoFileClip, AudioFileClip
 import datetime
+
 def record_audio(filename, duration):
     # Audio recording settings
     chunk = 1024
@@ -74,10 +75,15 @@ video_thread.start()
 audio_thread.join()
 video_thread.join()
 
+from moviepy.editor import VideoFileClip, AudioFileClip
 
-def combine_audio_video(audio_filename, video_filename, output_filename):
+def combine_audio_video(audio_filename, video_filename, output_filename, audio_delay=0):
     # Load the audio file
     audio_clip = AudioFileClip(audio_filename)
+
+    # Apply the audio delay
+    if audio_delay != 0:
+        audio_clip = audio_clip.set_start(audio_delay)
 
     # Load the video file
     video_clip = VideoFileClip(video_filename)
@@ -88,5 +94,5 @@ def combine_audio_video(audio_filename, video_filename, output_filename):
     # Write the result to a file
     final_clip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
 
-# Example usage
-combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4')
+# Example usage with a 1.5-second delay
+combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=-1.5)
