@@ -78,21 +78,22 @@ video_thread.join()
 from moviepy.editor import VideoFileClip, AudioFileClip
 
 def combine_audio_video(audio_filename, video_filename, output_filename, audio_delay=0):
-    # Load the audio file
+    # Load the audio and video files
     audio_clip = AudioFileClip(audio_filename)
-
-    # Apply the audio delay
-    if audio_delay != 0:
-        audio_clip = audio_clip.set_start(audio_delay)
-
-    # Load the video file
     video_clip = VideoFileClip(video_filename)
 
-    # Set the audio of the video clip as the audio file
+    # Apply the audio delay
+    if audio_delay > 0:
+        audio_clip = audio_clip.set_start(audio_delay)
+    elif audio_delay < 0:
+        video_clip = video_clip.set_start(-audio_delay)
+
+    # Set the audio of the video clip as the modified audio file
     final_clip = video_clip.set_audio(audio_clip)
 
     # Write the result to a file
     final_clip.write_videofile(output_filename, codec="libx264", audio_codec="aac")
 
-# Example usage with a 1.5-second delay
-combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=-1.5)
+# Adjust the audio_delay parameter 
+combine_audio_video('output_audio.wav', 'output_video.mp4', 'final_output.mp4', audio_delay=1.5)
+
