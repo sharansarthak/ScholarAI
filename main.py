@@ -14,7 +14,7 @@ import os
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Read the API key from a file
 with open("APIKEY", "r") as file:
