@@ -12,7 +12,7 @@ import os
 from openai import OpenAI
 import os
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import auth, credentials, firestore
 
 
 app = Flask(__name__)
@@ -46,6 +46,44 @@ client = OpenAI()
 #     transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
 
 #     return jsonify({"transcription": transcription})
+
+# Endpoint for user registration (sign-up)
+@app.route('/signup', methods=['POST'])
+def signup():
+    try:
+        # Get user data from the request
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        # Create a new user account with the provided email and password
+        user = auth.create_user(
+            email=email,
+            password=password
+        )
+
+        return jsonify({'success': True, 'uid': user.uid}), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+# Endpoint for user login
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        # Get user data from the request
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        # Sign in the user with the provided email and password
+        user = auth.sign_in_with_email_and_password(email,password)
+        user_token = auth.create_custom_token(user.uid)
+
+        return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 401
 
 @app.route('/request_chatgpt', methods=['POST'])
 def chatgpt():
@@ -155,6 +193,39 @@ def get_all_scholarships():
 
     return jsonify(result)
 
+@app.route('/update_scholarship_answer', methods=['POST'])
+def update_scholarship_answer():
+    try:
+        # Get data from the request
+        data = request.json
+        username = data.get('username')
+        scholarship_title = data.get('title')
+        index = data.get('index')
+        updated_answer = data.get('updated_answer')
+
+        # Validate required fields
+        if not username or not scholarship_title or index is None or updated_answer is None:
+            return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
+
+        # Retrieve the scholarship document
+        scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
+        scholarship_doc = scholarship_ref.get()
+
+        # Check if the scholarship exists
+        if not scholarship_doc.exists:
+            return jsonify({'error': 'Scholarship not found.'}), 404
+
+        # Update the 'Answers' field at the specified index
+        current_answers = scholarship_doc.get('Answers', [])
+        if 0 <= index < len(current_answers):
+            current_answers[index] = updated_answer
+            scholarship_ref.update({'Answers': current_answers})
+            return jsonify({'success': True})
+
+        return jsonify({'error': 'Invalid index.'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
 if __name__ == '__main__':
     app.run(debug=True)

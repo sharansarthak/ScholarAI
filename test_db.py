@@ -1,10 +1,11 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import auth, credentials, firestore, initialize_app
 
 cred = credentials.Certificate("hhh2023-a2da1-firebase-adminsdk-h2zwt-5ae5f17a8b.json")
 firebase_admin.initialize_app(cred)
 
 db=firestore.client()
+
 
 # #db.collection('users').add({'name': 'Zeeshan'})
 # db.collection('users').document('zeeshan').collection('chat').add({'age': 22})
@@ -17,7 +18,6 @@ db=firestore.client()
 # docs = db.collection('users').document('zeeshan').collection('chat').get()
 # for doc in docs:
 #     print(doc.to_dict())
-
 
 
 def write_chat(username, request):    
@@ -54,6 +54,65 @@ def get_all_scholarship(username):
     for doc in docs:
         result.append(doc.to_dict())
     return result
+
+def login(email, password):
+    try:
+        # Sign in the user with the provided email and password
+        user = auth.sign_in_with_email_and_password(email,password)
+        user_token = auth.create_custom_token(user.uid)
+
+        return {'success': True, 'uid': user.uid, 'token': user_token}
+
+    except Exception as e:
+        return {'error': e}, 401
+
+def signup(email, password):
+    try:
+
+        # Create a new user account with the provided email and password
+        user = auth.create_user(
+            email=email,
+            password=password
+        )
+
+        return {'success': True, 'uid': user.uid}
+
+    except Exception as e:
+        return {'error': str(e)}
+
+def store_updated_scholarship_response(index, updated_answer):
+
+    try:
+        # Get data from the request
+        data = request.json
+        username = data.get('username')
+        scholarship_title = data.get('title')
+        index = data.get('index')
+        updated_answer = data.get('updated_answer')
+
+        # Validate required fields
+        if not username or not scholarship_title or index is None or updated_answer is None:
+            return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
+
+        # Retrieve the scholarship document
+        scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
+        scholarship_doc = scholarship_ref.get()
+
+        # Check if the scholarship exists
+        if not scholarship_doc.exists:
+            return jsonify({'error': 'Scholarship not found.'}), 404
+
+        # Update the 'Answers' field at the specified index
+        current_answers = scholarship_doc.get('Answers', [])
+        if 0 <= index < len(current_answers):
+            current_answers[index] = updated_answer
+            scholarship_ref.update({'Answers': current_answers})
+            return jsonify({'success': True})
+
+        return jsonify({'error': 'Invalid index.'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # write_chat('zeeshan', [{"role": "system", "content": "You are a helpful assistant."},
 #     {"role": "user", "content": "Who won the world series in 2020?"},
@@ -183,3 +242,5 @@ scholarships = [
 add_scholarship('zeeshan',scholarships)
 
 print(get_all_scholarship_brief('zeeshan'))
+
+print(login('Zeeshan.chougle@ucalgary.ca', 'Zeemaan1234@'))
