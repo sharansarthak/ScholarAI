@@ -11,10 +11,18 @@ import os
 #from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+cred = credentials.Certificate("hhh2023-a2da1-firebase-adminsdk-h2zwt-5ae5f17a8b.json")
+firebase_admin.initialize_app(cred)
+
+db=firestore.client()
+
 
 # Read the API key from a file
 with open("APIKEY", "r") as file:
@@ -128,6 +136,7 @@ def get_all_scholarships_brief():
         # Remove "Questions" and "Answers" fields if they exist
         scholarship_data.pop('Questions', None)
         scholarship_data.pop('Answers', None)
+        scholarship_data.pop('Description', None)
         result.append(scholarship_data)
 
     return jsonify(result)

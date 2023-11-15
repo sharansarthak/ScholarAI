@@ -44,6 +44,7 @@ def get_all_scholarship_brief(username):
         # Remove "questions" and "answers" fields if they exist
         scholarship_data.pop('Questions', None)
         scholarship_data.pop('Answers', None)
+        scholarship_data.pop('Description', None)
         result.append(scholarship_data)
     return result
 
@@ -70,6 +71,7 @@ scholarships = [
         "Estimated Completion Time": "30 minutes",
         "Title": "STEM Innovation Grant",
         "Requirements": ["STEM", "Innovation", "Academic Excellence"],
+        "Description": "This scholarship is for students with a passion for STEM, a history of innovation, and demonstrated academic excellence.",
         "Questions": [
             "What is your experience in STEM?",
             "How have you demonstrated innovation?",
@@ -88,6 +90,7 @@ scholarships = [
         "Estimated Completion Time": "45 minutes",
         "Title": "Community Leadership Scholarship",
         "Requirements": ["Leadership", "Community Service", "High GPA"],
+        "Description": "This scholarship recognizes students who have shown exceptional leadership skills, contributed to their community, and maintained a high GPA.",
         "Questions": [
             "Describe your leadership experience.",
             "How have you contributed to your community?",
@@ -106,6 +109,7 @@ scholarships = [
         "Estimated Completion Time": "25 minutes",
         "Title": "Diversity and Inclusion Award",
         "Requirements": ["Diversity", "Inclusion", "Essay"],
+        "Description": "This award is for students who actively promote diversity and inclusion. Applicants must submit an essay detailing their experiences related to diversity.",
         "Questions": [
             "How have you promoted diversity and inclusion?",
             "Why do you believe diversity is important?",
@@ -124,6 +128,7 @@ scholarships = [
         "Estimated Completion Time": "40 minutes",
         "Title": "Future Entrepreneur Scholarship",
         "Requirements": ["Entrepreneurship", "Business Plan", "Innovation"],
+        "Description": "This scholarship is for aspiring entrepreneurs with a strong background in entrepreneurship, a well-defined business plan, and a track record of innovation.",
         "Questions": [
             "What is your experience in entrepreneurship?",
             "Describe your business plan.",
@@ -142,6 +147,7 @@ scholarships = [
         "Estimated Completion Time": "50 minutes",
         "Title": "Environmental Stewardship Grant",
         "Requirements": ["Environmental Conservation", "Sustainability", "Essay"],
+        "Description": "This grant is for students dedicated to environmental conservation and sustainability. Applicants must submit an essay detailing their commitment to environmental stewardship.",
         "Questions": [
             "How have you contributed to environmental conservation?",
             "Why is sustainability important to you?",
@@ -160,6 +166,7 @@ scholarships = [
         "Estimated Completion Time": "35 minutes",
         "Title": "Merit Excellence Scholarship",
         "Requirements": ["Academic Excellence", "High GPA", "Essay"],
+        "Description": "This scholarship recognizes students with a history of academic excellence, a high GPA, and the ability to articulate their academic journey and goals through an essay.",
         "Questions": [
             "What achievements demonstrate your academic excellence?",
             "Why is maintaining a high GPA important to you?",
@@ -173,6 +180,6 @@ scholarships = [
     }
 ]
 
-#add_scholarship('zeeshan',scholarships)
+add_scholarship('zeeshan',scholarships)
 
 print(get_all_scholarship_brief('zeeshan'))
