@@ -1,0 +1,31 @@
+
+.card-header{
+    background-color: white;
+    border-bottom: 0cm;
+}
+
+.star{
+    color: white;
+    -webkit-text-stroke: 1px black;
+}
+
+.filled{
+    color: gold;
+    fill: gold;
+    -webkit-text-stroke: 0px black;
+}
+
+.learnPageCards{
+    display: flex;
+    flex-direction: column;
+}
+
+.learnPageCards2{
+    display: flex;
+    gap: 10px;
+    /* flex-direction: column; */
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap ;
+
+}

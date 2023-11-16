@@ -1,0 +1,43 @@
+/* LearnPageCardStyles.css */
+.resourceCard {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer;
+    margin: 1% 0;
+    width: 32%;
+  }
+
+  .resourceCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .resourceCard .card-header {
+    padding: 10px;
+  }
+  
+  .resourceCard .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    /* color: #007bff; Link color */
+  }
+
+  .resourceCard .card-body{
+    height: 41px;
+  }
+  
+  .resourceCard .card-subtitle {
+    font-size: 14px;
+    color: #6c757d; /* Gray color for description */
+  }
+  
+  .resourceCard .card-subtitle span {
+    font-weight: bold;
+  }
+  
+  /* Add this link color if you want to change the color of the link */
+  .resourceCard .card-title:hover {
+    color: #0056b3; /* Darker link color on hover */
+  }
+  

@@ -1,0 +1,77 @@
+
+.TrackingHeader{
+    color: #1b7e72;
+    font-size: 50px;
+    font-family: 'Ubuntu';
+}
+
+.TrackingSubHeader{
+    color:black;
+    font-family: 'Poppins';
+    margin-top: 10%;
+}
+
+.ListSelectButton{
+    color: white;
+    font-family: "Ubuntu", sans-serif;
+}
+
+.ListContainer{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2%;
+}
+
+.ColumnHeader{
+  font-family: 'Poppins';
+  margin-bottom: 2%;
+}
+
+.ColumnSubHeader{
+  font-family: 'Poppins';
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.589);
+}
+
+.Column{
+  min-height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2%;
+}
+
+.JobCardImage{
+  height: 2rem;
+  margin-right: 10px;
+}
+
+.JobCard{
+  margin: 3% 0;
+  width: 320px;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.AddCardButton {
+  background-color: #2A9D8F;
+  border-color: #2A9D8F;
+  font-family: "Ubuntu", sans-serif;
+  margin: 0.5rem 0.8rem;
+  padding: 0.6rem 1.3rem;
+}
+
+.DeleteCardButton {
+  background-color: rgb(187, 0, 0);
+  border-color: rgb(187, 0, 0);
+  font-family: "Ubuntu", sans-serif;
+  margin: 0.5rem 0.8rem;
+  padding: 0.6rem 1.3rem;
+}
+
+.DeleteCardButton:hover{
+  background-color: rgb(187, 0, 0);
+  border-color: rgb(187, 0, 0);
+}
