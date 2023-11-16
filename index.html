@@ -62,6 +62,42 @@
         .button:hover:not(:disabled) {
             background-color: #0056b3;
         }
+        #aiFeedback {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left; /* Align text to the left */
+}
+
+#aiFeedback h2 {
+    font-size: 24px; /* Adjust size as needed */
+    font-weight: bold;
+    margin-bottom: 10px; /* Spacing after headings */
+}
+
+#aiFeedback p, #aiFeedback ul, #aiFeedback ol {
+    font-size: 16px; /* Adjust size as needed */
+    line-height: 1.6;
+    margin-bottom: 10px; /* Spacing after paragraphs and lists */
+}
+
+#aiFeedback ul, #aiFeedback ol {
+    padding-left: 20px; /* Indentation for list items */
+}
+
+#aiFeedback li {
+    margin-bottom: 5px; /* Spacing between list items */
+}
+
+@media (max-width: 600px) {
+    #aiFeedback {
+        padding: 15px;
+        font-size: 14px; /* Smaller font size on smaller screens */
+    }
+}
+
         @media (max-width: 768px) {
             .container {
                 width: 90%;

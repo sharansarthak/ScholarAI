@@ -59,11 +59,11 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.ai_feedback) {
                 console.log('Displaying AI feedback');
                 document.getElementById('aiFeedback').style.display = 'block';
-                document.getElementById('feedbackText').textContent = data.ai_feedback;
+                document.getElementById('feedbackText').innerHTML = data.ai_feedback;
             } else {
                 console.log('No AI feedback found');
                 document.getElementById('aiFeedback').style.display = 'none';
-                document.getElementById('feedbackText').textContent = '';
+                document.getElementById('feedbackText').innerHTML = '';
             }
         })
         
