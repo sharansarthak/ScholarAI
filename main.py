@@ -11,11 +11,10 @@ from moviepy.editor import VideoFileClip, AudioFileClip
 #from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
-<<<<<<< HEAD
 import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
-
+from speechToText import extract_audio, transcribe_audio
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -23,26 +22,14 @@ cred = credentials.Certificate("hhh2023-a2da1-firebase-adminsdk-h2zwt-5ae5f17a8b
 firebase_admin.initialize_app(cred)
 
 db=firestore.client()
-
-
 # Read the API key from a file
 with open("APIKEY", "r") as file:
     api_key = file.read().strip()
-=======
-from flask_cors import CORS
-from speechToText import extract_audio_from_video, transcribe_audio, extract_audio
-app = Flask(__name__)
-CORS(app)
-# # Read the API key from a file
-# with open("APIKEY", "r") as file:
-#     api_key = file.read().strip()
->>>>>>> bf813bb (Adding working interview page with bad style)
 
 # Set the API key as an environment variable
-os.environ["OPENAI_API_KEY"] = "api_key"
+os.environ["OPENAI_API_KEY"] = api_key
 
 client = OpenAI()
-
 
 
 @app.route('/upload_video', methods=['POST'])
@@ -52,17 +39,46 @@ def upload_video():
         video_path = os.path.join('uploads', video_file.filename)
         video_file.save(video_path)
         
-        # Process the video file
-        process_video(video_path)
+        # Process the video file and get feedback
+        ai_feedback = process_video_and_get_feedback(video_path)
 
-        return jsonify({"message": "Video uploaded successfully"})
+        # Return the AI feedback in the response
+        return jsonify({"message": "Video uploaded successfully", "ai_feedback": ai_feedback})
     return jsonify({"error": "No video file provided"}), 400
 
+
+def process_video_and_get_feedback(video_file_path):
+    # Extract audio from the video
+    audio_file_path =     extract_audio(video_path=video_file_path, audio_path="output_audio.wav")
+
+    
+    # Transcribe the audio to text
+    transcribed_text = transcribe_audio("output_audio.wav")
+    print(transcribed_text)
+    # Prepare the conversation for AI feedback
+    question = "Tell me about yourself"
+    answer = transcribed_text
+    conversations = [{"role": "system", "content": "You are an expert interview preparation assistant. Your goal is to provide constructive feedback and suggestions for improvement when given interview questions and a user's transcribed audio response. Emphasize clarity, relevance, and professionalism in your feedback."}]
+    request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to improve my response to ace the interview."
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+    conversations.append(request_message_formatted)
+
+    # Generate a response using OpenAI GPT-3.5-turbo
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversations
+    )
+
+    # Get the AI's response
+    ai_response = response.choices[0].message.content
+    testResponse = "Testing just random stuff"
+    print(ai_response)
+    return ai_response
 
 def process_video(video_path):
     # Extract audio from video
     extract_audio(video_path=video_path, audio_path="output_audio.wav")
-    transcribe_audio("output_audio.wav")
+    text = transcribe_audio("output_audio.wav")
     
 
     # Transcribe audio
