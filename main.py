@@ -56,9 +56,21 @@ def process_video_and_get_feedback(video_file_path):
     transcribed_text = transcribe_audio("output_audio.wav")
     print(transcribed_text)
     # Prepare the conversation for AI feedback
-    question = "Tell me about yourself"
+    question = "Tell Us About The Biggest Challenge Youve Ever Faced"
     answer = transcribed_text
-    conversations = [{"role": "system", "content": "You are an expert interview preparation assistant. Your goal is to provide constructive feedback and suggestions for improvement when given interview questions and a user's transcribed audio response. Emphasize clarity, relevance, and professionalism in your feedback."}]
+    conversations = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert interview preparation assistant. Your goal is to provide "
+                "constructive feedback and suggestions for improvement when given interview "
+                "questions and a user's transcribed audio response. Emphasize clarity, relevance, "
+                "and professionalism in your feedback. Please format the feedback for HTML display. "
+                "Use <p> for paragraphs, <br> for new lines, <ul> or <ol> for lists, and <strong> for "
+                "emphasis. Ensure the feedback is well-structured and easy to read in an HTML document."
+            )
+        }
+    ]
     request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to improve my response to ace the interview."
     request_message_formatted = {'content': request_message, 'role': 'user'}
     conversations.append(request_message_formatted)
@@ -86,7 +98,6 @@ def process_video(video_path):
     
     # Additional processing...
 
-# Endpoint for user registration (sign-up)
 @app.route('/signup', methods=['POST'])
 def signup():
     try:
@@ -94,6 +105,10 @@ def signup():
         data = request.json
         email = data.get('email')
         password = data.get('password')
+        phone_number = data.get('phone_number')
+        username = data.get('username')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
 
         # Create a new user account with the provided email and password
         user = auth.create_user(
@@ -101,10 +116,22 @@ def signup():
             password=password
         )
 
-        return jsonify({'success': True, 'uid': user.uid}), 201
+        data_to_store = {
+            "email": email,
+            "password": password,
+            "phone_number": phone_number,
+            "username": username,
+            "first_name": first_name,
+            "last_name": last_name
+        }
+
+        # Update user profile in the database
+        db.collection('users').document(username).collection('personal_info').document('my_info').set(data_to_store)
+
+        return jsonify({'success': True}), 201  # Corrected closing parenthesis
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 500
 
 # Endpoint for user login
 @app.route('/login', methods=['POST'])
@@ -242,8 +269,6 @@ def update_scholarship_answer():
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
-        print(data)
-
         # Validate required fields
         if not username or not scholarship_title or index is None or updated_answer is None:
             return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
@@ -251,10 +276,6 @@ def update_scholarship_answer():
         # Retrieve the scholarship document
         scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
         scholarship_doc = scholarship_ref.get().to_dict()
-        print(scholarship_doc)
-        # Check if the scholarship exists
-        if not scholarship_doc.exists:
-            return jsonify({'error': 'Scholarship not found.'}), 404
 
         # Update the 'Answers' field at the specified index
         current_answers = scholarship_doc.get('Answers')
