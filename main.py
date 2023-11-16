@@ -11,7 +11,6 @@ from moviepy.editor import VideoFileClip, AudioFileClip
 #from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
-<<<<<<< HEAD
 import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
@@ -28,15 +27,6 @@ db=firestore.client()
 # Read the API key from a file
 with open("APIKEY", "r") as file:
     api_key = file.read().strip()
-=======
-from flask_cors import CORS
-from speechToText import extract_audio_from_video, transcribe_audio, extract_audio
-app = Flask(__name__)
-CORS(app)
-# # Read the API key from a file
-# with open("APIKEY", "r") as file:
-#     api_key = file.read().strip()
->>>>>>> bf813bb (Adding working interview page with bad style)
 
 # Set the API key as an environment variable
 os.environ["OPENAI_API_KEY"] = "api_key"
@@ -102,7 +92,7 @@ def login():
         # Sign in the user with the provided email and password
         user = auth.get_user_by_email(email)
         user_token = auth.create_custom_token(user.uid)
-        
+
         return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
 
     except Exception as e:
@@ -346,6 +336,21 @@ def get_interview_feedback():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/update_user_profile', methods=['POST'])
+def update_user_profile():
+    try:
+        # Get data from the request
+        data = request.json
+        username = data.get('username')
+        user_response = data.get('user_response')
+
+        # Update user profile in the database
+        db.collection('users').document(username).set(user_response)
+
+        return jsonify({'success': True, 'message': 'User profile updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

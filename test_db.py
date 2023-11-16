@@ -32,6 +32,10 @@ def read_chat(username):
     return result
 
 
+def populate_user_profile(username, user_response):
+    db.collection('users').document(username).set(user_response)
+    
+
 def add_scholarship(username, scholarships):
     for scholarship in scholarships:
         db.collection('users').document(username).collection('scholarship').document(str(scholarship['Title'])).set(scholarship)
@@ -356,9 +360,40 @@ resources = [
     }
 ]
 
+user_response = {
+  "name": "Zeeshan",
+  "age": 22,
+  "race": "Asian",
+  "gender": "Male",
+  "GPA": 3.99,
+  "institution": "University of Calgary",
+  "major": "Software Engineer",
+  "year_of_study": "Senior",
+  "extracurricular_activities": ["Programming Club", "Debate Team"],
+  "internship_experience": [
+    {
+      "company": "Activision",
+      "position": "Software Engineering Intern",
+      "duration": "Summer 2022"
+    }
+  ],
+  "research_projects": [
+    {
+      "title": "Natural Language Processing in Chatbots",
+      "description": "Explored advanced techniques for improving chatbot interactions using NLP."
+    }
+  ],
+  "awards_and_honors": ["Dean's List", "Outstanding Volunteer Award"],
+  "languages_spoken": ["English", "Mandarin"],
+  "career_aspirations": "I aspire to become a computer scientist specializing in artificial intelligence. My goal is to contribute to advancements in machine learning and create innovative solutions.",
+  "community_involvement": "I have been actively involved in my community by volunteering at a local shelter, organizing charity events, and participating in environmental conservation projects. I believe in making a positive impact and fostering community well-being.",
+  "challenges_and_achievements": "One significant challenge I faced was overcoming language barriers when I moved to a new country. Despite the initial struggles, I not only learned a new language but also excelled academically. My proudest achievement is winning the 'Outstanding Volunteer' award for my contributions to a youth mentorship program."
+}
+
 
 add_scholarship('zeeshan',scholarships)
 add_resource('zeeshan',resources)
+populate_user_profile('zeeshan', user_response)
 
 #print(get_all_scholarship_brief('zeeshan'))
 #print(update_scholarship_answer('zeeshan', 'Community Leadership Scholarship', 0, 'aaadsad'))
