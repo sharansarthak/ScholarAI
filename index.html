@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Interview Recorder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        .question-section, .answer-section {
+            background-color: #e9ecef;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .answer-section {
+            background-color: #d1e7dd;
+        }
+        .video-container {
+            margin-bottom: 15px;
+        }
+        #videoLive, #videoRecorded {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:disabled, .button:not(:enabled) {
+            background-color: #ccc;
+        }
+        .button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+        #aiFeedback {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left; /* Align text to the left */
+}
+
+#aiFeedback h2 {
+    font-size: 24px; /* Adjust size as needed */
+    font-weight: bold;
+    margin-bottom: 10px; /* Spacing after headings */
+}
+
+#aiFeedback p, #aiFeedback ul, #aiFeedback ol {
+    font-size: 16px; /* Adjust size as needed */
+    line-height: 1.6;
+    margin-bottom: 10px; /* Spacing after paragraphs and lists */
+}
+
+#aiFeedback ul, #aiFeedback ol {
+    padding-left: 20px; /* Indentation for list items */
+}
+
+#aiFeedback li {
+    margin-bottom: 5px; /* Spacing between list items */
+}
+
+@media (max-width: 600px) {
+    #aiFeedback {
+        padding: 15px;
+        font-size: 14px; /* Smaller font size on smaller screens */
+    }
+}
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+            .question-section, .answer-section {
+                padding: 10px;
+            }
+            .button {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Practice Interview Recorder</h2>
+        <div class="question-section">
+            <p>Here is your interview question:</p>
+            <p><strong>Q: How do you handle stress and pressure in your work?</strong></p>
+        </div>
+        <div class="video-container">
+            <video autoplay muted playsinline id="videoLive"></video>
+            <video controls playsinline id="videoRecorded" style="display:none;"></video>
+        </div>
+        <div class="controls">
+            <button type="button" id="buttonStart" class="button">Start Recording</button>
+            <button type="button" id="buttonStop" class="button" disabled>Stop Recording</button>
+            <button type="button" id="buttonUpload" class="button" style="display: none;">Submit video</button>
+        </div>
+        <div class="answer-section" id="aiFeedback">
+            <p>AI Feedback:</p>
+            <p id="feedbackText"></p>
+        </div>        
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
