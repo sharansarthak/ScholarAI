@@ -80,19 +80,13 @@ def signup(email, password):
     except Exception as e:
         return {'error': str(e)}
 
-def store_updated_scholarship_response(index, updated_answer):
-
+def update_scholarship_answer(username, scholarship_title, index, updated_answer):
     try:
         # Get data from the request
-        data = request.json
-        username = data.get('username')
-        scholarship_title = data.get('title')
-        index = data.get('index')
-        updated_answer = data.get('updated_answer')
 
         # Validate required fields
         if not username or not scholarship_title or index is None or updated_answer is None:
-            return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
+            return {'error': 'Invalid request. Missing required fields.'}
 
         # Retrieve the scholarship document
         scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
@@ -100,19 +94,23 @@ def store_updated_scholarship_response(index, updated_answer):
 
         # Check if the scholarship exists
         if not scholarship_doc.exists:
-            return jsonify({'error': 'Scholarship not found.'}), 404
+            return {'error': 'Scholarship not found.'}
 
+        print("Hi")
         # Update the 'Answers' field at the specified index
-        current_answers = scholarship_doc.get('Answers', [])
+        current_answers = scholarship_doc.get('Answers')
+
+        print(current_answers)
         if 0 <= index < len(current_answers):
             current_answers[index] = updated_answer
             scholarship_ref.update({'Answers': current_answers})
-            return jsonify({'success': True})
+            return {'success': True}
 
-        return jsonify({'error': 'Invalid index.'}), 400
+        return {'error': 'Invalid index.'}
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return {'error': str(e)}
+
 
 # write_chat('zeeshan', [{"role": "system", "content": "You are a helpful assistant."},
 #     {"role": "user", "content": "Who won the world series in 2020?"},
@@ -241,6 +239,8 @@ scholarships = [
 
 add_scholarship('zeeshan',scholarships)
 
-print(get_all_scholarship_brief('zeeshan'))
+#print(get_all_scholarship_brief('zeeshan'))
 
-print(login('Zeeshan.chougle@ucalgary.ca', 'Zeemaan1234@'))
+print(update_scholarship_answer('zeeshan', 'Community Leadership Scholarship', 0, 'aaadsad'))
+
+# print(login('Zeeshan.chougle@ucalgary.ca', 'Zeemaan1234@'))

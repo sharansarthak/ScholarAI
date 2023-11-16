@@ -218,9 +218,8 @@ def update_scholarship_answer():
             return jsonify({'error': 'Scholarship not found.'}), 404
 
         # Update the 'Answers' field at the specified index
-        print("poop5")
-        current_answers = scholarship_doc.get('Answers', [])
-        print("poop")
+        current_answers = scholarship_doc.get('Answers')
+
         if 0 <= index < len(current_answers):
             print(index)
             current_answers[index] = updated_answer
