@@ -140,18 +140,33 @@
     padding: 50px; /* Adjust padding as needed */
 }
 
-.SignupButton{
+/* .SignupButton{
   background-color: #3b6b7e;
   color: white;
   border-color: #3b6b7e;
   font-family: "Inter", sans-serif;
   padding: 0.5rem 1.3rem;
-}
+  margin: 0rem 0rem;
+} */
 
 .GoogleButton{
   background-color: white;
   color: white;
-  border-color: #d3d3d3;
+  border-color: #808080;
+  font-family: "Inter", sans-serif;
+  padding: 0.5rem 1.3rem;
+}
+.SignupLoginButton{
+  background-color: #3b6b7e;
+  color: white;
+  border-color: #808080;
+  font-family: "Inter", sans-serif;
+  padding: 0.5rem 1.3rem;
+}
+.LoginButton{
+  background-color: #3b6b7e;
+  color: white;
+  border-color: #808080;
   font-family: "Inter", sans-serif;
   padding: 0.5rem 1.3rem;
 }

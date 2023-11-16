@@ -6,11 +6,12 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { useState } from "react";
+  import { useState } from "react";
 import { styles } from "../styles"
 import Axios from "axios";
 import  googlelogo from "../assets/googleicon.png";
 import  applelogo  from "../assets/appleicon.png";
+import { Link } from 'react-router-dom';
 
 export default function SignupPage() {
   const [emailValidity, setEmailValidity] = useState(false);
@@ -215,7 +216,7 @@ export default function SignupPage() {
         </Row>
         <Row className="mb-0">
             <Col className="mb-2">
-              <Button size="lg" className="SignupButton" onClick={signup} style={{ width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold' }}>
+              <Button size="lg" className="SignupLoginButton" onClick={signup} style={{ width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold' }}>
                 Register
               </Button>
             </Col>
@@ -223,7 +224,7 @@ export default function SignupPage() {
           <Row className="mb-2">
             <Col className="mb-1">
               <p className="text-center">
-                Already have an account? <span style={{ color: 'blue', fontWeight:'bold' }}>Log in</span>
+                Already have an account? <Link to="/login" style={{ color: 'blue', fontWeight: 'bold' }}>Log in</Link>
               </p>
               <Row className="mb-2" style={{ marginTop: '50px'}}>
               <Col>
