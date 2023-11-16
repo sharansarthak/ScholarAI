@@ -290,7 +290,7 @@ def get_enhanced_essay():
         )
 
         # Get the AI's response from the choices
-        ai_response = response['choices'][0]['message']['content']
+        ai_response = response.choices[0].message.content
 
         return jsonify({'success': True, 'response': ai_response})
 

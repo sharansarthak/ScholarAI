@@ -48,6 +48,23 @@ def chatgpt(question, answer):
 
     print(response.choices[0].message.content)
 
+def get_interview_feedback_chatgpt(question, answer):
+
+
+    conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
+
+    request_message = "The question asked in my scholarship application is this: "+str(question)+" My Reponse is: "+str(answer)+" Provide improved essay keeping similar word count"
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+
+    conversations.append(request_message_formatted)
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversations
+    )
+
+    print(response.choices[0].message.content)
+
 #write_chat('zeeshan', {'message':  {"role": "user", "content": "Who won the world series in 2020?"}})
 #print(read_chat('zeeshan')[0])
 message="Name 2 hard to aattain scholarships?"
