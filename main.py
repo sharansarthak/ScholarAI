@@ -7,10 +7,11 @@ import os
 # from speechToText import transcribe_audio
 # from recordAudio import record_audio
 # from recordVideo import record_video   
-# from moviepy.editor import VideoFileClip, AudioFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip
 #from speechToText import extract_audio_from_video, transcribe_audio
 from openai import OpenAI
 import os
+<<<<<<< HEAD
 import firebase_admin
 from firebase_admin import auth, credentials, firestore
 from openai import OpenAI
@@ -27,25 +28,47 @@ db=firestore.client()
 # Read the API key from a file
 with open("APIKEY", "r") as file:
     api_key = file.read().strip()
+=======
+from flask_cors import CORS
+from speechToText import extract_audio_from_video, transcribe_audio, extract_audio
+app = Flask(__name__)
+CORS(app)
+# # Read the API key from a file
+# with open("APIKEY", "r") as file:
+#     api_key = file.read().strip()
+>>>>>>> bf813bb (Adding working interview page with bad style)
 
 # Set the API key as an environment variable
-os.environ["OPENAI_API_KEY"] = api_key
+os.environ["OPENAI_API_KEY"] = "api_key"
 
 client = OpenAI()
 
 
-# @app.route('/process_media', methods=['POST'])
-# def process_media():
-#     media_path = request.json.get('media_path')
-#     audio_path = media_path.replace('.mp4', '.wav')  # Assuming .mp4, adjust as necessary
 
-#     # Extract audio from the video
-#     extract_audio_from_video(media_path, audio_path)
+@app.route('/upload_video', methods=['POST'])
+def upload_video():
+    video_file = request.files['video']
+    if video_file:
+        video_path = os.path.join('uploads', video_file.filename)
+        video_file.save(video_path)
+        
+        # Process the video file
+        process_video(video_path)
 
-#     # Now you can call your transcription function
-#     transcription = transcribe_audio(audio_path)  # Define this function based on your transcription logic
+        return jsonify({"message": "Video uploaded successfully"})
+    return jsonify({"error": "No video file provided"}), 400
 
-#     return jsonify({"transcription": transcription})
+
+def process_video(video_path):
+    # Extract audio from video
+    extract_audio(video_path=video_path, audio_path="output_audio.wav")
+    transcribe_audio("output_audio.wav")
+    
+
+    # Transcribe audio
+    # transcription = transcribe_audio(audio_path)  # Implement this function based on your transcription logic
+    
+    # Additional processing...
 
 # Endpoint for user registration (sign-up)
 @app.route('/signup', methods=['POST'])

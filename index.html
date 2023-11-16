@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Interview Recorder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .video-container {
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+        #videoLive, #videoRecorded {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Practice Interview Recorder</h2>
+        <div class="video-container">
+            <video autoplay muted playsinline id="videoLive"></video>
+            <video controls playsinline id="videoRecorded" style="display:none;"></video>
+        </div>
+        <div>
+            <button type="button" id="buttonStart">Start Recording</button>
+            <button type="button" id="buttonStop" disabled>Stop Recording</button>
+            <button type="button" id="buttonUpload" class="button" style="display: none;">Upload Video</button>
+
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
+
