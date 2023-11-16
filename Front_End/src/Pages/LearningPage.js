@@ -106,46 +106,46 @@ export default function LearningPage() {
     //   window.location.href = "http://localhost:3000/login";
     // }
     // API call to populate resourceList at the beggining. 
-    Axios.get("http://127.0.0.1:5000/api/learningResources", {})
+    Axios.get("http://127.0.0.1:5000/api/get_all_resources?username=zeeshan", {})
     .then((res) => {
       console.log(res.data)
       setResourceList(res.data);
     })
 
-    Axios.get("http://127.0.0.1:5000/api/learningResources", {})
-    .then((res) => {
-      console.log(res.data)
-      setLearningResources(res.data);
-    })
+    // Axios.get("http://127.0.0.1:5000/api/learningResources", {})
+    // .then((res) => {
+    //   console.log(res.data)
+    //   setLearningResources(res.data);
+    // })
 
-    Axios.get("http://127.0.0.1:5000/api/exampleQuestionResources", {})
-    .then((res) => {
-      setQuestionResources(res.data);
-    })
+    // Axios.get("http://127.0.0.1:5000/api/exampleQuestionResources", {})
+    // .then((res) => {
+    //   setQuestionResources(res.data);
+    // })
 
-    let temp = [];
-    Axios.get("http://127.0.0.1:5000/api/savedResources", {
-      params: {
-        token: localStorage.getItem("token"),
-      }
-    })
-    .then((res) => {
-      temp = res.data;
-    })
+    // let temp = [];
+    // Axios.get("http://127.0.0.1:5000/api/savedResources", {
+    //   params: {
+    //     token: localStorage.getItem("token"),
+    //   }
+    // })
+    // .then((res) => {
+    //   temp = res.data;
+    // })
 
-    Axios.get("http://127.0.0.1:5000/api/savedPracticeResources", {
-      params: {
-        token: localStorage.getItem("token"),
-      }
-    })
-    .then((res) => {
-      temp.push(...res.data);
-      console.log(temp)
-      setStarredResources(temp);
-    })
-    .catch((res) => {
-      setStarredResources(temp);
-    })
+    // Axios.get("http://127.0.0.1:5000/api/savedPracticeResources", {
+    //   params: {
+    //     token: localStorage.getItem("token"),
+    //   }
+    // })
+    // .then((res) => {
+    //   temp.push(...res.data);
+    //   console.log(temp)
+    //   setStarredResources(temp);
+    // })
+    // .catch((res) => {
+    //   setStarredResources(temp);
+    // })
   }, [])
 
   function openCard(example) {
