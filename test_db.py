@@ -74,7 +74,7 @@ def get_all_resources(username):
 def login(email, password):
     try:
         # Sign in the user with the provided email and password
-        user = auth.sign_in_with_email_and_password(email,password)
+        user = auth.get_user_by_email(email)
         user_token = auth.create_custom_token(user.uid)
 
         return {'success': True, 'uid': user.uid, 'token': user_token}
