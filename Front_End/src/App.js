@@ -79,8 +79,8 @@ function App() {
         </Container>
       </Navbar>
       
-      {/* <LearningPage /> */}
-      <ApplicationReview />
+      <LearningPage />
+      {/* <ApplicationReview /> */}
       {/* <Switch>
         <Route path="/" exact>
           <HomePage />
