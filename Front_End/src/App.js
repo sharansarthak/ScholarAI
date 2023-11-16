@@ -12,6 +12,7 @@ import SignupPage from "./Pages/SignupPage";
 import EmployerDashboardPage from "./Pages/EmployerDashboardPage";
 import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
+import ApplicationReview from "./Pages/ApplicationReview";
 
 
 function App() {
@@ -77,9 +78,10 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-
-      <Switch>
+      
+      <LearningPage />
+      {/* <ApplicationReview /> */}
+      {/* <Switch>
         <Route path="/" exact>
           <HomePage />
         </Route>
@@ -113,7 +115,11 @@ function App() {
         <Route path="/" >
           <h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry this page doesn't exist!</h1>
         </Route> 
+<<<<<<< HEAD
       </Switch>
+=======
+      </Switch> */}
+>>>>>>> UserInterface
 
 
       <Navbar collapseOnSelect expand="lg" sticky="bottom" style={{height:`170px`}}>
