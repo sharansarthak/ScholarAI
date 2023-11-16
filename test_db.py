@@ -103,7 +103,7 @@ def update_scholarship_answer(username, scholarship_title, index, updated_answer
         print(current_answers)
         if 0 <= index < len(current_answers):
             current_answers[index] = updated_answer
-            scholarship_ref.set({'Answers': current_answers})
+            scholarship_ref.update({'Answers': current_answers})
             return {'success': True}
 
         return {'error': 'Invalid index.'}
@@ -239,7 +239,7 @@ scholarships = [
 
 add_scholarship('zeeshan',scholarships)
 
-# print(get_all_scholarship_brief('zeeshan'))
+#print(get_all_scholarship_brief('zeeshan'))
 
 print(update_scholarship_answer('zeeshan', 'Community Leadership Scholarship', 0, 'aaadsad'))
 
