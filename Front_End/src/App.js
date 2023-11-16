@@ -12,6 +12,7 @@ import SignupPage from "./Pages/SignupPage";
 import EmployerDashboardPage from "./Pages/EmployerDashboardPage";
 import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
+import InterviewPage from "./Pages/InterviewPage";
 import ApplicationReview from "./Pages/ApplicationReview";
 
 
@@ -33,6 +34,7 @@ function App() {
               <Nav.Link href="/jobs">Jobs</Nav.Link>
               <Nav.Link href="/salaries">Salaries</Nav.Link>
               <Nav.Link href="/learning">Learning</Nav.Link>
+              <Nav.Link href="/interview">Interview</Nav.Link>
             </Nav>
             <Nav>
               {
@@ -105,6 +107,9 @@ function App() {
         </Route>
         <Route path="/login" exact>
           <LoginPage />
+        </Route>
+        <Route path="/interview" exact>
+          <InterviewPage />
         </Route>
         <Route path="/employerlogin" exact>
           <EmployerLoginPage />
