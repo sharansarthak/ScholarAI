@@ -98,7 +98,6 @@ def process_video(video_path):
     
     # Additional processing...
 
-# Endpoint for user registration (sign-up)
 @app.route('/signup', methods=['POST'])
 def signup():
     try:
@@ -106,6 +105,10 @@ def signup():
         data = request.json
         email = data.get('email')
         password = data.get('password')
+        phone_number = data.get('phone_number')
+        username = data.get('username')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
 
         # Create a new user account with the provided email and password
         user = auth.create_user(
@@ -113,10 +116,22 @@ def signup():
             password=password
         )
 
-        return jsonify({'success': True, 'uid': user.uid}), 201
+        data_to_store = {
+            "email": email,
+            "password": password,
+            "phone_number": phone_number,
+            "username": username,
+            "first_name": first_name,
+            "last_name": last_name
+        }
+
+        # Update user profile in the database
+        db.collection('users').document(username).collection('personal_info').document('my_info').set(data_to_store)
+
+        return jsonify({'success': True}), 201  # Corrected closing parenthesis
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 500
 
 # Endpoint for user login
 @app.route('/login', methods=['POST'])
@@ -254,14 +269,16 @@ def update_scholarship_answer():
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
+        print(data)
+
         # Validate required fields
         if not username or not scholarship_title or index is None or updated_answer is None:
             return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
 
         # Retrieve the scholarship document
         scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
-        scholarship_doc = scholarship_ref.get()
-
+        scholarship_doc = scholarship_ref.get().to_dict()
+        print(scholarship_doc)
         # Check if the scholarship exists
         if not scholarship_doc.exists:
             return jsonify({'error': 'Scholarship not found.'}), 404
@@ -270,6 +287,7 @@ def update_scholarship_answer():
         current_answers = scholarship_doc.get('Answers')
 
         if 0 <= index < len(current_answers):
+            print(index)
             current_answers[index] = updated_answer
             scholarship_ref.update({'Answers': current_answers})
             return jsonify({'success': True})
