@@ -119,7 +119,7 @@ def login():
         user = auth.get_user_by_email(email)
         user_token = auth.create_custom_token(user.uid)
 
-        return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
+        return jsonify({'success': True}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 401
