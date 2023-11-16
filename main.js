@@ -1,3 +1,5 @@
+let globalStream = null; // Global variable to store the media stream
+
 document.addEventListener("DOMContentLoaded", function() {
     const videoLive = document.getElementById("videoLive");
     const videoRecorded = document.getElementById("videoRecorded");
@@ -7,12 +9,28 @@ document.addEventListener("DOMContentLoaded", function() {
     let mediaRecorder;
     let recordedChunks = [];
 
+    async function initVideoStream() {
+        try {
+            globalStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            videoLive.srcObject = globalStream;
+            // Additional configurations for videoLive if needed
+        } catch (error) {
+            console.error("Error accessing media devices:", error);
+            // Handle the error appropriately
+        }
+    }
+
+    // Call the new function to initialize the video stream
+    initVideoStream();
 
     async function startRecording() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            videoLive.srcObject = stream;
-            mediaRecorder = new MediaRecorder(stream);
+            recordedChunks = [];
+            if (!globalStream) {
+                globalStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                videoLive.srcObject = globalStream;
+            }
+            mediaRecorder = new MediaRecorder(globalStream);
             mediaRecorder.ondataavailable = event => {
                 if (event.data.size > 0) {
                     recordedChunks.push(event.data);
@@ -26,18 +44,20 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             mediaRecorder.start();
             buttonUpload.style.display = 'none'; // Hide upload button during recording
+            videoRecorded.style.display = 'none'; // Hide recorded video when recording starts
+    videoLive.style.display = 'block'; // Ensure live video is visible
 
         } catch (error) {
             console.error("Error starting recording:", error);
         }
     }
-
     function stopRecording() {
         if (mediaRecorder && mediaRecorder.state === "recording") {
             mediaRecorder.stop();
             videoLive.srcObject.getTracks().forEach(track => track.stop());
             videoLive.srcObject = null;
-            recordedChunks = [];
+            videoLive.style.display = 'none'; // Hide live video when recording stops
+
         }
         buttonUpload.style.display = 'block'; // Show upload button after recording
 
@@ -65,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById('aiFeedback').style.display = 'none';
                 document.getElementById('feedbackText').innerHTML = '';
             }
+            
         })
         
     .catch(error => {
