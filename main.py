@@ -229,9 +229,10 @@ def update_scholarship_answer():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/get_all_resources/<username>', methods=['GET'])
-def get_all_resources(username):
+@app.route('/get_all_resources', methods=['GET'])
+def get_all_resources():
     try:
+        username = request.args.get('username')
         docs = db.collection('users').document(username).collection('resource').get()
         result = []
 
@@ -262,21 +263,23 @@ def submit_application():
         return jsonify({'error': str(e)}), 500
 
 
-# @app.route('/gpt_improve_essay', methods=['POST'])
-# def gpt_improve_essay():
+@app.route('/gpt_improve_essay', methods=['POST'])
+def gpt_improve_essay(question, answer):
 
-#     request_message_formatted = {'content': request_message, 'role': 'user'}
-#     messages_to_send = read_chat(username) + [request_message_formatted]
+    request_message = "The question asked in my scholarship application is this: "+str(question)+" My Reponse is: "+str(annswer)+" Improve my essay keeping similar word count"
+    request_message_formatted = {'content': request_message, 'role': 'user'}
 
-#     response = client.chat.completions.create(
-#         model="gpt-3.5-turbo",
-#         messages=messages_to_send
-#     )
+    messages_to_send = read_chat(username) + [request_message_formatted]
 
-#     response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
-#     messages = [request_message_formatted]+[response_message_formatted]
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages_to_send
+    )
 
-#     write_chat(username, messages)
+    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
+    messages = [request_message_formatted]+[response_message_formatted]
+
+    write_chat(username, messages)
     
 
 if __name__ == '__main__':
