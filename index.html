@@ -12,7 +12,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             height: 100vh;
             margin: 0;
         }
@@ -36,6 +35,8 @@
         .video-container {
             margin-bottom: 15px;
         }
+        
+
         #videoLive, #videoRecorded {
             width: 100%;
             border-radius: 5px;
@@ -90,6 +91,12 @@
 #aiFeedback li {
     margin-bottom: 5px; /* Spacing between list items */
 }
+.time-indicator {
+    color: #d35400; /* Choose a color that fits your theme */
+    font-size: 1.2em;
+    text-align: center; /* Center-align if it looks better in your layout */
+    margin-top: 10px; /* Adjust spacing as needed */
+}
 
 @media (max-width: 600px) {
     #aiFeedback {
@@ -117,7 +124,7 @@
         <h2>Practice Interview Recorder</h2>
         <div class="question-section">
             <p>Here is your interview question:</p>
-            <p><strong>Q: How do you handle stress and pressure in your work?</strong></p>
+            <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
         </div>
         <div class="video-container">
             <video autoplay muted playsinline id="videoLive"></video>
@@ -128,11 +135,16 @@
             <button type="button" id="buttonStop" class="button" disabled>Stop Recording</button>
             <button type="button" id="buttonUpload" class="button" style="display: none;">Submit video</button>
         </div>
+        <div class="time-indicator">
+            <h3>Answer Time Limit: 2 Minutes</h3>
+        </div>
+        
         <div class="answer-section" id="aiFeedback">
             <p>AI Feedback:</p>
             <p id="feedbackText"></p>
-        </div>        
+        </div>
+                
     </div>
     <script src="main.js"></script>
-</body>
+</body> 
 </html>

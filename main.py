@@ -56,9 +56,21 @@ def process_video_and_get_feedback(video_file_path):
     transcribed_text = transcribe_audio("output_audio.wav")
     print(transcribed_text)
     # Prepare the conversation for AI feedback
-    question = "Tell me about yourself"
+    question = "Tell Us About The Biggest Challenge Youve Ever Faced"
     answer = transcribed_text
-    conversations = [{"role": "system", "content": "You are an expert interview preparation assistant. Your goal is to provide constructive feedback and suggestions for improvement when given interview questions and a user's transcribed audio response. Emphasize clarity, relevance, and professionalism in your feedback."}]
+    conversations = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert interview preparation assistant. Your goal is to provide "
+                "constructive feedback and suggestions for improvement when given interview "
+                "questions and a user's transcribed audio response. Emphasize clarity, relevance, "
+                "and professionalism in your feedback. Please format the feedback for HTML display. "
+                "Use <p> for paragraphs, <br> for new lines, <ul> or <ol> for lists, and <strong> for "
+                "emphasis. Ensure the feedback is well-structured and easy to read in an HTML document."
+            )
+        }
+    ]
     request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to improve my response to ace the interview."
     request_message_formatted = {'content': request_message, 'role': 'user'}
     conversations.append(request_message_formatted)
