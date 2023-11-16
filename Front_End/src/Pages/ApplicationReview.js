@@ -4,12 +4,14 @@ import Axios from 'axios';
 import "../Styles/ApplicationReview.css";
 
 export default function ApplicationReview() {
-  const [scholarshipName, setscholarshipName] = useState("Diversity and Inclusion Award");
+  const param1 = localStorage.getItem("ApplicationReviewTitle");
+  const [scholarshipName, setscholarshipName] = useState(param1);
   const [scholarshipDescription, setscholarshipDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
+  
 
   useEffect(() => { 
     Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {})

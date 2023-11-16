@@ -19,6 +19,7 @@ import {
 import "../Styles/JobsPageStyles.css";
 import "../Styles/SearchBar.css";
 import "../Styles/VerticalMenu.css";
+import ApplicationReview from "./ApplicationReview";
 // import { scholarships } from "../Constants";
 
 
@@ -79,6 +80,14 @@ export default function JobsPage() {
     })
     
   }, [])
+
+  const redirectToApplicationReview = (applicationTitle) => {
+    localStorage.setItem("ApplicationReviewTitle",applicationTitle);
+    // Reloads the current page
+    window.location.reload();
+    // Redirects to the main page
+    window.location.href = "http://localhost:3000/applicationReview";
+  };
 
   function handleCloseAddDoc() {
     setShowAddDoc(false);
@@ -312,7 +321,7 @@ export default function JobsPage() {
                   </div>
                   <Card.Link
                     style={{ cursor: `pointer` }}
-                    // onClick={() => apply(job.id)}
+                    onClick={() => redirectToApplicationReview(scholarship.Title)}
                   >
                     Apply
                   </Card.Link>

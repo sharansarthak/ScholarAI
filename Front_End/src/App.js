@@ -110,6 +110,9 @@ function App() {
         <Route path="/employerlogin" exact>
           <EmployerLoginPage />
         </Route>
+        <Route path="/applicationReview" exact>
+          <ApplicationReview />
+        </Route>
         <Route path="/employerdashboard" exact>
           <EmployerDashboardPage />
         </Route>
