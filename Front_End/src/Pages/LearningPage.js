@@ -95,7 +95,7 @@ export default function LearningPage() {
     exampleQuestionResources
   );
   const [starredResources, setStarredResources] = useState([]);
-  const [resourceList, setResourceList] = useState(exampleRecourceList);
+  const [resourceList, setResourceList] = useState([]);
 
   const [show, setShow] = useState(false);
   const [modalData, setModalData] = useState(questionResources[0]);
@@ -106,10 +106,11 @@ export default function LearningPage() {
     //   window.location.href = "http://localhost:3000/login";
     // }
     // API call to populate resourceList at the beggining. 
-    Axios.get("http://127.0.0.1:5000/api/get_all_resources?username=zeeshan", {})
+    Axios.get("http://127.0.0.1:5000/get_all_resources?username=zeeshan", {})
     .then((res) => {
-      console.log(res.data)
+      
       setResourceList(res.data);
+      console.log("this is it ",resourceList)
     })
 
     // Axios.get("http://127.0.0.1:5000/api/learningResources", {})
