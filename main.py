@@ -281,7 +281,7 @@ def get_enhanced_essay():
         conversations.append(request_message_formatted)
 
         # Generate a response using OpenAI GPT-3.5-turbo
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=conversations
         )
