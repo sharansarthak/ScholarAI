@@ -294,32 +294,38 @@ resources = [
             {
                 "activity": "Hackathon 1",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon1.com"
+                "link": "https://hackathon1.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             },
             {
                 "activity": "Hackathon 2",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon2.com"
+                "link": "https://hackathon2.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             },
             {
                 "activity": "Hackathon 3",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon3.com"
+                "link": "https://hackathon3.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             },
             {
                 "activity": "Hackathon 4",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon4.com"
+                "link": "https://hackathon4.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             },
             {
                 "activity": "Hackathon 5",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon5.com"
+                "link": "https://hackathon5.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             },
             {
                 "activity": "Hackathon 6",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://hackathon6.com"
+                "link": "https://hackathon6.com",
+                "image": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F625987202909085696%2FKKYbLP8y_400x400.jpg&tbnid=ky1Jb3jyAGSj1M&vet=12ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK..i&imgrefurl=https%3A%2F%2Ftwitter.com%2Fdevpost&docid=JrkSXIYc2ahqUM&w=400&h=400&q=devpost%20logo&ved=2ahUKEwjg6OnV0ceCAxWdLDQIHc-tBOwQMygAegQIARBK"
             }
         ]
     },
@@ -329,32 +335,38 @@ resources = [
             {
                 "activity": "Certificate 1",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate1.com"
+                "link": "https://certificate1.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             },
             {
                 "activity": "Certificate 2",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate2.com"
+                "link": "https://certificate2.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             },
             {
                 "activity": "Certificate 3",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate3.com"
+                "link": "https://certificate3.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             },
             {
                 "activity": "Certificate 4",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate4.com"
+                "link": "https://certificate4.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             },
             {
                 "activity": "Certificate 5",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate5.com"
+                "link": "https://certificate5.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             },
             {
                 "activity": "Certificate 6",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
-                "link": "https://certificate6.com"
+                "link": "https://certificate6.com",
+                "image": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fpng%2F18930587-linkedin-logo-png-linkedin-icon-transparent-png&psig=AOvVaw0vHVmWPgfEAp5NSP1aQ4lu&ust=1700193963078000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMicwJvSx4IDFQAAAAAdAAAAABAI"
             }
         ]
     }
