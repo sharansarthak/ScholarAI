@@ -14,6 +14,56 @@ import Axios from 'axios';
 import "../Styles/SalariesPageStyles.css";
 import "../Styles/LearningPageStyles.css";
 
+
+const exampleRecourceList = [
+  {
+    title: "hackathon",
+    values: [
+      {
+        name: "hackathon1",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+      {
+        name: "hackathon2",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+      {
+        name: "hackathon3",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+    ],
+  },
+  {
+    title: "challenges",
+    values: [
+      {
+        name: "challenge1",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+      {
+        name: "challenge2",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+      {
+        name: "challenge3",
+        link: "hackathon1.com",
+        image: "hackathon1.jpg",
+        description: "description of hackathon1"
+      },
+    ],
+  }
+];
+
 const exampleLearningResources = [
   {
     rId: "1",
@@ -45,6 +95,7 @@ export default function LearningPage() {
     exampleQuestionResources
   );
   const [starredResources, setStarredResources] = useState([]);
+  const [resourceList, setResourceList] = useState(exampleRecourceList);
 
   const [show, setShow] = useState(false);
   const [modalData, setModalData] = useState(questionResources[0]);
@@ -54,6 +105,12 @@ export default function LearningPage() {
     // if(localStorage.getItem("token") == null){
     //   window.location.href = "http://localhost:3000/login";
     // }
+    // API call to populate resourceList at the beggining. 
+    Axios.get("http://127.0.0.1:5000/api/learningResources", {})
+    .then((res) => {
+      console.log(res.data)
+      setResourceList(res.data);
+    })
 
     Axios.get("http://127.0.0.1:5000/api/learningResources", {})
     .then((res) => {
@@ -168,68 +225,6 @@ export default function LearningPage() {
         })
         }
       }
-    
-
-    /*if (!(starredResources.filter((element) => element.id === id).length > 0)) {
-      let res = learningResources.filter((item) => {
-        if (item.id === id) return true;
-        else return false;
-      });
-      if (res.length === 0) {
-        res = questionResources.filter((item) => {
-          if (item.id === id) return true;
-          else return false;
-        });
-        a = questionResources.filter((element) => {
-          if(element.id !== id) return true;
-          else return false;
-        })
-        setQuestionResources(a);
-        Axios.post("http://127.0.0.1:5000/api/setSavedPracticeResources", {
-          token: localStorage.getItem("token"),
-          id: res[0].id
-        })
-      }else{
-        a = learningResources.filter((element) => {
-          if(element.id !== id) return true;
-          else return false;
-        })
-        setLearningResources(a);
-        Axios.post("http://127.0.0.1:5000/api/setSavedLearningResources", {
-          token: localStorage.getItem("token"),
-          id: res[0].id,
-        })
-      }
-      res = res[0];
-      setStarredResources([...starredResources, res]);
-    }else{
-      let res = starredResources.filter((element) => {
-        if(element.id !== id) return true;
-        else return false;
-      })
-      a = starredResources.filter((element) => {
-        if(element.id === id) return true;
-        else return false;
-      })
-      setStarredResources(res);
-      if("qPrompt" in a[0]){
-        setQuestionResources([...questionResources, a[0]]);
-        Axios.delete("http://127.0.0.1:5000/api/deleteSavedPracticeResources", {
-          params: {
-            token: localStorage.getItem("token"),
-            id: a[0].qId,
-          }
-        })
-      }else{
-        Axios.delete("http://127.0.0.1:5000/api/deleteSavedResources", {
-          params: {
-            token: localStorage.getItem("token"),
-            id: a[0].rId,
-          }
-        })
-        setLearningResources([...learningResources, a[0]]);
-      }
-    } */
   }
 
   return (
@@ -320,91 +315,49 @@ export default function LearningPage() {
           }
         })}
       </Row>
-      <h2 className="SubHeader">Learn data structures and algo's</h2>
-      <Row style={{ justifyContent: `space-between` }}>
-        {learningResources.map((example) => {
-          return (
-            <Card className="resourceCard">
-              <Card.Header>
-                <Card.Title>
-                  <Row>
-                    <Col
-                      onClick={() =>
-                        window.open(example.link, "_blank").focus()
-                      }
-                    >
-                      {example.tags.map((tag) => {
-                        return (
-                          <Badge
-                            style={{ margin: `1%`, width: `auto` }}
-                            bg="primary"
-                          >
-                            {tag}
-                          </Badge>
-                        );
-                      })}
-                    </Col>
-                    <Col style={{ width: `20%` }}>
-                      <h1
-                        onClick={() => {
-                          addToFavorite(example.rId, undefined)
-                        } }
-                        style={{ marginLeft: `95%` }}
-                        class="star"
+      {resourceList.map((resource, index) => (
+        <div>
+          <h2 className="SubHeader">{resource.title}</h2>
+          {resource.values.map((value, valueIndex) => (
+            
+            <Row style={{ justifyContent: `space-between` }}>
+              <Card className="resourceCard">
+                <Card.Header>
+                  <Card.Title>
+                    <Row>
+                      <Col
+                        onClick={() =>
+                          window.open(value.link, "_blank").focus()
+                        }
                       >
-                        &#9733;
-                      </h1>
-                    </Col>
-                  </Row>
-                </Card.Title>
-                <Card.Subtitle
-                  style={{ fontSize: `14px`, color: `rgb(100, 100, 100)` }}
-                >
-                  {example.topic}
-                </Card.Subtitle>
-              </Card.Header>
-            </Card>
-          );
-        })}
-      </Row>
-      <h2 className="SubHeader">Practice your skills</h2>
-      <Row style={{ justifyContent: `space-between`, marginBottom: `4%` }}>
-        {questionResources.map((example) => {
-          return (
-            <Card className="resourceCard">
-              <Card.Header>
-                <Card.Title style={{ fontSize: `22px` }}>
-                  <Row>
-                    <Col onClick={() => openCard(example)}>
-                      {example.questionNum}
-                    </Col>
-                    <Col>
-                      <h1
-                        onClick={() => addToFavorite(undefined, example.qId)}
-                        style={{ marginLeft: `95%` }}
-                        class="star"
-                      >
-                        &#9733;
-                      </h1>
-                    </Col>
-                  </Row>
-                </Card.Title>
-                <Card.Subtitle
-                  style={{ fontSize: `12px`, color: `rgb(100, 100, 100)` }}
-                >
-                  {example.tags.map((tag) => {
-                    return (
-                      <Badge style={{ margin: `1%` }} bg="primary">
-                        {tag}
-                      </Badge>
-                    );
-                  })}
-                </Card.Subtitle>
-              </Card.Header>
-            </Card>
-          );
-        })}
-      </Row>
+                        {value.name}
+                      </Col>
+                      {/* <Col style={{ width: `20%` }}>
+                        <h1
+                          onClick={() => {
+                            addToFavorite(example.rId, undefined)
+                          } }
+                          style={{ marginLeft: `95%` }}
+                          class="star"
+                        >
+                          &#9733;
+                        </h1>
+                      </Col> */}
+                    </Row>
+                  </Card.Title>
+                  <Card.Subtitle
+                    style={{ fontSize: `14px`, color: `rgb(100, 100, 100)` }}
+                  >
+                    {value.description}
+                  </Card.Subtitle>
+                </Card.Header>
+              </Card>
+            </Row>  
+          ))} 
+        </div>
+        
+        
+      ))}
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{modalData.questionNum}</Modal.Title>
