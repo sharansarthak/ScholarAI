@@ -72,23 +72,24 @@ export default function ApplicationReview() {
     setEditedText(event.target.value);
   };
 
-  const handleEnhanceClick = (index) => {
-    // Send a Get Request to the backend server and receive an enhanced answer
-    Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {})
-      .then((res) => {
-        // Create a copy of the responses array
-        const updatedResponses = [...responses];
-        
-        // Modify the specific element in the copied array
-        // For example, setting the response at the given index to the enhanced answer
-        updatedResponses[index] = res.data;
 
-        // Update the state with the modified array
-        setResponses(updatedResponses);
-      })
-      .catch((error) => {
-        console.error("Error getting enhanced Answer back from the server", error);
+  const handleEnhanceClick = async (index) => {
+    // Send a Get Request to the backend server and receive an enhanced answer
+      const enchancedResponse = await Axios.post("http://127.0.0.1:5000/get_enhanced_essay", {
+        question: questions[index],
+        answer: responses[index],
       });
+
+      // Create a copy of the responses array
+      const updatedResponses = [...responses];
+      
+      // Modify the specific element in the copied array
+      // For example, setting the response at the given index to the enhanced answer
+      updatedResponses[index] = enchancedResponse;
+
+      // Update the state with the modified array
+      setResponses(updatedResponses);
+      
   };
 
   const handleSubmitClick = async () => {
