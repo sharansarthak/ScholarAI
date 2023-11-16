@@ -30,7 +30,7 @@ function App() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/tracking">Tracking</Nav.Link>
-              <Nav.Link href="/jobs">Scholarships</Nav.Link>
+              <Nav.Link href="/scholarships">Scholarships</Nav.Link>
               <Nav.Link href="/salaries">Interview</Nav.Link>
               <Nav.Link href="/learning">Learning</Nav.Link>
             </Nav>
@@ -89,7 +89,7 @@ function App() {
         <Route path="/tracking" exact>
           <TrackingPage />
         </Route>
-        <Route path="/jobs" exact>
+        <Route path="/scholarships" exact>
           <JobsPage />
         </Route>
         <Route path="/salaries" exact>
