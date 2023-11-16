@@ -87,7 +87,7 @@ export default function ApplicationReview() {
       
       // Modify the specific element in the copied array
       // For example, setting the response at the given index to the enhanced answer
-      updatedResponses[index] = enchancedResponse;
+      updatedResponses[index] = enchancedResponse.data.response;
 
       // Update the state with the modified array
       setResponses(updatedResponses);
