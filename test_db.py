@@ -36,6 +36,19 @@ def add_scholarship(username, scholarships):
     for scholarship in scholarships:
         db.collection('users').document(username).collection('scholarship').document(str(scholarship['Title'])).set(scholarship)
 
+def add_resource(username, resources):
+    for category in resources:
+        category_name = category['category']
+        activities = category['activities']
+        
+        # Create a document with the category name as the document ID
+        category_doc_ref = db.collection('users').document(username).collection('resource').document(category_name)
+        
+        # Set the document with all activities of the category
+        category_doc_ref.set({'activities': activities})
+
+
+
 def get_all_scholarship_brief(username):
     docs = db.collection('users').document(username).collection('scholarship').get()
     result = []
@@ -48,12 +61,15 @@ def get_all_scholarship_brief(username):
         result.append(scholarship_data)
     return result
 
-def get_all_scholarship(username):
-    docs = db.collection('users').document(username).collection('scholarship').get()
+def get_all_resources(username):
+    docs = db.collection('users').document(username).collection('resource').get()
     result = []
     for doc in docs:
-        result.append(doc.to_dict())
+        resource_data = doc.to_dict()
+        resource_data['category'] = doc.id  # Add the 'category' field
+        result.append(resource_data)
     return result
+
 
 def login(email, password):
     try:
@@ -111,6 +127,30 @@ def update_scholarship_answer(username, scholarship_title, index, updated_answer
     except Exception as e:
         return {'error': str(e)}
 
+# def application_submitted(username, title):
+
+#     data = request.json
+#     username = data.get('username')
+#     title = data.get('title')
+
+#     db.collection('users').document(username).collection('scholarship').document(title).update({'Submitted': True})
+
+
+def gpt_improve_essay():
+
+    request_message_formatted = {'content': request_message, 'role': 'user'}
+    messages_to_send = read_chat(username) + [request_message_formatted]
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages_to_send
+    )
+
+    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
+    messages = [request_message_formatted]+[response_message_formatted]
+
+    write_chat(username, messages)
+    
 
 # write_chat('zeeshan', [{"role": "system", "content": "You are a helpful assistant."},
 #     {"role": "user", "content": "Who won the world series in 2020?"},
@@ -138,7 +178,8 @@ scholarships = [
             "I participated in a STEM research project last year.",
             "I developed a new technology for my school project.",
             "I have consistently maintained a high GPA."
-        ]
+        ],
+        "Submitted": False  # New field
     },
     {
         "Scholarship Amount": "$7,500",
@@ -157,7 +198,8 @@ scholarships = [
             "I led a community service project in my neighborhood.",
             "I volunteered at a local food bank.",
             "Maintaining a high GPA is important because..."
-        ]
+        ],
+        "Submitted": False  # New field
     },
     {
         "Scholarship Amount": "$3,000",
@@ -176,7 +218,8 @@ scholarships = [
             "I organized a diversity awareness event at my school.",
             "Diversity is important because it enriches perspectives.",
             "In my essay, I will share personal experiences that highlight the importance of diversity."
-        ]
+        ],
+        "Submitted": False  # New field
     },
     {
         "Scholarship Amount": "$6,000",
@@ -195,7 +238,8 @@ scholarships = [
             "I started my own small business in high school.",
             "My business plan focuses on...",
             "I introduced innovative strategies to increase business efficiency."
-        ]
+        ],
+        "Submitted": False  # New field
     },
     {
         "Scholarship Amount": "$8,000",
@@ -214,7 +258,8 @@ scholarships = [
             "I organized a community clean-up event.",
             "Sustainability is important because...",
             "In my essay, I will elaborate on my dedication to environmental stewardship."
-        ]
+        ],
+        "Submitted": False  # New field
     },
     {
         "Scholarship Amount": "$4,500",
@@ -233,14 +278,92 @@ scholarships = [
             "I achieved the highest grades in my science courses.",
             "Maintaining a high GPA is important because...",
             "In my essay, I will reflect on my academic journey and outline my future goals."
+        ],
+        "Submitted": False  # New field
+    }
+]
+
+resources = [
+    {
+        "category": "hackathons",
+        "activities": [
+            {
+                "activity": "Hackathon 1",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon1.com"
+            },
+            {
+                "activity": "Hackathon 2",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon2.com"
+            },
+            {
+                "activity": "Hackathon 3",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon3.com"
+            },
+            {
+                "activity": "Hackathon 4",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon4.com"
+            },
+            {
+                "activity": "Hackathon 5",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon5.com"
+            },
+            {
+                "activity": "Hackathon 6",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://hackathon6.com"
+            }
+        ]
+    },
+    {
+        "category": "certificates",
+        "activities": [
+            {
+                "activity": "Certificate 1",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate1.com"
+            },
+            {
+                "activity": "Certificate 2",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate2.com"
+            },
+            {
+                "activity": "Certificate 3",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate3.com"
+            },
+            {
+                "activity": "Certificate 4",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate4.com"
+            },
+            {
+                "activity": "Certificate 5",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate5.com"
+            },
+            {
+                "activity": "Certificate 6",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.",
+                "link": "https://certificate6.com"
+            }
         ]
     }
 ]
 
+
 add_scholarship('zeeshan',scholarships)
+add_resource('zeeshan',resources)
 
 #print(get_all_scholarship_brief('zeeshan'))
-
-print(update_scholarship_answer('zeeshan', 'Community Leadership Scholarship', 0, 'aaadsad'))
+#print(update_scholarship_answer('zeeshan', 'Community Leadership Scholarship', 0, 'aaadsad'))
+#print(application_submitted('zeeshan', 'Community Leadership Scholarship'))
 
 # print(login('Zeeshan.chougle@ucalgary.ca', 'Zeemaan1234@'))
+
+print(get_all_resources('zeeshan')[1])

@@ -227,6 +227,57 @@ def update_scholarship_answer():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get_all_resources/<username>', methods=['GET'])
+def get_all_resources(username):
+    try:
+        docs = db.collection('users').document(username).collection('resource').get()
+        result = []
+
+        for doc in docs:
+            resource_data = doc.to_dict()
+            resource_data['category'] = doc.id  # Add the 'category' field
+            result.append(resource_data)
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/submit_application', methods=['POST'])
+def submit_application():
+    try:
+        data = request.json
+        username = data.get('username')
+        title = data.get('title')
+
+        # Update the 'Submitted' field to True
+        db.collection('users').document(username).collection('scholarship').document(title).update({'Submitted': True})
+
+        return jsonify({'success': True, 'message': 'Application submitted successfully.'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# @app.route('/gpt_improve_essay', methods=['POST'])
+# def gpt_improve_essay():
+
+#     request_message_formatted = {'content': request_message, 'role': 'user'}
+#     messages_to_send = read_chat(username) + [request_message_formatted]
+
+#     response = client.chat.completions.create(
+#         model="gpt-3.5-turbo",
+#         messages=messages_to_send
+#     )
+
+#     response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
+#     messages = [request_message_formatted]+[response_message_formatted]
+
+#     write_chat(username, messages)
     
+
 if __name__ == '__main__':
     app.run(debug=True)
