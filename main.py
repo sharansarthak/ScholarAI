@@ -116,7 +116,7 @@ def login():
         password = data.get('password')
 
         # Sign in the user with the provided email and password
-        user = auth.sign_in_with_email_and_password(email,password)
+        user = auth.get_user_by_email(email)
         user_token = auth.create_custom_token(user.uid)
 
         return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
@@ -362,6 +362,21 @@ def get_interview_feedback():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/update_user_profile', methods=['POST'])
+def update_user_profile():
+    try:
+        # Get data from the request
+        data = request.json
+        username = data.get('username')
+        user_response = data.get('user_response')
+
+        # Update user profile in the database
+        db.collection('users').document(username).set(user_response)
+
+        return jsonify({'success': True, 'message': 'User profile updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
