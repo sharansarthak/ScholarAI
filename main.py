@@ -295,8 +295,8 @@ def get_enhanced_essay():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/get_enhanced_essay', methods=['POST'])
-def get_enhanced_essay():
+@app.route('/get_interview_feedback', methods=['POST'])
+def get_interview_feedback():
     try:
         # Get question and answer from the request JSON
         question = request.json.get('question')
