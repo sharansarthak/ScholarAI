@@ -7,9 +7,10 @@ import {
   Col,
 } from "react-bootstrap";
 import { useState } from "react";
-import "../Styles/LoginAndSignupStyles.css";
 import { styles } from "../styles"
 import Axios from "axios";
+import  googlelogo from "../assets/googleicon.png";
+import  applelogo  from "../assets/appleicon.png";
 
 export default function SignupPage() {
   const [emailValidity, setEmailValidity] = useState(false);
@@ -87,7 +88,7 @@ export default function SignupPage() {
 
   return (
     <div style={{ minHeight: `73.3vh` }}>
-      <Container style={{ maxWidth: `900px`, paddingTop: `4%`}}>
+      <Container style={{ maxWidth: `900px`, paddingTop: `4%`, paddingBottom:'6%'}}>
       <h2 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center' }}>Ready to apply for scholarships?</h2>
       <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginBottom: '25px' }}>Quickly register and find the perfect scholarship for you!</p>
       <Form className="custom-signup-panel mx-auto" style={{ maxWidth: `700px` }} noValidate>
@@ -220,16 +221,16 @@ export default function SignupPage() {
             </Col>
           </Row>
           <Row className="mb-2">
-            <Col className="mb-2">
+            <Col className="mb-1">
               <p className="text-center">
                 Already have an account? <span style={{ color: 'blue', fontWeight:'bold' }}>Log in</span>
               </p>
-              <Row className="mb-4">
+              <Row className="mb-2" style={{ marginTop: '50px'}}>
               <Col>
                 <div className="line-div"></div>
               </Col>
               <Col>
-                <p className="text-center">Or sign up with</p>
+                <p className="text-center"  style={{ color: '#808080' }}>Or sign up with</p>
               </Col>
               <Col>
                 <div className="line-div"></div>
@@ -239,14 +240,23 @@ export default function SignupPage() {
           </Row>
           <Row>
             <Col>
-              <Button size="lg" className="SignupButton" href="/employersignup">
-                Sign up as an employer
+              <Button size="lg" className="GoogleButton" href="/employersignup" style ={{borderRadius: '10px'}}>
+                <img src ={ googlelogo } alt="Google Logo" className="google-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
-      </Row>
+            <Col>
+              <Button size="lg" className="GoogleButton" href="/anotherlink" style ={{borderRadius: '10px'}}>
+                <img src={ applelogo } alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px'}} /> 
+              </Button>
+            </Col>
+            <Col>
+              <Button size="lg" className="GoogleButton" href="/anotherlink" style ={{borderRadius: '10px'}}>
+                <img src={ applelogo } alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px'}} /> 
+              </Button>
+            </Col>
+        </Row>
       </Form>
-
-
+      <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '25px' }}>GPT-powered AI scholarship application tool!</p>
     </Container>
     </div>
   );
