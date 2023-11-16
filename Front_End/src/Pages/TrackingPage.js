@@ -75,7 +75,7 @@ export default function TrackingPage() {
             appliedList.push(job);
           } else if (job.applicationStatus === "Interview") {
             interviewList.push(job);
-          } else if (job.applicationStatus === "Offer") {
+          } else if (job.applicationStatus === "Accepted") {
             offerList.push(job);
           } else if (job.applicationStatus === "Regected") {
             rejectedList.push(job);
@@ -125,7 +125,7 @@ export default function TrackingPage() {
       count: interviewItems.length,
     },
     4: {
-      name: "Offer",
+      name: "Accepted",
       items: offerItems,
       count: offerItems.length,
     },
@@ -168,7 +168,7 @@ export default function TrackingPage() {
         appliedList.push(job);
       } else if (job.applicationStatus === "Interview") {
         interviewList.push(job);
-      } else if (job.applicationStatus === "Offer") {
+      } else if (job.applicationStatus === "Accepted") {
         offerList.push(job);
       } else if (job.applicationStatus === "Rejected") {
         rejectedList.push(job);
@@ -333,7 +333,7 @@ export default function TrackingPage() {
     if (status === "Wishlist") column = 1;
     if (status === "Applied") column = 2;
     if (status === "Interview") column = 3;
-    if (status === "Offer") column = 4;
+    if (status === "Accepted") column = 4;
     if (status === "Rejected") column = 5;
     let theColumn = columns[column];
 

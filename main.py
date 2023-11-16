@@ -13,7 +13,7 @@ from openai import OpenAI
 import os
 import firebase_admin
 from firebase_admin import auth, credentials, firestore
-
+from openai import OpenAI
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -203,14 +203,16 @@ def update_scholarship_answer():
         index = data.get('index')
         updated_answer = data.get('updated_answer')
 
+        print(data)
+
         # Validate required fields
         if not username or not scholarship_title or index is None or updated_answer is None:
             return jsonify({'error': 'Invalid request. Missing required fields.'}), 400
 
         # Retrieve the scholarship document
         scholarship_ref = db.collection('users').document(username).collection('scholarship').document(scholarship_title)
-        scholarship_doc = scholarship_ref.get()
-
+        scholarship_doc = scholarship_ref.get().to_dict()
+        print(scholarship_doc)
         # Check if the scholarship exists
         if not scholarship_doc.exists:
             return jsonify({'error': 'Scholarship not found.'}), 404
@@ -219,6 +221,7 @@ def update_scholarship_answer():
         current_answers = scholarship_doc.get('Answers')
 
         if 0 <= index < len(current_answers):
+            print(index)
             current_answers[index] = updated_answer
             scholarship_ref.update({'Answers': current_answers})
             return jsonify({'success': True})
@@ -263,24 +266,66 @@ def submit_application():
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/gpt_improve_essay', methods=['POST'])
-def gpt_improve_essay(question, answer):
+@app.route('/get_enhanced_essay', methods=['POST'])
+def get_enhanced_essay():
+    try:
+        # Get question and answer from the request JSON
+        question = request.json.get('question')
+        answer = request.json.get('answer')
 
-    request_message = "The question asked in my scholarship application is this: "+str(question)+" My Reponse is: "+str(annswer)+" Improve my essay keeping similar word count"
-    request_message_formatted = {'content': request_message, 'role': 'user'}
+        # Define the initial conversation
+        conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' scholarship essays"}]
 
-    messages_to_send = read_chat(username) + [request_message_formatted]
+        # Format user's request message
+        request_message = f"The question asked in my scholarship application is this: {question} My Response is: {answer} Provide just the improved essay keeping a similar word count (without title or unnecessary info)"
+        request_message_formatted = {'content': request_message, 'role': 'user'}
 
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages_to_send
-    )
+        # Add user's request to the conversation
+        conversations.append(request_message_formatted)
 
-    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
-    messages = [request_message_formatted]+[response_message_formatted]
+        # Generate a response using OpenAI GPT-3.5-turbo
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=conversations
+        )
 
-    write_chat(username, messages)
-    
+        # Get the AI's response from the choices
+        ai_response = response.choices[0].message.content
+
+        return jsonify({'success': True, 'response': ai_response})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get_interview_feedback', methods=['POST'])
+def get_interview_feedback():
+    try:
+        # Get question and answer from the request JSON
+        question = request.json.get('question')
+        answer = request.json.get('answer')
+
+        conversations =[{"role": "system", "content": "You are an expert interview preparation assistant. Your goal is to provide constructive feedback and suggestions for improvement when given interview questions and a user's transcribed audio response. Emphasize clarity, relevance, and professionalism in your feedback."}] 
+
+        request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to imrpove my response to ace the interview."
+        request_message_formatted = {'content': request_message, 'role': 'user'}
+
+        conversations.append(request_message_formatted)
+
+        # Generate a response using OpenAI GPT-3.5-turbo
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=conversations
+        )
+
+        # Get the AI's response from the choices
+        ai_response = response.choices[0].message.content
+
+        return jsonify({'success': True, 'response': ai_response})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

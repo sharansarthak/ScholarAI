@@ -12,6 +12,7 @@ import SignupPage from "./Pages/SignupPage";
 import EmployerDashboardPage from "./Pages/EmployerDashboardPage";
 import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
+import ApplicationReview from "./Pages/ApplicationReview";
 
 
 function App() {
@@ -77,8 +78,9 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-
+      
+      {/* <LearningPage /> */}
+      {/* <ApplicationReview /> */}
       <Switch>
         <Route path="/" exact>
           <HomePage />
