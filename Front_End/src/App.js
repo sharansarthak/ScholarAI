@@ -79,9 +79,9 @@ function App() {
         </Container>
       </Navbar>
       
-      <LearningPage />
+      {/* <LearningPage /> */}
       {/* <ApplicationReview /> */}
-      {/* <Switch>
+      <Switch>
         <Route path="/" exact>
           <HomePage />
         </Route>
@@ -115,11 +115,7 @@ function App() {
         <Route path="/" >
           <h1 style={{marginTop: `5%`, fontFamily:`Ubuntu`}}>Sorry this page doesn't exist!</h1>
         </Route> 
-<<<<<<< HEAD
       </Switch>
-=======
-      </Switch> */}
->>>>>>> UserInterface
 
 
       <Navbar collapseOnSelect expand="lg" sticky="bottom" style={{height:`170px`}}>
