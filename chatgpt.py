@@ -31,24 +31,28 @@ def read_chat(username):
         result.append(doc.to_dict()['message'])
     return result
 
-def chatgpt(username, request_message):
+def chatgpt(question, answer):
 
+
+    conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
+
+    request_message = "The question asked in my scholarship application is this: "+str(question)+" My Reponse is: "+str(answer)+" Provide improved essay keeping similar word count"
     request_message_formatted = {'content': request_message, 'role': 'user'}
-    messages_to_send = read_chat(username) + [request_message_formatted]
+
+    conversations.append(request_message_formatted)
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=messages_to_send
+        messages=conversations
     )
 
-    response_message_formatted = {'content': response.choices[0].message.content, 'role': 'assistant'}
-    messages = [request_message_formatted]+[response_message_formatted]
-
-    write_chat(username, messages)
+    print(response.choices[0].message.content)
 
 #write_chat('zeeshan', {'message':  {"role": "user", "content": "Who won the world series in 2020?"}})
 #print(read_chat('zeeshan')[0])
 message="Name 2 hard to aattain scholarships?"
+
+question = "Describe a challenging situation you faced in your academic journey and how you overcame it. How did this experience shape your character and contribute to your personal growth?"
+answer = "During my sophomore year, I encountered a challenging academic setback when I struggled with advanced calculus. Determined to overcome this obstacle, I sought additional tutoring, formed study groups, and dedicated extra hours to grasp the concepts. This perseverance not only improved my grades but also honed my problem-solving skills. The experience taught me resilience, emphasizing the importance of seeking support when faced with challenges. Overcoming this academic hurdle has positively shaped my character, instilling a proactive approach to difficulties. It has contributed significantly to my personal growth by fostering resilience, adaptability, and a passion for continuous learning."
 chatgpt('zeeshan', message)
-print(read_chat('zeeshan'))
 #print(response.choices[0].message.content)
