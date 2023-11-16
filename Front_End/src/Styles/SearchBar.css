@@ -1,0 +1,27 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25vh; /* 100% of the viewport height */
+    border-radius: 30px; /* Increased rounded corners */
+    background-color: #f0f0f0; /* Optional: Background color */
+  }
+  
+  .search-form {
+    text-align: center;
+  }
+  
+  input {
+    padding: 10px; /* Increased padding for better appearance */
+    margin-right: 5px;
+    border-radius: 30px; /* Increased rounded corners for the input */
+  }
+  
+  button {
+    padding: 10px; /* Increased padding for better appearance */
+    border-radius: 30px; /* Increased rounded corners for the button */
+    background-color: #4caf50; /* Optional: Button background color */
+    color: white; /* Optional: Button text color */
+    border: none; /* Optional: Remove button border */
+  }
+  
