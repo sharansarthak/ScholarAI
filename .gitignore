@@ -7,3 +7,5 @@ ace-axon-345319-373465ce4bf2.json
 *.pyc
 __pycache__/
 myenv/
+
+package-lock.json
