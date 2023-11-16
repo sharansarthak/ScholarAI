@@ -48,12 +48,12 @@ def chatgpt(question, answer):
 
     print(response.choices[0].message.content)
 
-def get_interview_feedback_chatgpt(question, answer):
+def get_interview_feedback_chatgpt(question, response):
 
 
-    conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
+    conversations = [{"role": "system", "content": "You are a helpful interview preparation assistant who will provide feedback for improvement when provided with the questions and user's transcribe audio for their response"}]
 
-    request_message = "The question asked in my scholarship application is this: "+str(question)+" My Reponse is: "+str(answer)+" Provide improved essay keeping similar word count"
+    request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to imrpove my response to ace the interview."
     request_message_formatted = {'content': request_message, 'role': 'user'}
 
     conversations.append(request_message_formatted)
