@@ -13,7 +13,7 @@ from openai import OpenAI
 import os
 import firebase_admin
 from firebase_admin import auth, credentials, firestore
-
+from openai import OpenAI
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
