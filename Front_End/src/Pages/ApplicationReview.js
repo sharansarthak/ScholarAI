@@ -4,7 +4,7 @@ import Axios from 'axios';
 import "../Styles/ApplicationReview.css";
 
 export default function ApplicationReview() {
-  const [scholarshipName, setscholarshipName] = useState("Community Leadership Scholarship");
+  const [scholarshipName, setscholarshipName] = useState("Diversity and Inclusion Award");
   const [scholarshipDescription, setscholarshipDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
@@ -26,7 +26,7 @@ export default function ApplicationReview() {
             setQuestions(scholarshipData.Questions);
             setResponses(scholarshipData.Answers);
           } else {
-            console.error("Scholarship with title 'Scholarshipname' not found in jsonData");
+            console.error("Scholarship with title ${scholarshipName} not found in jsonData");
           }
         }
       })

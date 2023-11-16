@@ -51,9 +51,9 @@ export default function LearningPage() {
 
   useEffect(() => {
     // Checks for token in storage, indicating signed in.
-    if(localStorage.getItem("token") == null){
-      window.location.href = "http://localhost:3000/login";
-    }
+    // if(localStorage.getItem("token") == null){
+    //   window.location.href = "http://localhost:3000/login";
+    // }
 
     Axios.get("http://127.0.0.1:5000/api/learningResources", {})
     .then((res) => {
@@ -234,7 +234,7 @@ export default function LearningPage() {
 
   return (
     <Container style={{ minHeight: `77vh`, textAlign: `left` }}>
-      <h1 className="SalaryHeader">Learn how to ace the interview</h1>
+      <h1 className="SalaryHeader">Improve Your Skills!</h1>
       {starredResources.length !== 0 ? (
         <h2 className="SubHeader">Starred Resources</h2>
       ) : (
