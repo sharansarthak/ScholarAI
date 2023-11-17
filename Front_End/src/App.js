@@ -32,7 +32,6 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link href="/tracking">Tracking</Nav.Link>
             <Nav.Link href="/scholarships">Scholarships</Nav.Link>
-            <Nav.Link href="/salaries">Salaries</Nav.Link>
             <Nav.Link href="/learning">Learning</Nav.Link>
             <Nav.Link href="/interview">Interview</Nav.Link>
           </Nav>
