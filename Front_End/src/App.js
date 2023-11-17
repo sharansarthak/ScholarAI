@@ -12,6 +12,7 @@ import SignupPage from "./Pages/SignupPage";
 import EmployerDashboardPage from "./Pages/EmployerDashboardPage";
 import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
+import InterviewPage from "./Pages/InterviewPage";
 import ApplicationReview from "./Pages/ApplicationReview";
 
 
@@ -23,61 +24,61 @@ function App() {
 
   return (
     <Router>
-      <Navbar collapseOnSelect expand="lg">
-        <Container>
-          <Navbar.Brand href="/">ScholarAI</Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/tracking">Tracking</Nav.Link>
-              <Nav.Link href="/scholarships">Scholarships</Nav.Link>
-              <Nav.Link href="/salaries">Interview</Nav.Link>
-              <Nav.Link href="/learning">Learning</Nav.Link>
-            </Nav>
-            <Nav>
-              {
-                localStorage.getItem("token") !== null ? 
-                <Button
+       <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: 'white' }}>
+      <Container>
+        <Navbar.Brand href="/">ScholarAI</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="/tracking">Tracking</Nav.Link>
+            <Nav.Link href="/jobs">Jobs</Nav.Link>
+            <Nav.Link href="/salaries">Salaries</Nav.Link>
+            <Nav.Link href="/learning">Learning</Nav.Link>
+            <Nav.Link href="/interview">Interview</Nav.Link>
+          </Nav>
+          <Nav>
+            {localStorage.getItem("token") !== null ? (
+              <Button
                 className="navButton"
+                onClick={signOut}
                 style={{
                   backgroundColor: `white`,
                   color: `#264653`,
                   borderColor: `white`,
                 }}
-                onClick={signOut}
               >
                 Sign out
               </Button>
-              :
+            ) : (
               <div>
-              <Button
-                className="navButton"
-                style={{
-                  backgroundColor: `white`,
-                  color: `#264653`,
-                  borderColor: `white`,
-                }}
-                href="/signup"
-              >
-                Sign up for free
-              </Button>
-              <Button
-                className="navButton"
-                style={{
-                  backgroundColor: `#3b6b7e`,
-                  color: `white`,
-                  borderColor: `#3b6b7e`,
-                }}
-                href="/login"
-              >
-                Sign in
-              </Button>
+                <Button
+                  className="navButton"
+                  href="/signup"
+                  style={{
+                    backgroundColor: `white`,
+                    color: `#264653`,
+                    borderColor: `white`,
+                  }}
+                >
+                  Sign up for free
+                </Button>
+                <Button
+                  className="navButton"
+                  href="/login"
+                  style={{
+                    backgroundColor: `#3b6b7e`,
+                    color: `white`,
+                    borderColor: `#3b6b7e`,
+                  }}
+                >
+                  Sign in
+                </Button>
               </div>
-              }
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
       
       {/* <LearningPage /> */}
       {/* <ApplicationReview /> */}
@@ -107,6 +108,9 @@ function App() {
         <Route path="/login" exact>
           <LoginPage />
         </Route>
+        <Route path="/interview" exact>
+          <InterviewPage />
+        </Route>
         <Route path="/employerlogin" exact>
           <EmployerLoginPage />
         </Route>
@@ -122,11 +126,11 @@ function App() {
       </Switch>
 
 
-      <Navbar collapseOnSelect expand="lg" sticky="bottom" style={{height:`170px`}}>
+      <Navbar collapseOnSelect expand="lg" sticky="bottom" style={{height:`170px`, backgroundColor:`#e29578`}}>
         <Container style={{justifyContent:`center`}}>
           <div>
             <h1>Simplify your job search, increase your total compensation, and practice for the interview. All for free.</h1>
-            <h1 className="FooterLogo">SWEseek</h1>
+            <h1 className="FooterLogo">ScholarAI</h1>
           </div>
         </Container>
       </Navbar>

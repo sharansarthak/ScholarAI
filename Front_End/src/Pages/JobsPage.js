@@ -21,6 +21,9 @@ import "../Styles/SearchBar.css";
 import "../Styles/VerticalMenu.css";
 import ApplicationReview from "./ApplicationReview";
 // import { scholarships } from "../Constants";
+import { styles } from "../styles"
+
+import { scholarships } from "../Constants";
 
 
 export default function JobsPage() {
@@ -247,6 +250,7 @@ export default function JobsPage() {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Enter your search..."
+            style={{ width: '75%', color:`black` }}
           />
           <button type="submit">Search</button>
         </form>
@@ -257,10 +261,10 @@ export default function JobsPage() {
   
 
   return (
-    <Container style={{ minHeight: `100vh` }}>
-      <Row>
+    <Container style={{ minHeight: `100vh`}}>
+     <Row>
         {/* Left Side Vertical Menu */}
-        <Col md={3} className="vertical-menu">
+        <Col md={2} className="vertical-menu">
           <ul>
             <li>
               Eligible Scholarships
@@ -293,43 +297,41 @@ export default function JobsPage() {
         </Col>
 
         {/* Right Side Content */}
-        <Col md={9}>
-        <h1 className="JobsHeader">Scholarships</h1>
-          <SearchBar />
-          <Row style={{ justifyContent: `space-evenly` }}>
-            {scholarships?.map((scholarship) => {
-              return (
-                <div style={{ width: "18rem", background: '#FFFFFF', margin: `1% 0`, border: '1px solid black', borderRadius: '35px', textAlign: 'center', padding: '10px' }}>
+        <Col md={10} style={{ paddingLeft: `50px`, marginBottom:`90px`}}>
+          <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop:`70px` }}>Scholarships</h1>
+          <div style={{width:'100%'}}>
+            <SearchBar />
+          </div>
+          <Row style={{ justifyContent: `space-evenly`, gap:`25px` }}>
+            {scholarships.map((scholarship) => (
+              <div key={scholarship.id} className="scholarship-card" style={{ width: "18rem", height:"370px", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative' }}>
                 {/* Centered Image */}
                 <img
                   src={scholarship.Image} // Replace with the actual image URL
                   alt="Scholarship Logo"
-                  style={{ width: '30%', borderRadius: '50%', marginBottom: '10px' }}
+                  style={{ width: '30%', marginBottom: '10px' }}
                 />
-              
-                <Card.Body>
+                <Card.Body style={{ cursor: `pointer` }} onClick={() => redirectToApplicationReview(scholarship.Title)}>
                   <Card.Title>{scholarship.Title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {scholarship.Institution}
                   </Card.Subtitle>
                   <Card.Text>{scholarship.Requirements}</Card.Text>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px', marginTop: '10px' }}>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship["Scholarship Amount"]}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.Deadline}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship["Estimated Completion Time"]}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship["Number of Recipients"]}</div>
+                  <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px' }}>
+                        <div style={{ borderBottom: '1px solid #d3d3d3', borderRight: '1px solid #d3d3d3', padding: '10px' }}>💸​ {scholarship["Scholarship Amount"]}</div>
+                        <div style={{ borderBottom: '1px solid #d3d3d3', padding: '10px' }}>📆​ {scholarship.Deadline}</div>
+                        <div style={{ borderRight: '1px solid #d3d3d3', padding: '10px' }}>⌛​ {scholarship["Estimated Completion Time"]}</div>
+                        <div style={{ padding: '10px' }}>📜 {scholarship["Number of Recipients"]}</div>
+                    </div>
                   </div>
-                  <Card.Link
-                    style={{ cursor: `pointer` }}
-                    onClick={() => redirectToApplicationReview(scholarship.Title)}
-                  >
-                    Apply
-                  </Card.Link>
                 </Card.Body>
-              </div>          
-              );
-            })}
+              </div>
+            ))}
           </Row>
+
+
+          {/* ... (existing modals and other content) */}
         </Col>
       </Row>
     </Container>
