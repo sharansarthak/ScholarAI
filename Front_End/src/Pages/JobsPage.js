@@ -312,10 +312,10 @@ export default function JobsPage() {
               
                 <Card.Body style={{ cursor: `pointer`, display:`flex`, flexDirection:'column' }} onClick={() => redirectToApplicationReview(scholarship.Title)}>
                   <Card.Title>{scholarship.Title}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
+                  <Card.Subtitle className="mb-2 text-muted" style={{ marginTop: "10px"}}>
                     {scholarship.Institution}
                   </Card.Subtitle>
-                  <div style={{ margin: '15px 0' }}>
+                  <div style={{ margin: '5px 0', marginBottom: '5px'}}>
                     {scholarship.Requirements.map((requirement, index) => (
                       <p key={index}  className="requirement-text">
                         #{requirement}
