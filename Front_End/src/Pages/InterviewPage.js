@@ -1,145 +1,246 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-const InterviewPage = () => {
-  const [recording, setRecording] = useState(false);
-  const [globalStream, setGlobalStream] = useState(null);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [recordedChunks, setRecordedChunks] = useState([]);
-  const [videoURL, setVideoURL] = useState('');
+class InterviewPage extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    // Refs for video elements
+    this.videoLive = React.createRef();
+    this.videoRecorded = React.createRef();
 
-  const initVideoStream = async () => {
-    try {
-      setGlobalStream(await navigator.mediaDevices.getUserMedia({ video: true, audio: true }));
-    } catch (error) {
-      console.error("Error accessing media devices:", error);
-      // Handle the error appropriately
-    }
-  };
+    // Binding methods to 'this' context
+    this.initVideoStream = this.initVideoStream.bind(this);
+    this.startRecording = this.startRecording.bind(this);
+    this.stopRecording = this.stopRecording.bind(this);
+    this.uploadVideo = this.uploadVideo.bind(this);
 
-  const startRecording = async () => {
-    try {
-      setRecordedChunks([]);
-      
-      // Ensure globalStream is initialized before proceeding
-      if (!globalStream) {
-        await initVideoStream();
-      }
-
-      // Double-check if globalStream is now available
-      if (globalStream) {
-        const mediaRecorderInstance = new MediaRecorder(globalStream);
-        setMediaRecorder(mediaRecorderInstance);
-
-        mediaRecorderInstance.ondataavailable = event => {
-          if (event.data.size > 0) {
-            setRecordedChunks(prevChunks => [...prevChunks, event.data]);
-          }
-        };
-
-        mediaRecorderInstance.onstop = () => {
-          const videoBlob = new Blob(recordedChunks, { type: "video/mp4" });
-          const blobURL = URL.createObjectURL(videoBlob);
-          setVideoURL(blobURL);
-          document.getElementById("videoRecorded").src = blobURL;
-        };
-
-        mediaRecorderInstance.start();
-        document.getElementById("buttonUpload").style.display = 'none';
-        document.getElementById("videoRecorded").style.display = 'none';
-        document.getElementById("videoLive").style.display = 'block';
-      } else {
-        console.error("globalStream is still not available");
-      }
-    } catch (error) {
-      console.error("Error starting recording:", error);
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      mediaRecorder.stop();
-      globalStream.getTracks().forEach(track => track.stop());
-      setGlobalStream(null);
-      document.getElementById("videoLive").style.display = 'none';
-    }
-    document.getElementById("buttonUpload").style.display = 'block';
-  };
-
-  const uploadVideo = () => {
-    const formData = new FormData();
-    recordedChunks.forEach((chunk, index) => {
-      formData.append(`chunk${index}`, chunk);
-    });
-
-    fetch('http://localhost:5000/upload_video', {
-      method: 'POST',
-      body: formData
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Upload successful', data);
-        console.log('Checking AI feedback:', data.ai_feedback);
-      })
-      .catch(error => {
-        console.error('Error in upload:', error);
-      });
-  };
-
-  useEffect(() => {
-    const videoLive = document.getElementById("videoLive");
-    const videoRecorded = document.getElementById("videoRecorded");
-    const buttonStart = document.getElementById("buttonStart");
-    const buttonStop = document.getElementById("buttonStop");
-    const buttonUpload = document.getElementById("buttonUpload");
-
-    if (buttonStart && buttonStop && buttonUpload) {
-      buttonStart.addEventListener("click", startRecording);
-      buttonStop.addEventListener("click", stopRecording);
-      buttonUpload.addEventListener("click", uploadVideo);
-    }
-
-    return () => {
-      if (globalStream) {
-        globalStream.getTracks().forEach(track => track.stop());
-      }
+    // Initialize state
+    this.state = {
+        isRecording: false,            // To track if recording is in progress
+        isUploadButtonVisible: false,  // To control the visibility of the upload button
+        aiFeedback: '',                // To store AI feedback
+        error: null,                   // To handle any errors
+        stream: null,                  // To store the media stream
+        mediaRecorder: null,           // To reference the MediaRecorder instance
+        recordedChunks: [],            // To store the recorded video chunks
+        showAiFeedback: false          // To control the display of AI feedback
     };
-  }, [globalStream, mediaRecorder, recordedChunks]);
-
-
-  return (
-    <div style={{ fontFamily: 'Roboto', backgroundColor: '#f4f4f4', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', margin: 0 }}>
-      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', textAlign: 'center', maxWidth: '600px' }}>
-        <h2>Practice Interview Recorder</h2>
-        <div style={{ backgroundColor: '#e9ecef', padding: '15px', marginBottom: '20px', borderRadius: '8px' }}>
-          <p>Here is your interview question:</p>
-          <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
-        </div>
-        <div style={{ marginBottom: '15px' }}>
-          <video autoPlay muted playsInline id="videoLive" style={{ width: '100%', borderRadius: '5px' }}></video>
-          <video controls playsInline id="videoRecorded" style={{ display: 'none', width: '100%', borderRadius: '5px' }}></video>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-          <button type="button" onClick={startRecording} style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', transition: 'background-color 0.3s' }} disabled={recording}>
-            {recording ? 'Recording...' : 'Start Recording'}
-          </button>
-          <button type="button" onClick={stopRecording} style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', transition: 'background-color 0.3s' }} disabled={!recording}>
-            Stop Recording
-          </button>
-          <button type="button" onClick={uploadVideo} style={{ backgroundColor: '#007bff', color: 'white', border: 'none', padding: '10px 15px', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', transition: 'background-color 0.3s' }}>
-            Upload Video
-          </button>
-        </div>
-        <div style={{ color: '#d35400', fontSize: '1.2em', textAlign: 'center', marginTop: '10px' }}>
-          <h3>Answer Time Limit: 2 Minutes</h3>
-        </div>
-
-        <div style={{ backgroundColor: '#f9f9f9', border: '1px solid #ddd', borderRadius: '4px', padding: '20px', marginTop: '20px', textAlign: 'left' }}>
-          <p>AI Feedback:</p>
-          <p id="feedbackText"></p>
-        </div>
-      </div>
-    </div>
-  );
 }
 
+
+  componentDidMount() {
+      this.initVideoStream();
+  }
+
+  initVideoStream = async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        
+        // Use the ref to set the stream to the video element
+        if (this.videoLive.current) {
+            this.videoLive.current.srcObject = stream;
+        }
+
+        // Update the component's state, e.g., to indicate that the stream is ready
+        this.setState({
+            isStreamReady: true,
+            error: null
+        });
+
+        return stream;
+    } catch (error) {
+        console.error("Error accessing media devices:", error);
+        
+        // Update the component's state to handle the error
+        this.setState({
+            isStreamReady: false,
+            error: error.message // Storing the error message in the state
+        });
+
+        return null;
+    }
+}
+
+
+startRecording = async () => {
+  try {
+    let stream = this.state.stream;
+
+    // Check if the stream is not already active
+    if (!stream || stream.getTracks().every(track => track.readyState === 'ended')) {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        this.setState({ stream });
+    }
+
+    if (this.videoLive.current) {
+        this.videoLive.current.srcObject = stream;
+        this.videoLive.current.style.display = 'block'; // Ensure the live feed is visible
+    }
+
+    // Initialize MediaRecorder with the stream
+    const mediaRecorder = new MediaRecorder(this.state.stream);
+    let recordedChunks = [];
+
+      // Event handler for when data is available
+      mediaRecorder.ondataavailable = event => {
+          if (event.data.size > 0) {
+              recordedChunks.push(event.data);
+          }
+      };
+
+      // Event handler for when recording stops
+      mediaRecorder.onstop = () => {
+          const videoBlob = new Blob(recordedChunks, { type: "video/mp4" });
+          const videoURL = URL.createObjectURL(videoBlob);
+          if (this.videoRecorded.current) {
+              this.videoRecorded.current.src = videoURL;
+              this.videoRecorded.current.style.display = "block";
+          }
+      };
+
+      // Start recording
+      mediaRecorder.start();
+
+      // Update component state
+      this.setState({
+          mediaRecorder,
+          isRecording: true,
+          isUploadButtonVisible: false
+      });
+  } catch (error) {
+      console.error("Error starting recording:", error);
+      this.setState({ error: error.message });
+  }
+};
+
+
+stopRecording = () => {
+  // Check if the mediaRecorder is currently recording
+  if (this.state.mediaRecorder && this.state.mediaRecorder.state === "recording") {
+      // Stop the media recorder
+      this.state.mediaRecorder.stop();
+
+      // Stop all media tracks in the stream
+      if (this.state.stream) {
+          this.state.stream.getTracks().forEach(track => track.stop());
+      }
+
+      // Update component state to reflect changes
+      this.setState({
+          isRecording: false,
+          isUploadButtonVisible: true,
+          // Do not clear the stream here; keep it for reuse
+      });
+
+      // If using refs to manage DOM elements
+      if (this.videoLive.current) {
+          this.videoLive.current.srcObject = null;
+          this.videoLive.current.style.display = 'none';
+      }
+  }
+};
+uploadVideo = () => {
+  // Assuming 'recordedChunks' is stored in the component's state
+  const videoBlob = new Blob(this.state.recordedChunks, { type: "video/mp4" });
+  const formData = new FormData();
+  formData.append("video", videoBlob, "interview.mp4");
+
+  // Fetch API call
+  fetch('http://localhost:5000/upload_video', {
+    method: 'POST',
+    body: formData
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('Upload successful', data);
+    console.log('Checking AI feedback:', data.ai_feedback); 
+
+    if (data.ai_feedback) {
+        console.log('Displaying AI feedback');
+        this.setState({
+            aiFeedback: data.ai_feedback,
+            showAiFeedback: true
+        });
+    } else {
+        console.log('No AI feedback found');
+        this.setState({
+            aiFeedback: '',
+            showAiFeedback: false
+        });
+    }this.setState({
+        recordedChunks: [],
+    });
+})
+
+.catch(error => {
+    console.error('Error in upload:', error);
+    this.setState({
+        error: error.message,
+        showAiFeedback: false
+    });
+});
+};
+
+render() {
+  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback } = this.state;
+
+  return (
+      <div className="container">
+          <h2>Practice Interview Recorder</h2>
+          <div className="question-section">
+              <p>Here is your interview question:</p>
+              <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
+          </div>
+          <div className="video-container">
+              <video autoPlay muted playsInline ref={this.videoLive}></video>
+              <video controls playsInline ref={this.videoRecorded} style={{ display: 'none' }}></video>
+          </div>
+        
+          <div className="controls">
+                {!isRecording && (
+                    <button 
+                        type="button" 
+                        className="button start" 
+                        onClick={this.startRecording}
+                    >
+                        Start Recording
+                    </button>
+                )}
+                {isRecording && (
+                    <button 
+                        type="button" 
+                        className="button stop" 
+                        onClick={this.stopRecording}
+                    >
+                        Stop Recording
+                    </button>
+                )}
+                {isUploadButtonVisible && (
+                    <button 
+                        type="button" 
+                        className="button" 
+                        onClick={this.uploadVideo}
+                    >
+                        Submit Video
+                    </button>
+                )}
+          </div>
+          <div className="time-indicator">
+              <h3>Answer Time Limit: 2 Minutes</h3>
+          </div>
+          {showAiFeedback && (
+              <div className="answer-section" id="aiFeedback">
+                  <p>AI Feedback:</p>
+                  <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
+              </div>
+          )}
+      </div>
+  );
+}
+}
 export default InterviewPage;

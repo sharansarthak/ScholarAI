@@ -1,0 +1,153 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This will vertically center your container */
+    align-items: center; /* This will horizontally center your container */
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px; 
+    background-color: #fff;
+    padding: 30px;
+    margin: auto; /* This will also help in horizontal centering if flex doesn't work as intended */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+}
+
+.question-section, .answer-section {
+    background-color: #e9ecef;
+    padding: 20px; /* increased padding */
+    margin-bottom: 30px; /* increased bottom margin */
+    border-radius: 10px; /* smoother border radius */
+}
+
+.answer-section {
+    background-color: #d1e7dd;
+}
+
+.video-container {
+    margin-bottom: 30px; /* increased bottom margin */
+    padding-top: 56.25%; /* maintain aspect ratio for videos */
+    position: relative; /* relative positioning for absolute video */
+    border-radius: 10px; /* smoother border radius */
+    overflow: hidden; /* hide overflow for border-radius */
+}
+
+video {
+    position: absolute; /* absolute position for aspect ratio maintenance */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* ensure full coverage within container */
+}
+
+.recording-indicator {
+    color: red;
+    font-weight: bold; /* make recording indicator bold */
+    margin-bottom: 10px; /* space before recording indicator */
+}
+
+#videoLive, #videoRecorded {
+    border-radius: 10px; /* smoother border radius */
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* increased gap between buttons */
+    margin-top: 20px; /* space above controls */
+    margin-bottom: 30px; /* increased bottom margin */
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px; /* increased padding for larger buttons */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px; /* larger font size for readability */
+    transition: background-color 0.3s, transform 0.1s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+}
+
+.button:disabled, .button:not(:enabled) {
+    background-color: #ccc;
+}
+
+.button:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: scale(1.05); /* slight increase in size on hover */
+}
+
+#aiFeedback {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* smoother border radius */
+    padding: 25px; /* increased padding */
+    margin-top: 20px; /* space above AI feedback */
+    text-align: left; /* align text to the left */
+}
+
+#aiFeedback h2 {
+    font-size: 26px; /* larger size for heading */
+    font-weight: bold;
+    margin-bottom: 15px; /* spacing after headings */
+}
+
+#aiFeedback p, #aiFeedback ul, #aiFeedback ol {
+    font-size: 16px; /* adjusted size for readability */
+    line-height: 1.7; /* increased line height for readability */
+    margin-bottom: 15px; /* spacing after paragraphs and lists */
+}
+
+#aiFeedback ul, #aiFeedback ol {
+    padding-left: 20px; /* indentation for list items */
+}
+
+#aiFeedback li {
+    margin-bottom: 10px; /* spacing between list items */
+}
+
+.time-indicator {
+    color: #d35400; /* color that fits the theme */
+    font-size: 1.2em;
+    margin-top: 10px; /* adjusted spacing as needed */
+    font-weight: bold; /* make time indicator bold */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 20px; /* adjusted padding on smaller screens */
+    }
+
+    .question-section, .answer-section {
+        padding: 15px; /* adjusted padding on smaller screens */
+    }
+
+    .button {
+        padding: 10px 15px; /* adjusted padding on smaller screens */
+        font-size: 16px; /* adjusted font size on smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    #aiFeedback {
+        padding: 15px;
+        font-size: 14px; /* smaller font size for smaller screens */
+    }
+
+    .time-indicator {
+        font-size: 1em; /* smaller font size for smaller screens */
+    }
+}
