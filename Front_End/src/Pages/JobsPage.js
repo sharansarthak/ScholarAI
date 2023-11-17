@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
+import Switch from "react-switch";
 import {
   Container,
   DropdownButton,
@@ -18,7 +19,8 @@ import {
 import "../Styles/JobsPageStyles.css";
 import "../Styles/SearchBar.css";
 import "../Styles/VerticalMenu.css";
-import { scholarships } from "../Constants";
+import ApplicationReview from "./ApplicationReview";
+import { styles } from "../styles"
 
 
 export default function JobsPage() {
@@ -30,13 +32,36 @@ export default function JobsPage() {
   const [showAddDoc, setShowAddDoc] = useState(false);
   const [resume, setResume] = useState();
   const [coverLetter, setCoverLetter] = useState();
+  const [scholarships, setScholarships] = useState();
+  const [eligibleScholarshipSwitch, setEligibleScholarshipSwitch] = useState(false);
+  const [myInstitutionSwitch, setMyInstitutionSwitch ] = useState(false);
 
+  const eligibleScholarshipSwitchHandler = (checked) => {
+    setEligibleScholarshipSwitch(checked);
+  };
+
+  const myInstitutionSwitchHandler = (checked) => {
+    setMyInstitutionSwitch(checked);
+  };
 
   useEffect(() => {
     // Checks for token in storage, indicating signed in.
     // if(localStorage.getItem("token") == null){
     //   window.location.href = "http://localhost:3000/login";
     // }
+    const fetchData = async () => {
+      try {
+        const response = await Axios.get("http://127.0.0.1:5000/get_all_scholarships_brief?username=zeeshan", {
+        })
+        console.log(response);
+        setScholarships(response.data);
+        // setResourceList(response.data);
+      } catch (error) {
+        console.error("Error in getting resources for Scholarship page", error);
+      }
+    };
+
+    fetchData();
 
     Axios.get("http://127.0.0.1:5000/api/jobPostings", {})
     .then((res) => {
@@ -55,6 +80,14 @@ export default function JobsPage() {
     })
     
   }, [])
+
+  const redirectToApplicationReview = (applicationTitle) => {
+    localStorage.setItem("ApplicationReviewTitle",applicationTitle);
+    // Reloads the current page
+    window.location.reload();
+    // Redirects to the main page
+    window.location.href = "http://localhost:3000/applicationReview";
+  };
 
   function handleCloseAddDoc() {
     setShowAddDoc(false);
@@ -214,6 +247,7 @@ export default function JobsPage() {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Enter your search..."
+            style={{ width: '75%', color:`black` }}
           />
           <button type="submit">Search</button>
         </form>
@@ -227,121 +261,83 @@ export default function JobsPage() {
     <Container style={{ minHeight: `100vh` }}>
       <Row>
         {/* Left Side Vertical Menu */}
-        <Col md={3} className="vertical-menu">
+        <Col md={2} className="vertical-menu">
           <ul>
-            <li>Menu Item 1</li>
-            <li>Menu Item 2</li>
+            <li>
+              Eligible Scholarships
+              <Switch
+                onChange={eligibleScholarshipSwitchHandler}
+                checked={eligibleScholarshipSwitch}
+                onColor="#86d3ff"
+                onHandleColor="#2693e6"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+              />
+            </li>
+            <li>
+              My Institution
+              <Switch
+                onChange={myInstitutionSwitchHandler}
+                checked={myInstitutionSwitch}
+                onColor="#86d3ff"
+                onHandleColor="#2693e6"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+              />
+            </li>
             {/* Add more menu items as needed */}
           </ul>
         </Col>
 
         {/* Right Side Content */}
-        <Col md={9}>
-        <h1 className="JobsHeader">Scholarships</h1>
+        <Col md={10} style={{ paddingLeft: `50px`, marginBottom:`90px`}}>
+        <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop:`70px` }}>Scholarships</h1>
+        <div style={{width:'100%'}}>
           <SearchBar />
-          <Row style={{ justifyContent: `space-evenly` }}>
-            {scholarships.map((scholarship) => {
+        </div>
+        <Row style={{ justifyContent: `space-evenly`, gap:`25px` }}>
+            {scholarships?.map((scholarship) => {
               return (
-                <div style={{ width: "18rem", background: '#FFFFFF', margin: `1% 0`, border: '1px solid black', borderRadius: '35px', textAlign: 'center', padding: '10px' }}>
+                <div key={scholarship.id} className="scholarship-card" style={{ width: "20rem", height:"100%", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '11px', position: 'relative' }}>
                 {/* Centered Image */}
                 <img
-                  src={scholarship.image} // Replace with the actual image URL
+                  src={scholarship.Image} // Replace with the actual image URL
                   alt="Scholarship Logo"
-                  style={{ width: '30%', borderRadius: '50%', marginBottom: '10px' }}
+                  style={{ width: '30%', marginBottom: '5px' }}
                 />
               
-                <Card.Body>
-                  <Card.Title>{scholarship.name}</Card.Title>
+                <Card.Body style={{ cursor: `pointer`, display:`flex`, flexDirection:'column' }} onClick={() => redirectToApplicationReview(scholarship.Title)}>
+                  <Card.Title>{scholarship.Title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    {scholarship.company}
+                    {scholarship.Institution}
                   </Card.Subtitle>
-                  <Card.Text>{scholarship.tags}</Card.Text>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px', marginTop: '10px' }}>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.amount}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.deadline}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.time}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.recipients}</div>
+                  <div style={{ margin: '15px 0' }}>
+                    {scholarship.Requirements.map((requirement, index) => (
+                      <p key={index}  className="requirement-text">
+                        #{requirement}
+                      </p>
+                    ))}
                   </div>
-                  {/* <Card.Link
-                    style={{ cursor: `pointer` }}
-                    // onClick={() => apply(job.id)}
-                  >
-                    Apply
-                  </Card.Link> */}
+                  <div style={{ position: 'relative', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px' }}>
+                      <div style={{ borderBottom: '1px solid #d3d3d3', borderRight: '1px solid #d3d3d3', padding: '10px' }}>💸{scholarship["Scholarship Amount"]}</div>
+                      <div style={{ borderBottom: '1px solid #d3d3d3', padding: '10px' }}>📆​ {scholarship.Deadline}</div>
+                      <div style={{ borderRight: '1px solid #d3d3d3', padding: '10px' }}>⌛​ {scholarship["Estimated Completion Time"]}</div>
+                      <div style={{ padding: '10px' }}>📜 Upto {scholarship["Number of Recipients"]} Recipients</div>
+                    </div>
+                  </div>
                 </Card.Body>
-              </div>          
+              </div>  
+         
               );
             })}
           </Row>
-
-          {/* ... (existing modals and other content) */}
         </Col>
       </Row>
-{/* 
-      <Modal centered show={showApplyJob} onHide={handleCloseApplyJob}>
-        <Modal.Header closeButton>
-          <Modal.Title>Apply</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col>
-              <FormLabel className="SearchLabel">Resume</FormLabel>
-              <Form.Select style={{ width: `100%` }} id="addResume">
-                {documents.length === 0 ? (
-                  <option>Upload a resume first</option>
-                ) : (
-                  documents.map((doc) => {
-                    if (doc.type === "resume") {
-                      return <option value={doc.dNo}>{doc.fileName}</option>;
-                    }
-                  })
-                )}
-              </Form.Select>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FormLabel className="SearchLabel" style={{ marginTop: `3%` }}>
-                Cover Letter (optional)
-              </FormLabel>
-              <Form.Select style={{ width: `100%` }} id="addCover">
-                {documents.length === 0 ? (
-                  <option>Upload a resume first</option>
-                ) : (
-                  documents.map((doc) => {
-                    if (doc.type === "coverLetter") {
-                      return <option value={doc.dNo}>{doc.fileName}</option>;
-                    }
-                  })
-                )}
-              </Form.Select>
-            </Col>
-          </Row>
-          <Button
-            onClick={() => applyForJob(currJob.id, document.getElementById("addResume").value, document.getElementById("addCover").value)}
-            id="submitButton"
-            style={{ marginTop: `3%` }}
-          >
-            Submit
-          </Button>
-        </Modal.Body>
-      </Modal>
-      <Modal centered show={showAddDoc} onHide={handleCloseAddDoc}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Documents</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{textAlign:`left`}}>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Uploaded Resume</Form.Label>
-            <Form.Control style={{ width: `60%` }} type="file" onChange={(e) => setResume(e.target.files)}/>
-          </Form.Group>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Uploaded Cover Letter</Form.Label>
-            <Form.Control style={{ width: `60%` }} type="file" onChange={(e) => setCoverLetter(e.target.files)}/>
-          </Form.Group>
-          <Button onClick={() => submitDocuments(resume, coverLetter)}>Submit</Button>
-        </Modal.Body>
-      </Modal> */}
     </Container>
   );
 }

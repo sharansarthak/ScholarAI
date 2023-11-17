@@ -140,13 +140,59 @@
     padding: 50px; /* Adjust padding as needed */
 }
 
-.SignupButton{
+.requirement-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333; /* Add your desired text color */
+  /* Add any other styles you want */
+}
+
+.scholarship-card {
+  border-radius: 20px; /* Adjust the border-radius for curved corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0.2, 0.2); /* Add shadow for a subtle effect */
+  padding: 50px; /* Adjust padding as needed */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.question-card {
+  border-radius: 20px; /* Adjust the border-radius for curved corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0.2, 0.2); /* Add shadow for a subtle effect */
+  padding: 50px; /* Adjust padding as needed */
+}
+
+/* .SignupButton{
   background-color: #3b6b7e;
   color: white;
   border-color: #3b6b7e;
   font-family: "Inter", sans-serif;
   padding: 0.5rem 1.3rem;
+  margin: 0rem 0rem;
+} */
+
+.GoogleButton{
+  background-color: white;
+  color: white;
+  border-color: #808080;
+  font-family: "Inter", sans-serif;
+  padding: 0.5rem 1.3rem;
 }
+.SignupLoginButton{
+  background-color: #3b6b7e;
+  color: white;
+  border-color: #808080;
+  font-family: "Inter", sans-serif;
+  padding: 0.5rem 1.3rem;
+}
+.LoginButton{
+  background-color: #3b6b7e;
+  color: white;
+  border-color: #808080;
+  font-family: "Inter", sans-serif;
+  padding: 0.5rem 1.3rem;
+}
+
 
 .line-div {
   border-bottom: 1px solid #d3d3d3; /* Change the color as needed */
