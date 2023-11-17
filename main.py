@@ -71,10 +71,6 @@ def process_video_and_get_feedback(video_file_path):
             )
         }
     ]
-<<<<<<< HEAD
-
-=======
->>>>>>> main
     request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to improve my response to ace the interview."
     request_message_formatted = {'content': request_message, 'role': 'user'}
     conversations.append(request_message_formatted)
