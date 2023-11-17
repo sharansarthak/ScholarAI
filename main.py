@@ -341,7 +341,7 @@ def get_enhanced_essay():
         conversations = [{"role": "system", "content": "You are a helpful assistant who specializes in enhancing users' scholarship essays"}]
 
         # Format user's request message
-        request_message = f"The question asked in my scholarship application is this: {question} My Response is: {answer} Provide just the improved essay keeping a similar word count (without title or unnecessary info)"
+        request_message = f"The question asked in my scholarship application is this: {question} My Response is: {answer} Provide just the improved essay in about 100 words)"
         request_message_formatted = {'content': request_message, 'role': 'user'}
 
         # Add user's request to the conversation
