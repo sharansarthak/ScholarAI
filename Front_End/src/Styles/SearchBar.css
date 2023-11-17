@@ -21,7 +21,7 @@
   
   button {
     padding: 10px; /* Increased padding for better appearance */
-    border-radius: 20px; /* Increased rounded corners for the button */
+    border-radius: 15px; /* Increased rounded corners for the button */
     background-color: #006D77 ; /* Optional: Button background color */
     color: white; /* Optional: Button text color */
     border: none; /* Optional: Remove button border */

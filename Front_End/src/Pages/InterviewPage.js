@@ -1,4 +1,6 @@
 import React from 'react';
+import { styles } from "../styles"
+// import "../Styles/InterviewPageStyles.css";
 
 class InterviewPage extends React.Component {
   constructor(props) {
@@ -190,57 +192,59 @@ render() {
   const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback } = this.state;
 
   return (
-      <div className="container">
-          <h2>Practice Interview Recorder</h2>
-          <div className="question-section">
-              <p>Here is your interview question:</p>
-              <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
-          </div>
-          <div className="video-container">
-              <video autoPlay muted playsInline ref={this.videoLive}></video>
-              <video controls playsInline ref={this.videoRecorded} style={{ display: 'none' }}></video>
-          </div>
-        
-          <div className="controls">
-                {!isRecording && (
-                    <button 
-                        type="button" 
-                        className="button start" 
-                        onClick={this.startRecording}
-                    >
+    <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '70px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+        {/* Left Section: Question Pane and Answer Section */}
+        <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: '30px' }}>Interview Prep</h1>
+            <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '45px' }}>Here is your interview question!</p>
+            <div style={{ width: "18rem", height: "100px", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#ffffff', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
+                <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
+            </div>
+            {showAiFeedback && (
+                <div className="answer-section" id="aiFeedback" style={{ marginTop: '20px' }}>
+                <p>AI Feedback:</p>
+                <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
+            </div>
+            )}
+        </div>
+
+        <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* Right Section: Video Container and Time Indicator */}
+            <div style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', width: '100%', height: '550px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ borderRadius: '20px', overflow: 'hidden', height: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '0' }}>
+                    <video style={{ borderRadius: '20px', overflow: 'hidden' }} autoPlay muted playsInline ref={this.videoLive}></video>
+                    <video style={{ display: 'none', borderRadius: '20px', overflow: 'hidden' }} controls playsInline ref={this.videoRecorded}></video>
+                </div>
+
+                {/* Controls */}
+                <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                    {!isRecording && (
+                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.startRecording}>
                         Start Recording
                     </button>
-                )}
-                {isRecording && (
-                    <button 
-                        type="button" 
-                        className="button stop" 
-                        onClick={this.stopRecording}
-                    >
+                    )}
+                    {isRecording && (
+                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.stopRecording}>
                         Stop Recording
                     </button>
-                )}
-                {isUploadButtonVisible && (
-                    <button 
-                        type="button" 
-                        className="button" 
-                        onClick={this.uploadVideo}
-                    >
+                    )}
+                    {isUploadButtonVisible && (
+                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.uploadVideo}>
                         Submit Video
                     </button>
-                )}
-          </div>
-          <div className="time-indicator">
-              <h3>Answer Time Limit: 2 Minutes</h3>
-          </div>
-          {showAiFeedback && (
-              <div className="answer-section" id="aiFeedback">
-                  <p>AI Feedback:</p>
-                  <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
-              </div>
-          )}
-      </div>
+                    )}
+                </div>
+            </div>
+
+
+            {/* Text Container */}
+            <div>
+                <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>Time Limit:</p>
+            </div>
+        </div>
+    </div>
   );
+  
 }
 }
 export default InterviewPage;
