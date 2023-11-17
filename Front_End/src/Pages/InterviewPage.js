@@ -25,6 +25,8 @@ class InterviewPage extends React.Component {
         stream: null,                  // To store the media stream
         mediaRecorder: null,           // To reference the MediaRecorder instance
         recordedChunks: [],            // To store the recorded video chunks
+        remainingTime: 120,
+        timerActive: false,
         showAiFeedback: false          // To control the display of AI feedback
     };
 }
@@ -67,7 +69,17 @@ class InterviewPage extends React.Component {
 startRecording = async () => {
   try {
     let stream = this.state.stream;
-
+    this.setState({ timerActive: true });
+    this.timerInterval = setInterval(() => {
+        this.setState(prevState => {
+            if (prevState.remainingTime > 0) {
+                return { remainingTime: prevState.remainingTime - 1 };
+            } else {
+                clearInterval(this.timerInterval);
+                return { remainingTime: 0, timerActive: false };
+            }
+        });
+    }, 1000);
     // Check if the stream is not already active
     if (!stream || stream.getTracks().every(track => track.readyState === 'ended')) {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -85,10 +97,12 @@ startRecording = async () => {
 
       // Event handler for when data is available
       mediaRecorder.ondataavailable = event => {
-          if (event.data.size > 0) {
-              recordedChunks.push(event.data);
-          }
-      };
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+            console.log('Chunk added: ', event.data); // Add this line
+        }
+    };
+    
 
       // Event handler for when recording stops
       mediaRecorder.onstop = () => {
@@ -98,6 +112,8 @@ startRecording = async () => {
               this.videoRecorded.current.src = videoURL;
               this.videoRecorded.current.style.display = "block";
           }
+          this.setState({ recordedChunks }); // Save the blob directly in the state
+
       };
 
       // Start recording
@@ -134,6 +150,8 @@ stopRecording = () => {
           // Do not clear the stream here; keep it for reuse
       });
 
+      clearInterval(this.timerInterval);
+    this.setState({ timerActive: false, remainingTime: 120 }); // Reset timer
       // If using refs to manage DOM elements
       if (this.videoLive.current) {
           this.videoLive.current.srcObject = null;
@@ -141,11 +159,18 @@ stopRecording = () => {
       }
   }
 };
+
 uploadVideo = () => {
   // Assuming 'recordedChunks' is stored in the component's state
   const videoBlob = new Blob(this.state.recordedChunks, { type: "video/mp4" });
   const formData = new FormData();
   formData.append("video", videoBlob, "interview.mp4");
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ', ' + pair[1]);
+    if (pair[1] instanceof Blob) {
+    }
+}
 
   // Fetch API call
   fetch('http://localhost:5000/upload_video', {
@@ -189,7 +214,9 @@ uploadVideo = () => {
 };
 
 render() {
-  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback } = this.state;
+  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback, remainingTime, timerActive } = this.state;
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
 
   return (
     <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '90px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -239,8 +266,9 @@ render() {
 
             {/* Text Container */}
             <div>
-                <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>Time Limit:</p>
-            </div>
+            <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>
+            Time Limit: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        </p>            </div>
         </div>
     </div>
   );

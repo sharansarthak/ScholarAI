@@ -14,6 +14,7 @@ import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
 import InterviewPage from "./Pages/InterviewPage";
 import ApplicationReview from "./Pages/ApplicationReview";
+import ProfileBuilder from "./Pages/ProfileBuilder";
 
 
 function App() {
@@ -115,6 +116,9 @@ function App() {
         </Route>
         <Route path="/interview" exact>
           <InterviewPage />
+        </Route>
+        <Route path="/profileBuilder" exact>
+          <ProfileBuilder />
         </Route>
         {/* <Route path="/employerlogin" exact>
           <EmployerLoginPage />
