@@ -85,19 +85,24 @@ startRecording = async () => {
 
       // Event handler for when data is available
       mediaRecorder.ondataavailable = event => {
-          if (event.data.size > 0) {
-              recordedChunks.push(event.data);
-          }
-      };
+        if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+            console.log('Chunk added: ', event.data); // Add this line
+        }
+    };
+    
 
       // Event handler for when recording stops
       mediaRecorder.onstop = () => {
           const videoBlob = new Blob(recordedChunks, { type: "video/mp4" });
+          console.log('Final video blob: ', videoBlob); // Add this line
           const videoURL = URL.createObjectURL(videoBlob);
           if (this.videoRecorded.current) {
               this.videoRecorded.current.src = videoURL;
               this.videoRecorded.current.style.display = "block";
           }
+          this.setState({ recordedChunks }); // Save the blob directly in the state
+
       };
 
       // Start recording
@@ -141,11 +146,20 @@ stopRecording = () => {
       }
   }
 };
+
 uploadVideo = () => {
   // Assuming 'recordedChunks' is stored in the component's state
   const videoBlob = new Blob(this.state.recordedChunks, { type: "video/mp4" });
   const formData = new FormData();
   formData.append("video", videoBlob, "interview.mp4");
+  console.log('Uploading video blob size:', videoBlob.size); // Check size again here
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ', ' + pair[1]);
+    if (pair[1] instanceof Blob) {
+        console.log(`Blob details - Type: ${pair[1].type}, Size: ${pair[1].size}`);
+    }
+}
 
   // Fetch API call
   fetch('http://localhost:5000/upload_video', {
