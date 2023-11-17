@@ -14,7 +14,7 @@ import EmployerSignupPage from "./Pages/EmployerSignupPage";
 import EmployerLoginPage from "./Pages/EmployerLoginPage";
 import InterviewPage from "./Pages/InterviewPage";
 import ApplicationReview from "./Pages/ApplicationReview";
-
+import TrackingPage2 from "./Pages/TrackingPage2";
 
 function App() {
   function signOut(){
@@ -87,7 +87,7 @@ function App() {
           <HomePage />
         </Route>
         <Route path="/tracking" exact>
-          <TrackingPage />
+          <TrackingPage2 />
         </Route>
         <Route path="/scholarships" exact>
           <JobsPage />
