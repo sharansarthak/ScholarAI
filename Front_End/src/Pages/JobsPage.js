@@ -301,8 +301,9 @@ export default function JobsPage() {
         </div>
         <Row style={{ justifyContent: `space-evenly`, gap:`25px` }}>
             {scholarships?.map((scholarship) => {
+              console.log('req',scholarship.Requirements)
               return (
-                <div key={scholarship.id} className="scholarship-card" style={{ width: "18rem", height:"370px", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative' }}>
+                <div key={scholarship.id} className="scholarship-card" style={{ width: "18rem", height:"450px", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative' }}>
                 {/* Centered Image */}
                 <img
                   src={scholarship.Image} // Replace with the actual image URL
@@ -310,12 +311,14 @@ export default function JobsPage() {
                   style={{ width: '30%', marginBottom: '10px' }}
                 />
               
-                <Card.Body>
+                <Card.Body style={{ cursor: `pointer` }} onClick={() => redirectToApplicationReview(scholarship.Title)}>
                   <Card.Title>{scholarship.Title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {scholarship.Institution}
                   </Card.Subtitle>
-                  <Card.Text>{scholarship.Requirements}</Card.Text>
+                  {scholarship.Requirements.map((requirement, index) => (
+                      <Card.Text key={index}>{requirement}</Card.Text>
+                    ))}
                   <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px' }}>
                       <div style={{ borderBottom: '1px solid #d3d3d3', borderRight: '1px solid #d3d3d3', padding: '10px' }}>💸{scholarship["Scholarship Amount"]}</div>
@@ -324,12 +327,6 @@ export default function JobsPage() {
                       <div style={{ padding: '10px' }}>📜 {scholarship["Number of Recipients"]}</div>
                     </div>
                   </div>
-                  <Card.Link
-                    style={{ cursor: `pointer` }}
-                    onClick={() => redirectToApplicationReview(scholarship.Title)}
-                  >
-                    Apply
-                  </Card.Link>
                 </Card.Body>
               </div>          
               );
