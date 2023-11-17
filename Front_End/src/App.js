@@ -54,9 +54,12 @@ function App() {
                   className="navButton"
                   href="/signup"
                   style={{
-                    backgroundColor: `white`,
-                    color: `#264653`,
-                    borderColor: `white`,
+                    backgroundColor: `#FFC0BE`,
+                    color: `#black`,
+                    borderColor: `#FF82A9`,
+                    borderWidth:'4px',
+                    borderRadius: '15px',
+                    fontWeight:'bold',
                   }}
                 >
                   Sign up for free
@@ -65,9 +68,12 @@ function App() {
                   className="navButton"
                   href="/login"
                   style={{
-                    backgroundColor: `#3b6b7e`,
-                    color: `white`,
-                    borderColor: `#3b6b7e`,
+                    backgroundColor: `#FFC0BE`,
+                    color: `#black`,
+                    borderColor: `#FF82A9`,
+                    borderWidth:'4px',
+                    borderRadius: '15px',
+                    fontWeight:'bold',
                   }}
                 >
                   Sign in

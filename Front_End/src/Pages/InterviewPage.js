@@ -192,13 +192,13 @@ render() {
   const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback } = this.state;
 
   return (
-    <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '70px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+    <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '90px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
         {/* Left Section: Question Pane and Answer Section */}
         <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: '30px' }}>Interview Prep</h1>
             <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '45px' }}>Here is your interview question!</p>
             <div style={{ width: "18rem", height: "100px", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#ffffff', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
-                <p><strong>Q: Tell us about the biggest challenge you've ever faced</strong></p>
+                <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
             </div>
             {showAiFeedback && (
                 <div className="answer-section" id="aiFeedback" style={{ marginTop: '20px' }}>
@@ -219,17 +219,17 @@ render() {
                 {/* Controls */}
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                     {!isRecording && (
-                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.startRecording}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold'  }} onClick={this.startRecording}>
                         Start Recording
                     </button>
                     )}
                     {isRecording && (
-                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.stopRecording}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold'  }} onClick={this.stopRecording}>
                         Stop Recording
                     </button>
                     )}
                     {isUploadButtonVisible && (
-                    <button type="button" style={{ marginRight: '10px', width:'200px' }} onClick={this.uploadVideo}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold' }} onClick={this.uploadVideo}>
                         Submit Video
                     </button>
                     )}

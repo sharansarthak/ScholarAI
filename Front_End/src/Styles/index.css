@@ -143,11 +143,21 @@
 .requirement-text {
   font-size: 14px;
   font-weight: bold;
-  color: #333; /* Add your desired text color */
+  color: #EA698B; /* Add your desired text color */
   margin:0;
   padding:0;
   /* Add any other styles you want */
 }
+
+.description-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #808080; /* Add your desired text color */
+  margin:0;
+  padding:0;
+  /* Add any other styles you want */
+}
+
 
 .scholarship-card {
   border-radius: 20px; /* Adjust the border-radius for curved corners */
