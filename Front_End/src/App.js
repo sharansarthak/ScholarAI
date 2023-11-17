@@ -16,6 +16,7 @@ import InterviewPage from "./Pages/InterviewPage";
 import ApplicationReview from "./Pages/ApplicationReview";
 import TrackingPage2 from "./Pages/TrackingPage2";
 import ProfileBuilder from "./Pages/ProfileBuilder";
+import scholair from '../src/assets/scholair.png'
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
     <Router>
        <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: 'white' }}>
       <Container>
-        <Navbar.Brand href="/">ScholarAI</Navbar.Brand>
+        <Navbar.Brand href="/"><img src={scholair} alt="ChatGPT Icon" style={{ marginRight: '5px', height: '80px', width: '220x' }} /></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -137,10 +138,10 @@ function App() {
 
 
       <Navbar collapseOnSelect expand="lg" sticky="bottom" style={{height:`170px`, backgroundColor:`#e29578`}}>
-        <Container style={{justifyContent:`center`}}>
+        <Container style={{justifyContent:`center`, marginTop:`10px`}}>
           <div>
-            <h1>Simplify your job search, increase your total compensation, and practice for the interview. All for free.</h1>
-            <h1 className="FooterLogo">ScholarAI</h1>
+            <h1>An all-in-one GPT-powered scholarship application tool. Simplify the search for scholarships, maximize your potential, and sharpen your interview skills – all at no cost.</h1>
+            <img src={scholair} alt="ChatGPT Icon" style={{ marginRight: '5px', height: '80px', width: '220x' }} />
           </div>
         </Container>
       </Navbar>

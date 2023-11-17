@@ -11,6 +11,7 @@ import { styles } from "../styles"
 import Axios from "axios";
 import  googlelogo from "../assets/googleicon.png";
 import  applelogo  from "../assets/appleicon.png";
+import calgary from "../assets/calgary.png";
 import { Link } from 'react-router-dom';
 
 export default function SignupPage() {
@@ -216,7 +217,7 @@ export default function SignupPage() {
         </Row>
         <Row className="mb-0">
             <Col className="mb-2">
-              <Button size="lg" className="SignupLoginButton" onClick={signup} style={{ width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold' }}>
+              <Button size="lg" className="SignupLoginButton" onClick={signup} style={{ background: '#FFC0BE', color:'#000000', width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold', borderColor: `#FF82A9`, borderWidth:'4px' }}>
                 Register
               </Button>
             </Col>
@@ -240,19 +241,19 @@ export default function SignupPage() {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
               <Button size="lg" className="GoogleButton" href="/employersignup" style ={{borderRadius: '10px'}}>
                 <img src ={ googlelogo } alt="Google Logo" className="google-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
-            <Col>
+            <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
               <Button size="lg" className="GoogleButton" href="/anotherlink" style ={{borderRadius: '10px'}}>
                 <img src={ applelogo } alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px'}} /> 
               </Button>
             </Col>
-            <Col>
-              <Button size="lg" className="GoogleButton" href="/anotherlink" style ={{borderRadius: '10px'}}>
-                <img src={ applelogo } alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px'}} /> 
+            <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
+              <Button size="lg" className="GoogleButton" href="/login" style ={{borderRadius: '10px'}}>
+                <img src={ calgary } alt="UofC Image" className="ucalgary-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
         </Row>
