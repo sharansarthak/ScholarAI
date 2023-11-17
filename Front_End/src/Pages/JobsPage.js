@@ -35,6 +35,9 @@ export default function JobsPage() {
   const [scholarships, setScholarships] = useState();
   const [eligibleScholarshipSwitch, setEligibleScholarshipSwitch] = useState(false);
   const [myInstitutionSwitch, setMyInstitutionSwitch ] = useState(false);
+  const [needSwitch, setneedSwitch ] = useState(false);
+  const [meritSwitch, setmeritSwitch ] = useState(false);
+  const [deadlineSwitch, setdeadlineSwitch ] = useState(false);
 
   const eligibleScholarshipSwitchHandler = (checked) => {
     setEligibleScholarshipSwitch(checked);
@@ -42,6 +45,16 @@ export default function JobsPage() {
 
   const myInstitutionSwitchHandler = (checked) => {
     setMyInstitutionSwitch(checked);
+  };
+
+  const needSwitchHandler = (checked) => {
+    setneedSwitch(checked);
+  };
+  const meritSwitchHandler = (checked) => {
+    setmeritSwitch(checked);
+  };
+  const deadlineSwitchHandler = (checked) => {
+    setdeadlineSwitch(checked);
   };
 
   useEffect(() => {
@@ -249,7 +262,7 @@ export default function JobsPage() {
             placeholder="Enter your search..."
             style={{ width: '75%', color:`black` }}
           />
-          <button type="submit">Search</button>
+          <button type="submit" style={{ fontWeight: 'bold' }}>Search</button>
         </form>
       </div>
     );
@@ -268,8 +281,8 @@ export default function JobsPage() {
               <Switch
                 onChange={eligibleScholarshipSwitchHandler}
                 checked={eligibleScholarshipSwitch}
-                onColor="#86d3ff"
-                onHandleColor="#2693e6"
+                onColor="#FFC0BE"
+                onHandleColor="#FF82A9"
                 handleDiameter={30}
                 uncheckedIcon={false}
                 checkedIcon={false}
@@ -281,8 +294,47 @@ export default function JobsPage() {
               <Switch
                 onChange={myInstitutionSwitchHandler}
                 checked={myInstitutionSwitch}
-                onColor="#86d3ff"
-                onHandleColor="#2693e6"
+                onColor="#FFC0BE"
+                onHandleColor="#FF82A9"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+              />
+            </li>
+            <li>
+              Need-Based
+              <Switch
+                onChange={needSwitchHandler}
+                checked={needSwitch}
+                onColor="#FFC0BE"
+                onHandleColor="#FF82A9"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+              />
+            </li>
+            <li>
+              Merit-Based
+              <Switch
+                onChange={meritSwitchHandler}
+                checked={meritSwitch}
+                onColor="#FFC0BE"
+                onHandleColor="#FF82A9"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+              />
+            </li>
+            <li>
+              Deadline Soon
+              <Switch
+                onChange={deadlineSwitchHandler}
+                checked={deadlineSwitch}
+                onColor="#FFC0BE"
+                onHandleColor="#FF82A9"
                 handleDiameter={30}
                 uncheckedIcon={false}
                 checkedIcon={false}

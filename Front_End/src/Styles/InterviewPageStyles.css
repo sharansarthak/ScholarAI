@@ -74,24 +74,25 @@ video {
     margin-bottom: 30px; /* increased bottom margin */
 }
 
-.button {
-    background-color: #007bff;
+.video-button .button {
+    background-color: #EA698B;
     color: white;
     border: none;
     padding: 12px 20px; /* increased padding for larger buttons */
     border-radius: 5px;
     cursor: pointer;
     font-size: 18px; /* larger font size for readability */
+    font-weight:bold;
     transition: background-color 0.3s, transform 0.1s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
 }
 
-.button:disabled, .button:not(:enabled) {
+.video-button .button:disabled, .video-button .button:not(:enabled) {
     background-color: #ccc;
 }
 
-.button:hover:not(:disabled) {
-    background-color: #0056b3;
+.video-button .button:hover:not(:disabled) {
+    background-color: #EA698B;
     transform: scale(1.05); /* slight increase in size on hover */
 }
 

@@ -14,18 +14,22 @@
   input {
     padding: 10px; /* Increased padding for better appearance */
     margin-right: 10px;
-    border-radius: 20px; /* Increased rounded corners for the input */
+    border-radius: 15px; /* Increased rounded corners for the input */
     background-color: white;
-    border-color: bisque;
+    border-color: #FFC0BE;
+    border-style: solid;
+    border-width: 4px;
     color: black;
   }
   
   button {
     padding: 10px; /* Increased padding for better appearance */
     border-radius: 15px; /* Increased rounded corners for the button */
-    background-color: #006D77 ; /* Optional: Button background color */
+    background-color: #FFC0BE ; /* Optional: Button background color */
     color: white; /* Optional: Button text color */
-    border: none; /* Optional: Remove button border */
+    border-width: 4px; /* Optional: Remove button border */
     width: 100px;
+    border-style: solid;
+    border-color:#FF82A9;
   }
   
