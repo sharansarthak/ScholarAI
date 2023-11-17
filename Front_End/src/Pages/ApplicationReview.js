@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 import Axios from 'axios';
+import '../Styles/ApplicationReview.css'
 
 export default function ApplicationReview() {
   const param1 = localStorage.getItem("ApplicationReviewTitle");
@@ -75,12 +75,13 @@ export default function ApplicationReview() {
   };
 
   const handleSubmitClick = async () => {
+    console.log(scholarshipName);
     try {
-      await Axios.post("http://127.0.0.1:5000/submit_responses", {
+      await Axios.post("http://127.0.0.1:5000/submit_application", {
         username: "zeeshan",
-        responses: scholarshipName,
+        title: scholarshipName,
       });
-
+      
       console.log("Submit responses successful");
     } catch (error) {
       console.error("Error submitting responses:", error);
@@ -88,38 +89,50 @@ export default function ApplicationReview() {
   };
 
   return (
-    <div style={{ minHeight: `77vh`, textAlign: `left` }}>
-      <div className="card">
-        <div className="SalaryHeader">{scholarshipName}</div>
-        <p>{scholarshipDescription}</p>
-        <div className="questiondiv">
-          {questions.map((questionItem, index) => (
-            <div key={index}>
-              <strong className="ColumnSubHeader">Question:</strong> {questions[index]}
-              <br />
-              <label htmlFor={`textInput-${index}`} className="ColumnSubHeader">Answer:</label>
-              {editingIndex === index ? (
-                <div>
-                  <input
-                    type="text"
-                    id={`textInput-${index}`}
-                    name={`textInput-${index}`}
-                    value={editedText}
-                    onChange={handleInputChange}
-                  />
-                  <button onClick={() => handleSaveClick(index)}>Save</button>
-                </div>
-              ) : (
-                <div>
-                  <p>{responses[index]}</p>
-                  <button onClick={() => handleEditClick(index)}>Edit</button>
-                  <button onClick={() => handleEnhanceClick(index)}>Enhance</button>
-                </div>
-              )}
-            </div>
-          ))}
+    <div className="container">
+      <div style={{ minHeight: `77vh`, textAlign: `left` }}>
+        <div className="card">
+          <div className="SalaryHeader">{scholarshipName}</div>
+          <p className="scholarshipDesc">{scholarshipDescription}</p>
+          <div className="questiondiv">
+            {questions.map((questionItem, index) => (
+              <div key={index} className="question-container">
+                <strong className="ColumnSubHeader">Question:</strong> {questions[index]}
+                <br />
+                <label htmlFor={`textInput-${index}`} className="ColumnSubHeader">Answer:</label>
+                {editingIndex === index ? (
+                  <div>
+                    <textarea
+                      id={`textInput-${index}`}
+                      name={`textInput-${index}`}
+                      value={editedText}
+                      onChange={handleInputChange}
+                      rows={4}
+                      style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
+                    />
+                    <button className="invisiblePadding saveButton" onClick={() => handleSaveClick(index)}>Save</button>
+                  </div>
+                ) : (
+                  <div className="answer-container">
+                    <p>{responses[index]}</p>
+                    <div className="buttonContainer">
+                      <span style={{ padding: '0 8px' }}></span>
+                      <button className="invisiblePadding editButton" onClick={() => handleEditClick(index)}>Edit</button>
+                      <span style={{ padding: '0 8px' }}></span>
+                      <button className="invisiblePadding enhanceButton" onClick={() => handleEnhanceClick(index)}>Enhance</button>
+                      <span style={{ padding: '0 8px' }}></span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <button className="SignupButton" onClick={handleSubmitClick}>
+              Submit
+            </button>
+          </div>
         </div>
-        <Button onClick={handleSubmitClick}>Submit Responses</Button>
       </div>
     </div>
   );
