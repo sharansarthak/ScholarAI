@@ -24,9 +24,9 @@ export default function LoginPage() {
 
   function login(e) {
     e.preventDefault(); // Prevent the default form submission behavior
-
+    
     Axios.post("http://127.0.0.1:5000/login", {
-      email: document.getElementById("email").value,
+      email: document.getElementById("username").value,
       password: document.getElementById("password").value,
     })
       .then((res) => {
@@ -47,8 +47,14 @@ export default function LoginPage() {
         } else {
           console.error("Unexpected response format:", response);
         }
+        window.location.reload();
+        // Redirects to the main page
+        window.location.href = "http://localhost:3000/profileBuilder";
       })
       .catch((error) => {
+        window.location.reload();
+        // Redirects to the main page
+        window.location.href = "http://localhost:3000/profileBuilder";
         console.error("Error during login:", error);
         // Handle other errors (e.g., network issues) here
       });
@@ -109,13 +115,13 @@ export default function LoginPage() {
           </Row>
           <Row>
             <Col className="mb-3">
-              <Button
-                size="lg"
-                className="LoginButton"
-                type="submit"
-                onClick={login}
-                style={{ background: '#FFC0BE', color:'#000000', width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold', borderColor: `#FF82A9`, borderWidth:'4px' }}
-              >
+            <Button
+              size="lg"
+              className="LoginButton"
+              type="submit"
+              onClick={login}
+              style={{ background: '#FFC0BE', color:'#000000', width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold', borderColor: `#FF82A9`, borderWidth:'4px' }}
+            >
                 Login
               </Button>
             </Col>
