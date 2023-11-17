@@ -2,9 +2,11 @@ import medicable from '../assets/medicable.png'
 import "../Styles/index.css"
 import google from '../assets/googleicon.png'
 import apple from '../assets/appleicon.png'
+import chatgpt from '../assets/chatgpt.png'
 
 export const googlelogo =[{google}]
 export const applelogo = [{apple}]
+export const chatgptlogo = [{chatgpt}]
 
 export const scholarships = [
     {

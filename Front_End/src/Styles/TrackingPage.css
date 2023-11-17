@@ -8,24 +8,29 @@
 .columns-container {
   display: flex;
   flex-grow: 1;
+  padding: 25px;
+  gap:5px;
 }
 
 .column {
   flex-grow: 1;
   margin: 8px;
   padding: 16px;
-  background-color: #f2f2f2;
+  background-color: #FFEBE7 ;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card {
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   padding: 16px;
-  background-color: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
+  background-color: white;
+  border: 4px solid #FFC0BE;
+  border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: bolder;
+  color: #FF82A9;
+  
 }
 
 /* Add additional styling as needed */

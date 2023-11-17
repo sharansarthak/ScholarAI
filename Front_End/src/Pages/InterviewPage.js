@@ -246,17 +246,17 @@ render() {
                 {/* Controls */}
                 <div style={{ marginTop: '20px', textAlign: 'center' }}>
                     {!isRecording && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold'  }} onClick={this.startRecording}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.startRecording}>
                         Start Recording
                     </button>
                     )}
                     {isRecording && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold'  }} onClick={this.stopRecording}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.stopRecording}>
                         Stop Recording
                     </button>
                     )}
                     {isUploadButtonVisible && (
-                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold' }} onClick={this.uploadVideo}>
+                    <button className="video-button" type="video-button" style={{ marginRight: '10px', width:'200px', fontWeight:'bold', color:'black' }} onClick={this.uploadVideo}>
                         Submit Video
                     </button>
                     )}
