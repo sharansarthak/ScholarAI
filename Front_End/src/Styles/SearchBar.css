@@ -17,6 +17,7 @@
     border-radius: 20px; /* Increased rounded corners for the input */
     background-color: white;
     border-color: bisque;
+    color: black;
   }
   
   button {

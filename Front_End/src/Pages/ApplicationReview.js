@@ -1,42 +1,36 @@
 import { useEffect, useState } from "react";
-import { Container, Form, FormLabel, Row, Card, Modal, Button, Col } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Axios from 'axios';
-import "../Styles/ApplicationReview.css";
 
 export default function ApplicationReview() {
   const param1 = localStorage.getItem("ApplicationReviewTitle");
-  const [scholarshipName, setscholarshipName] = useState(param1);
-  const [scholarshipDescription, setscholarshipDescription] = useState("");
+  const [scholarshipName, setScholarshipName] = useState(param1);
+  const [scholarshipDescription, setScholarshipDescription] = useState("");
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
-  
 
-  useEffect(() => { 
+  useEffect(() => {
     Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {})
       .then((res) => {
         const jsonData = res.data;
         if (jsonData.length > 0) {
-          // Find the element with title "Scholarshipname"
           const scholarshipData = jsonData.find(item => item.Title === scholarshipName);
-          console.log(jsonData);
-          console.log(scholarshipData);
           if (scholarshipData) {
-            setscholarshipDescription(scholarshipData.Description);
-            setscholarshipName(scholarshipData.Title);
+            setScholarshipDescription(scholarshipData.Description);
+            setScholarshipName(scholarshipData.Title);
             setQuestions(scholarshipData.Questions);
             setResponses(scholarshipData.Answers);
           } else {
-            console.error("Scholarship with title ${scholarshipName} not found in jsonData");
+            console.error(`Scholarship with title ${scholarshipName} not found in jsonData`);
           }
         }
       })
       .catch((error) => {
         console.error("Error fetching scholarship description:", error);
       });
-  }, []);
-  
+  }, [scholarshipName]); // Include scholarshipName as a dependency
 
   const handleEditClick = (index) => {
     setEditingIndex(index);
@@ -44,29 +38,24 @@ export default function ApplicationReview() {
   };
 
   const handleSaveClick = async (index) => {
-    // Save the edited text, you can perform any save/update logic here
     const updatedResponses = [...responses];
     updatedResponses[index] = editedText;
     setResponses(updatedResponses);
 
-    // Reset editing state
     setEditingIndex(-1);
     setEditedText("");
-    
-    // Send a POST request to update the server
+
     try {
       await Axios.post("http://127.0.0.1:5000/update_scholarship_answer", {
         username: "zeeshan",
         title: scholarshipName,
-        index: index, // Assuming the server expects the question index
+        index: index,
         updated_answer: editedText,
       });
 
-      // Handle success if needed
       console.log("Post request successful");
     } catch (error) {
       console.error("Error sending post request:", error);
-      // Handle error if needed
     }
   };
 
@@ -74,39 +63,27 @@ export default function ApplicationReview() {
     setEditedText(event.target.value);
   };
 
-
   const handleEnhanceClick = async (index) => {
-    // Send a Get Request to the backend server and receive an enhanced answer
-      const enchancedResponse = await Axios.post("http://127.0.0.1:5000/get_enhanced_essay", {
-        question: questions[index],
-        answer: responses[index],
-      });
+    const enhancedResponse = await Axios.post("http://127.0.0.1:5000/get_enhanced_essay", {
+      question: questions[index],
+      answer: responses[index],
+    });
 
-      // Create a copy of the responses array
-      const updatedResponses = [...responses];
-      
-      // Modify the specific element in the copied array
-      // For example, setting the response at the given index to the enhanced answer
-      updatedResponses[index] = enchancedResponse.data.response;
-
-      // Update the state with the modified array
-      setResponses(updatedResponses);
-      
+    const updatedResponses = [...responses];
+    updatedResponses[index] = enhancedResponse.data.response;
+    setResponses(updatedResponses);
   };
 
   const handleSubmitClick = async () => {
-    // Send a request to the server to submit the responses
     try {
       await Axios.post("http://127.0.0.1:5000/submit_responses", {
         username: "zeeshan",
-        responses: responses,
+        responses: scholarshipName,
       });
 
-      // Handle success if needed
       console.log("Submit responses successful");
     } catch (error) {
       console.error("Error submitting responses:", error);
-      // Handle error if needed
     }
   };
 
