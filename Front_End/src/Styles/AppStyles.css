@@ -1,0 +1,21 @@
+/* AppStyles.css */
+
+html, body, #root {
+    height: 100%;
+  }
+  
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #root {
+    flex: 1;
+  }
+  
+  /* Add a class to your main content container */
+  .content-container {
+    flex: 1;
+    padding-bottom: 170px; /* Adjust this value based on your footer height */
+  }

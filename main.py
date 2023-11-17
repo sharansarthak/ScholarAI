@@ -261,7 +261,7 @@ def get_all_scholarships():
     return jsonify(result)
 
 @app.route('/get_institution_scholarships', methods=['GET'])
-def get_all_scholarships():
+def get_institution_scholarships():
     # username = request.args.get('username')
 
     result = [{

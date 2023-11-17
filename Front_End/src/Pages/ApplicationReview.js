@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Axios from 'axios';
 import '../Styles/ApplicationReview.css'
+import JobsPage from "./JobsPage";
 
 export default function ApplicationReview() {
   const param1 = localStorage.getItem("ApplicationReviewTitle");
@@ -10,6 +11,12 @@ export default function ApplicationReview() {
   const [responses, setResponses] = useState([]);
   const [editingIndex, setEditingIndex] = useState(-1);
   const [editedText, setEditedText] = useState("");
+
+  const redirectToScholarships = () => {
+    window.location.reload();
+    // Redirects to the main page
+    window.location.href = "http://localhost:3000/scholarships";
+  };
 
   useEffect(() => {
     Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {})
@@ -82,6 +89,7 @@ export default function ApplicationReview() {
         title: scholarshipName,
       });
       
+      redirectToScholarships()
       console.log("Submit responses successful");
     } catch (error) {
       console.error("Error submitting responses:", error);

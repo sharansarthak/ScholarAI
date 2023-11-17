@@ -38,6 +38,7 @@ export default function JobsPage() {
   const [needSwitch, setneedSwitch ] = useState(false);
   const [meritSwitch, setmeritSwitch ] = useState(false);
   const [deadlineSwitch, setdeadlineSwitch ] = useState(false);
+  const [myInstResults, setmyInstResults] = useState([]);
 
   const eligibleScholarshipSwitchHandler = (checked) => {
     setEligibleScholarshipSwitch(checked);
@@ -45,6 +46,20 @@ export default function JobsPage() {
 
   const myInstitutionSwitchHandler = (checked) => {
     setMyInstitutionSwitch(checked);
+    if(checked)
+    {
+        Axios.get("http://127.0.0.1:5000/get_institution_scholarships", {})
+        .then((res) => {
+          console.log(res.data);
+          setmyInstResults(res.data);
+          setScholarships([]);
+          setScholarships(res.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching scholarship description:", error);
+      });
+
+    }
   };
 
   const needSwitchHandler = (checked) => {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import "../Styles/TrackingPage.css"
+import ApplicationReview from "./ApplicationReview";
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
@@ -15,6 +16,14 @@ const TrackingPage2 = () => {
     accepted: [],
     rejected: [],
   });
+
+    const redirectToApplicationReview = (applicationTitle) => {
+    localStorage.setItem("ApplicationReviewTitle",applicationTitle);
+    // Reloads the current page
+    window.location.reload();
+    // Redirects to the main page
+    window.location.href = "http://localhost:3000/applicationReview";
+  };
 
   const Get_Title_Name = (given_name) => {
     switch (given_name) {
@@ -122,6 +131,7 @@ const TrackingPage2 = () => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           className="card"
+                          onClick={() => redirectToApplicationReview(application.Title)}
                         >
                           <p>{application.Title}</p>
                           {/* Add more details if needed */}
