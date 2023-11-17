@@ -42,72 +42,6 @@ export default function TrackingPage() {
   const [show, setShow] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
-
-  useEffect(() => {
-    // Checks for token in storage, indicating signed in.
-    // if (localStorage.getItem("token") == null) {
-    //   window.location.href = "http://localhost:3000/login";
-    // }
-    getLists();
-  }, []);
-
-  async function getLists() {
-    let wishList = [];
-    let appliedList = [];
-    let interviewList = [];
-    let offerList = [];
-    let rejectedList = [];
-    let list;
-    await Axios.get("http://127.0.0.1:5000/api/getLists", {
-      params: {
-        token: localStorage.getItem("token"),
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        list = res.data[0];
-        setLists(res.data);
-        list.jobs.forEach((job) => {
-          job.id = String(job.id);
-          if (job.applicationStatus === "Wishlist") {
-            wishList.push(job);
-          } else if (job.applicationStatus === "Applied") {
-            appliedList.push(job);
-          } else if (job.applicationStatus === "Interview") {
-            interviewList.push(job);
-          } else if (job.applicationStatus === "Accepted") {
-            offerList.push(job);
-          } else if (job.applicationStatus === "Regected") {
-            rejectedList.push(job);
-          }
-          setCurrentList(list);
-          setWishListItems(wishList);
-          setAppliedItems(appliedList);
-          setInterviewItems(interviewList);
-          setOfferItems(offerList);
-          setRegectedItems(rejectedList);
-          setColumnsData(
-            wishList,
-            appliedList,
-            interviewList,
-            offerList,
-            rejectedList
-          );
-        });
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  }
-
-  const handleClose = () => setShow(false);
-  const handleShow = (item) => {
-    setModalInfo(item);
-    setShow(true);
-  };
-
-  const handleCloseAdd = () => setShowAdd(false);
-
   const [columns, setColumns] = useState({
     1: {
       name: "Wishlist",
@@ -135,6 +69,70 @@ export default function TrackingPage() {
       count: regectedItems.length,
     },
   });
+
+  useEffect(() => {
+    // Checks for token in storage, indicating signed in.
+    // if (localStorage.getItem("token") == null) {
+    //   window.location.href = "http://localhost:3000/login";
+    // }
+    getLists();
+  }, []);
+
+  async function getLists() {
+    let wishList = [];
+    let appliedList = [];
+    let interviewList = [];
+    let offerList = [];
+    let rejectedList = [];
+    let list;
+    await Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {},)
+      .then((res) => {
+        // console.log(res);
+        list = res.data;
+        setLists(res.data);
+        list.forEach((job) => {
+          // console.log(job.Status);
+          job.id = String(job.id);
+          if (job.Status === "in_progress") {
+            wishList.push(job);
+          } else if (job.Status === "applied") {
+            appliedList.push(job);
+          } else if (job.Status === "interview") {
+            interviewList.push(job);
+          } else if (job.Status === "accepted") {
+            offerList.push(job);
+          } else if (job.Status === "rejected") {
+            rejectedList.push(job);
+          }});
+          setCurrentList(list);
+          setWishListItems(wishList);
+          setAppliedItems(appliedList);
+          setInterviewItems(interviewList);
+          setOfferItems(offerList);
+          setRegectedItems(rejectedList);
+          setColumnsData(
+            wishList,
+            appliedList,
+            interviewList,
+            offerList,
+            rejectedList
+          );
+          console.log(columns);
+        })
+      .catch((res) => {
+        console.log(res);
+      });
+  }
+
+  const handleClose = () => setShow(false);
+  const handleShow = (item) => {
+    setModalInfo(item);
+    setShow(true);
+  };
+
+  const handleCloseAdd = () => setShowAdd(false);
+
+
 
   function changeList(list) {
     console.log(list);
@@ -369,6 +367,8 @@ export default function TrackingPage() {
 
   return (
     <Container fluid style={{ minHeight: `69.6vh`, xOverflow: `visible` }}>
+
+      {/* This row contains the sidebar  */}
       <Row style={{ marginTop: `2%` }}>
         <Col style={{ alignSelf: `center` }}>
           <Row>
@@ -409,16 +409,20 @@ export default function TrackingPage() {
         </Col>
         <Col></Col>
       </Row>
+      
       <Row style={{ minHeight: `60vh` }}>
         <div className="ListContainer">
           <DragDropContext onDragEnd={handleOnDragEnd}>
             {Object.entries(columns).map(([columnId, column], index) => {
+              // console.log("boogi",column);
               return (
                 <div className="Column">
                   <Row>
+                    {/* This col contains the header of the colums we have */}
                     <Col>
                       <h2 className="ColumnHeader">{column.name}</h2>
                     </Col>
+                    {/* This is the functionality of the add button  */}
                     <Col>
                       <h2
                         onClick={() => addJobModal(columnId)}
@@ -428,150 +432,32 @@ export default function TrackingPage() {
                         +
                       </h2>
                     </Col>
+
                   </Row>
+                  {/* This tag contains your number of scholarships in each section */}
                   <h3 className="ColumnSubHeader">{column.count} Jobs</h3>
+                  {/* {Object.entries(column).map(([property, value], index) => {
+                    if(property == "items" && value.length > 0)
+                    {console.log("Property:", property);
+                    console.log("Value:", value);}
+                    return null; // Make sure to return something if rendering JSX
+                  })} */}
+                  {/* This is the div that contains all the droppable items  */}
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => (
                       <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {column.items.map((item, index) => {
+                        {
+                        Object.entries(column).map(([property, value], index) => {
+                          if(property == "items" && value.length > 0)
+                          {console.log("Property:", property);
+                          console.log("Value:", value);}
                           return (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <Card
-                                  className="JobCard"
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Card.Body>
-                                    <Row>
-                                      <Col xs={2}>
-                                        {
-                                          /*Quick and dirty solution to not storing images with the job posting*/
-                                          item.companyName.toLowerCase() ===
-                                          "google" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/googleicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "facebook" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/facebookicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "amazon" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/amazonicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "apple" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/appleicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "netflix" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/netflixicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "tesla" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/teslaicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "twitch" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/twitchicon.png"
-                                              alt=""
-                                            />
-                                          ) : item.companyName.toLowerCase() ===
-                                            "microsoft" ? (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/microsofticon.png"
-                                              alt=""
-                                            />
-                                          ) : (
-                                            <img
-                                              style={{ marginTop: `15%` }}
-                                              className="JobCardImage"
-                                              src="/Assets/defaulticon.png"
-                                              alt=""
-                                            />
-                                          )
-                                        }
-                                      </Col>
-                                      <Col xs={10}>
-                                        <Card.Title
-                                          style={{ textOverflow: `ellipsis` }}
-                                        >
-                                          {item.position.length > 24
-                                            ? item.position.substring(0, 24) +
-                                              "..."
-                                            : item.position}
-                                        </Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">
-                                          {item.companyName}
-                                        </Card.Subtitle>
-                                        <Row>
-                                          <Col style={{ alignSelf: `start` }}>
-                                            <Card.Link href={item.link}>
-                                              Posting
-                                            </Card.Link>
-                                          </Col>
-                                          <Col
-                                            style={{
-                                              alignSelf: `start`,
-                                              textAlign: `end`,
-                                            }}
-                                          >
-                                            <img
-                                              src="Assets/expand.png"
-                                              alt=""
-                                              onClick={() => handleShow(item)}
-                                              style={{
-                                                height: `18px`,
-                                                paddingRight: `15%`,
-                                                margin: `0`,
-                                              }}
-                                            />
-                                          </Col>
-                                        </Row>
-                                      </Col>
-                                    </Row>
-                                  </Card.Body>
-                                </Card>
-                              )}
-                            </Draggable>
+                           null
                           );
-                        })}
-                        {provided.placeholder}
-                      </div>
+                        })
+                        }
+                       {provided.placeholder}
+                       </div>
                     )}
                   </Droppable>
                 </div>
@@ -580,6 +466,7 @@ export default function TrackingPage() {
           </DragDropContext>
         </div>
       </Row>
+
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Job Details</Modal.Title>
