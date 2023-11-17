@@ -402,5 +402,17 @@ def update_user_profile():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/test', methods=['GET'])
+def test():
+    conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=conversations
+    )
+
+    return jsonify({"status", "Success"}), 200 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
