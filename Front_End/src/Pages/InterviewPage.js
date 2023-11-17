@@ -224,12 +224,12 @@ render() {
         <div style={{ marginRight: '30px', flex: 1.375, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop: '30px' }}>Interview Prep</h1>
             <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '45px' }}>Here is your interview question!</p>
-            <div style={{ width: "18rem", height: "100px", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#ffffff', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
+            <div style={{ width: "22rem", height: "100px", fontWeight:'bolder', color:'black', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFC0BE', margin: `1% 0`, borderRadius: '15px', border:'solid', borderWidth:'5px', borderColor:'#FF82A9', textAlign: 'center', padding: '19px', position: 'relative', alignText: 'center', justifyContent: 'space-between', marginTop:'20px'  }}>
                 <p><strong>Question: Tell us about the biggest challenge you've ever faced</strong></p>
             </div>
             {showAiFeedback && (
-                <div className="answer-section" id="aiFeedback" style={{ marginTop: '20px' }}>
-                <p>AI Feedback:</p>
+                <div className="answer-section" id="aiFeedback" style={{ width: "22rem", height: "100%", boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', background: '#FFEBE7', margin: `1% 0`, border:'solid', borderWidth:'5px', borderColor:'#FF82A9', borderRadius: '15px', padding: '15px', position: 'relative', alignText: 'center', justifyContent: 'space-between'  }}>
+                <p><strong>AI Feedback:</strong></p>
                 <div dangerouslySetInnerHTML={{ __html: aiFeedback }} />
             </div>
             )}
