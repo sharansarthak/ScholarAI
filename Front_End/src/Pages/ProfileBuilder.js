@@ -24,12 +24,11 @@ const ProfileBuilder = () => {
     };
 
     monitorSubmissions();
-  }, []);
+  }, []); 
 
   return (
     <div style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
-      <div data-tf-live="01HFDK4WN8B1Y8TN2ZX91JQX7C"></div>
-    </div>
+<div data-tf-live="01HFEFW8S6FB74AY4ME3ZZDEJZ"></div><script src="//embed.typeform.com/next/embed.js"></script>    </div>
   );
 };
 

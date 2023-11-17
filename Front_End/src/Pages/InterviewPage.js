@@ -25,6 +25,8 @@ class InterviewPage extends React.Component {
         stream: null,                  // To store the media stream
         mediaRecorder: null,           // To reference the MediaRecorder instance
         recordedChunks: [],            // To store the recorded video chunks
+        remainingTime: 120,
+        timerActive: false,
         showAiFeedback: false          // To control the display of AI feedback
     };
 }
@@ -67,7 +69,17 @@ class InterviewPage extends React.Component {
 startRecording = async () => {
   try {
     let stream = this.state.stream;
-
+    this.setState({ timerActive: true });
+    this.timerInterval = setInterval(() => {
+        this.setState(prevState => {
+            if (prevState.remainingTime > 0) {
+                return { remainingTime: prevState.remainingTime - 1 };
+            } else {
+                clearInterval(this.timerInterval);
+                return { remainingTime: 0, timerActive: false };
+            }
+        });
+    }, 1000);
     // Check if the stream is not already active
     if (!stream || stream.getTracks().every(track => track.readyState === 'ended')) {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -95,7 +107,6 @@ startRecording = async () => {
       // Event handler for when recording stops
       mediaRecorder.onstop = () => {
           const videoBlob = new Blob(recordedChunks, { type: "video/mp4" });
-          console.log('Final video blob: ', videoBlob); // Add this line
           const videoURL = URL.createObjectURL(videoBlob);
           if (this.videoRecorded.current) {
               this.videoRecorded.current.src = videoURL;
@@ -139,6 +150,8 @@ stopRecording = () => {
           // Do not clear the stream here; keep it for reuse
       });
 
+      clearInterval(this.timerInterval);
+    this.setState({ timerActive: false, remainingTime: 120 }); // Reset timer
       // If using refs to manage DOM elements
       if (this.videoLive.current) {
           this.videoLive.current.srcObject = null;
@@ -152,12 +165,10 @@ uploadVideo = () => {
   const videoBlob = new Blob(this.state.recordedChunks, { type: "video/mp4" });
   const formData = new FormData();
   formData.append("video", videoBlob, "interview.mp4");
-  console.log('Uploading video blob size:', videoBlob.size); // Check size again here
 
   for (var pair of formData.entries()) {
     console.log(pair[0] + ', ' + pair[1]);
     if (pair[1] instanceof Blob) {
-        console.log(`Blob details - Type: ${pair[1].type}, Size: ${pair[1].size}`);
     }
 }
 
@@ -203,7 +214,9 @@ uploadVideo = () => {
 };
 
 render() {
-  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback } = this.state;
+  const { isRecording, isUploadButtonVisible, aiFeedback, showAiFeedback, remainingTime, timerActive } = this.state;
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
 
   return (
     <div className="container" style={{ paddingLeft: '50px', marginTop:'60px', marginBottom: '70px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
@@ -253,8 +266,9 @@ render() {
 
             {/* Text Container */}
             <div>
-                <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>Time Limit:</p>
-            </div>
+            <p className={`${styles.sectionHeadText}`} style={{ fontSize: '15px', fontWeight: 'bold', textAlign: 'center', marginTop: '15px' }}>
+            Time Limit: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        </p>            </div>
         </div>
     </div>
   );
