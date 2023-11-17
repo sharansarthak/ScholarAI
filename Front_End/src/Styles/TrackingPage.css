@@ -1,0 +1,31 @@
+/* TrackingPage.css */
+
+.TrackingPage2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.columns-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.column {
+  flex-grow: 1;
+  margin: 8px;
+  padding: 16px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  margin-bottom: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Add additional styling as needed */

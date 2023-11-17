@@ -6,14 +6,19 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "ace-axon-345319-373465ce4bf2.jso
 
 from moviepy.editor import VideoFileClip
 import subprocess
-
+import shutil
 
 def extract_audio(video_path, audio_path, audio_format="mp3"):
     try:
+        # Check if FFmpeg is installed
+        if shutil.which("ffmpeg") is None:
+            print("Error: FFmpeg is not installed.")
+            return
+
         ffmpeg_command = ["ffmpeg", "-y", "-i", video_path]
 
         if audio_format == "mp3":
-            ffmpeg_command.extend(["-q:a", "0", "-map", "a", audio_path])
+            ffmpeg_command.extend(["-q:a", "256k", "-map", "a", audio_path])
         elif audio_format == "wav":
             ffmpeg_command.extend(["-vn", "-acodec", "pcm_s16le", "-ar", "44100", "-ac", "2", audio_path])
 
@@ -21,7 +26,6 @@ def extract_audio(video_path, audio_path, audio_format="mp3"):
         print(f"Audio extracted successfully to {audio_path}")
     except subprocess.CalledProcessError as e:
         print(f"Error extracting audio: {e}")
-
 
 def extract_audio_from_video(video_path, audio_path):
     print(f"Extracting audio from: {video_path} to {audio_path}")
