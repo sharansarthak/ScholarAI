@@ -16,6 +16,23 @@ const TrackingPage2 = () => {
     rejected: [],
   });
 
+  const Get_Title_Name = (given_name) => {
+    switch (given_name) {
+      case "applied":
+        return "Applied";
+      case "in_progress":
+        return "In Progress";
+      case "interview":
+        return "Interview";
+      case "accepted":
+        return "Accepted";
+      case "rejected":
+        return "Rejected";
+      default:
+        return given_name; // return the given name if it doesn't match any case
+    }
+  };
+
   useEffect(() => {
     // Fetch scholarship applications from the backend
     axios.get(`${API_BASE_URL}/get_all_scholarships?username=zeeshan`)
@@ -92,7 +109,7 @@ const TrackingPage2 = () => {
                   ref={provided.innerRef}
                   className="column"
                 >
-                  <h2>{column}</h2>
+                  <h2>{Get_Title_Name(column)}</h2>
                   {applications[column].map((application, index) => (
                     <Draggable
                       key={application.id}
