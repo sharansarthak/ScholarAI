@@ -42,6 +42,7 @@ export default function TrackingPage() {
   const [show, setShow] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
+
   const [columns, setColumns] = useState({
     1: {
       name: "Wishlist",
@@ -59,7 +60,7 @@ export default function TrackingPage() {
       count: interviewItems.length,
     },
     4: {
-      name: "Accepted",
+      name: "Offer",
       items: offerItems,
       count: offerItems.length,
     },
@@ -75,7 +76,20 @@ export default function TrackingPage() {
     // if (localStorage.getItem("token") == null) {
     //   window.location.href = "http://localhost:3000/login";
     // }
+    // id: id,
+    // companyName: company,
+    // position: position,
+    // link: link,
+    // applicationDate: applicationDate,
+    // applicationStatus: applicationStatus,
+    // startDate: startDate,
+    // description: description,
+
     getLists();
+
+    // const col = columns["Wishlist"];
+
+
   }, []);
 
   async function getLists() {
@@ -85,25 +99,28 @@ export default function TrackingPage() {
     let offerList = [];
     let rejectedList = [];
     let list;
-    await Axios.get("http://127.0.0.1:5000/get_all_scholarships?username=zeeshan", {},)
+    await Axios.get("http://127.0.0.1:5000/api/getLists", {
+      params: {
+        token: localStorage.getItem("token"),
+      },
+    })
       .then((res) => {
-        // console.log(res);
-        list = res.data;
+        console.log(res);
+        list = res.data[0];
         setLists(res.data);
-        list.forEach((job) => {
-          // console.log(job.Status);
+        list.jobs.forEach((job) => {
           job.id = String(job.id);
-          if (job.Status === "in_progress") {
+          if (job.applicationStatus === "Wishlist") {
             wishList.push(job);
-          } else if (job.Status === "applied") {
+          } else if (job.applicationStatus === "Applied") {
             appliedList.push(job);
-          } else if (job.Status === "interview") {
+          } else if (job.applicationStatus === "Interview") {
             interviewList.push(job);
-          } else if (job.Status === "accepted") {
+          } else if (job.applicationStatus === "Offer") {
             offerList.push(job);
-          } else if (job.Status === "rejected") {
+          } else if (job.applicationStatus === "Regected") {
             rejectedList.push(job);
-          }});
+          }
           setCurrentList(list);
           setWishListItems(wishList);
           setAppliedItems(appliedList);
@@ -117,8 +134,8 @@ export default function TrackingPage() {
             offerList,
             rejectedList
           );
-          console.log(columns);
-        })
+        });
+      })
       .catch((res) => {
         console.log(res);
       });
@@ -166,7 +183,7 @@ export default function TrackingPage() {
         appliedList.push(job);
       } else if (job.applicationStatus === "Interview") {
         interviewList.push(job);
-      } else if (job.applicationStatus === "Accepted") {
+      } else if (job.applicationStatus === "Offer") {
         offerList.push(job);
       } else if (job.applicationStatus === "Rejected") {
         rejectedList.push(job);
@@ -238,6 +255,63 @@ export default function TrackingPage() {
     })
   }
 
+  function addDummyData() {
+    const column = columns["Wishlist"];
+    let company = "Google";
+    let position = "dev";
+    let startDate = "May 2020";
+    let link = "google.com";
+    let description = "isjfsdkfjsdf";
+    let applicationStatus = "WishList";
+    let applicationDate = new Date().toDateString();
+    let id; //= uuidv4();
+
+    if (company === "") setCompanyValid(true);
+    if (position === "") setPositionValid(true);
+    if (startDate === "") setStartDateValid(true);
+    if (link === "") setLinkValid(true);
+    if (description === "") setDescriptionValid(true);
+
+    if (
+      company !== "" &&
+      position !== "" &&
+      startDate !== "" &&
+      link !== "" &&
+      description !== ""
+    ) {
+      column.count++;
+      handleCloseAdd();
+      console.log(currentList)
+      Axios.post("http://127.0.0.1:5000/api/addJobToTrack", {
+        token: localStorage.getItem("token"),
+        companyName: company,
+        position: position,
+        startDate: startDate,
+        link: link,
+        description: description,
+        listName: currentList.listName,
+        listId: currentList.listID,
+        applicationStatus: applicationStatus,
+        applicationDate: applicationDate,
+      }).then((res) => {
+        id = res.data.jobId;
+      });
+
+      column.items.push({
+        id: id,
+        companyName: company,
+        position: position,
+        link: link,
+        applicationDate: applicationDate,
+        applicationStatus: applicationStatus,
+        startDate: startDate,
+        description: description,
+      });
+      // console.log(id);
+    }
+  }
+
+
   function addJob() {
     const column = columns[addJobColumn];
     let company = document.getElementById("addCompany").value;
@@ -290,6 +364,7 @@ export default function TrackingPage() {
         startDate: startDate,
         description: description,
       });
+      console.log(id);
     }
   }
 
@@ -331,7 +406,7 @@ export default function TrackingPage() {
     if (status === "Wishlist") column = 1;
     if (status === "Applied") column = 2;
     if (status === "Interview") column = 3;
-    if (status === "Accepted") column = 4;
+    if (status === "Offer") column = 4;
     if (status === "Rejected") column = 5;
     let theColumn = columns[column];
 
@@ -367,8 +442,6 @@ export default function TrackingPage() {
 
   return (
     <Container fluid style={{ minHeight: `69.6vh`, xOverflow: `visible` }}>
-
-      {/* This row contains the sidebar  */}
       <Row style={{ marginTop: `2%` }}>
         <Col style={{ alignSelf: `center` }}>
           <Row>
@@ -409,20 +482,16 @@ export default function TrackingPage() {
         </Col>
         <Col></Col>
       </Row>
-      
       <Row style={{ minHeight: `60vh` }}>
         <div className="ListContainer">
           <DragDropContext onDragEnd={handleOnDragEnd}>
             {Object.entries(columns).map(([columnId, column], index) => {
-              // console.log("boogi",column);
               return (
                 <div className="Column">
                   <Row>
-                    {/* This col contains the header of the colums we have */}
                     <Col>
                       <h2 className="ColumnHeader">{column.name}</h2>
                     </Col>
-                    {/* This is the functionality of the add button  */}
                     <Col>
                       <h2
                         onClick={() => addJobModal(columnId)}
@@ -432,32 +501,150 @@ export default function TrackingPage() {
                         +
                       </h2>
                     </Col>
-
                   </Row>
-                  {/* This tag contains your number of scholarships in each section */}
                   <h3 className="ColumnSubHeader">{column.count} Jobs</h3>
-                  {/* {Object.entries(column).map(([property, value], index) => {
-                    if(property == "items" && value.length > 0)
-                    {console.log("Property:", property);
-                    console.log("Value:", value);}
-                    return null; // Make sure to return something if rendering JSX
-                  })} */}
-                  {/* This is the div that contains all the droppable items  */}
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => (
                       <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {
-                        Object.entries(column).map(([property, value], index) => {
-                          if(property == "items" && value.length > 0)
-                          {console.log("Property:", property);
-                          console.log("Value:", value);}
+                        {column.items.map((item, index) => {
                           return (
-                           null
+                            <Draggable
+                              key={item.id}
+                              draggableId={item.id}
+                              index={index}
+                            >
+                              {(provided) => (
+                                <Card
+                                  className="JobCard"
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  <Card.Body>
+                                    <Row>
+                                      <Col xs={2}>
+                                        {
+                                          /*Quick and dirty solution to not storing images with the job posting*/
+                                          item.companyName.toLowerCase() ===
+                                          "google" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/googleicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "facebook" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/facebookicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "amazon" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/amazonicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "apple" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/appleicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "netflix" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/netflixicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "tesla" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/teslaicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "twitch" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/twitchicon.png"
+                                              alt=""
+                                            />
+                                          ) : item.companyName.toLowerCase() ===
+                                            "microsoft" ? (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/microsofticon.png"
+                                              alt=""
+                                            />
+                                          ) : (
+                                            <img
+                                              style={{ marginTop: `15%` }}
+                                              className="JobCardImage"
+                                              src="/Assets/defaulticon.png"
+                                              alt=""
+                                            />
+                                          )
+                                        }
+                                      </Col>
+                                      <Col xs={10}>
+                                        <Card.Title
+                                          style={{ textOverflow: `ellipsis` }}
+                                        >
+                                          {item.position.length > 24
+                                            ? item.position.substring(0, 24) +
+                                              "..."
+                                            : item.position}
+                                        </Card.Title>
+                                        <Card.Subtitle className="mb-2 text-muted">
+                                          {item.companyName}
+                                        </Card.Subtitle>
+                                        <Row>
+                                          <Col style={{ alignSelf: `start` }}>
+                                            <Card.Link href={item.link}>
+                                              Posting
+                                            </Card.Link>
+                                          </Col>
+                                          <Col
+                                            style={{
+                                              alignSelf: `start`,
+                                              textAlign: `end`,
+                                            }}
+                                          >
+                                            <img
+                                              src="Assets/expand.png"
+                                              alt=""
+                                              onClick={() => handleShow(item)}
+                                              style={{
+                                                height: `18px`,
+                                                paddingRight: `15%`,
+                                                margin: `0`,
+                                              }}
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </Col>
+                                    </Row>
+                                  </Card.Body>
+                                </Card>
+                              )}
+                            </Draggable>
                           );
-                        })
-                        }
-                       {provided.placeholder}
-                       </div>
+                        })}
+                        {provided.placeholder}
+                      </div>
                     )}
                   </Droppable>
                 </div>
@@ -466,7 +653,6 @@ export default function TrackingPage() {
           </DragDropContext>
         </div>
       </Row>
-
       <Modal centered show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Job Details</Modal.Title>

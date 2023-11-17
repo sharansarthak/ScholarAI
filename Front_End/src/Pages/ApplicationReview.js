@@ -91,7 +91,7 @@ export default function ApplicationReview() {
   return (
     <div className="container">
       <div style={{ minHeight: `77vh`, textAlign: `left` }}>
-        <div className="card">
+        <div className="cardd">
           <div className="SalaryHeader">{scholarshipName}</div>
           <p className="scholarshipDesc">{scholarshipDescription}</p>
           <div className="questiondiv">
