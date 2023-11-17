@@ -2,12 +2,18 @@ import { Form, Button, FloatingLabel, Container, Row, Col } from "react-bootstra
 import Axios from "axios";
 import  googlelogo from "../assets/googleicon.png";
 import  applelogo  from "../assets/appleicon.png";
+import calgary from "../assets/calgary.png";
 import { styles } from "../styles"
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 
 export default function LoginPage() {
   const [usernameValidity, setUsernameValidity] = useState(false);
+  const param1 = localStorage.getItem("uofcLogin");
+  const [uofcLogin, setUofcLogin] =useState(param1);
+  
+  
+
   function login(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -94,7 +100,7 @@ export default function LoginPage() {
                 className="LoginButton"
                 type="submit"
                 onClick={login}
-                style={{ width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight: 'bold' }}
+                style={{ background: '#FFC0BE', color:'#000000', width: '100%', borderRadius: '10px', fontFamily: 'Inter', fontWeight:'bold', borderColor: `#FF82A9`, borderWidth:'4px' }}
               >
                 Login
               </Button>
@@ -119,19 +125,19 @@ export default function LoginPage() {
             </Col>
           </Row>
           <Row>
-            <Col>
-              <Button size="lg" className="GoogleButton" href="/employersignup" style={{ borderRadius: '10px' }}>
-                <img src={googlelogo} alt="Google Logo" className="google-logo" style={{ height: '35px', width: '35px' }} />
+          <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
+              <Button size="lg" className="GoogleButton" href="/employersignup" style ={{borderRadius: '10px'}}>
+                <img src ={ googlelogo } alt="Google Logo" className="google-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
-            <Col>
-              <Button size="lg" className="GoogleButton" href="/anotherlink" style={{ borderRadius: '10px' }}>
-                <img src={applelogo} alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px' }} />
+            <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
+              <Button size="lg" className="GoogleButton" href="/anotherlink" style ={{borderRadius: '10px'}}>
+                <img src={ applelogo } alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px'}} /> 
               </Button>
             </Col>
-            <Col>
-              <Button size="lg" className="GoogleButton" href="/anotherlink" style={{ borderRadius: '10px' }}>
-                <img src={applelogo} alt="Apple Image" className="apple-logo" style={{ height: '35px', width: '33px' }} />
+            <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
+              <Button size="lg" className="GoogleButton" href="/login" style ={{borderRadius: '10px'}}>
+                <img src={ calgary } alt="UofC Image" className="ucalgary-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
           </Row>
