@@ -32,8 +32,6 @@ os.environ["OPENAI_API_KEY"] = api_key
 client = OpenAI()
 
 
-
-
 @app.route('/upload_video', methods=['POST'])
 def upload_video():
     video_file = request.files['video']
@@ -98,8 +96,8 @@ def process_video(video_path):
     # Transcribe audio
     # transcription = transcribe_audio(audio_path)  # Implement this function based on your transcription logic
     
-    # Additional processing
-# Endpoint for user registration (sign-up)
+    # Additional processing...
+
 @app.route('/signup', methods=['POST'])
 def signup():
     try:
@@ -148,7 +146,7 @@ def login():
         user = auth.get_user_by_email(email)
         user_token = auth.create_custom_token(user.uid)
 
-        return jsonify({'success': True}), 200
+        return jsonify({'success': True, 'uid': user.uid, 'token': user_token}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 401

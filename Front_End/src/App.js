@@ -111,9 +111,9 @@ function App() {
         <Route path="/interview" exact>
           <InterviewPage />
         </Route>
-        <Route path="/employerlogin" exact>
+        {/* <Route path="/employerlogin" exact>
           <EmployerLoginPage />
-        </Route>
+        </Route> */}
         <Route path="/applicationReview" exact>
           <ApplicationReview />
         </Route>

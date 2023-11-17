@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function LoginPage() {
   const [usernameValidity, setUsernameValidity] = useState(false);
-  function login() {
+  function login(e) {
     e.preventDefault(); // Prevent the default form submission behavior
 
     Axios.post("http://127.0.0.1:5000/login", {
