@@ -5,6 +5,19 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import axios from 'axios';
 import "../Styles/TrackingPage.css"
 import ApplicationReview from "./ApplicationReview";
+import {
+  Container,
+  DropdownButton,
+  Dropdown,
+  Row,
+  Form,
+  FormLabel,
+  Button,
+  Card,
+  Modal,
+  Col,
+} from "react-bootstrap";
+import { styles } from "../styles"
 
 const API_BASE_URL = 'http://127.0.0.1:5000';
 
@@ -107,47 +120,50 @@ const TrackingPage2 = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="TrackingPage2">
-        <div className="columns-container">
-          {Object.keys(applications).map((column) => (
-            <Droppable droppableId={column} key={column}>
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="column"
-                >
-                  <h2>{Get_Title_Name(column)}</h2>
-                  {applications[column].map((application, index) => (
-                    <Draggable
-                      key={application.id}
-                      draggableId={application.id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="card"
-                          onClick={() => redirectToApplicationReview(application.Title)}
-                        >
-                          <p>{application.Title}</p>
-                          {/* Add more details if needed */}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          ))}
+    <Container style={{ minHeight: `100vh`, minWidth:`100vh` }}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="TrackingPage2">
+          <div className="columns-container ">
+            {Object.keys(applications).map((column) => (
+              <Droppable droppableId={column} key={column}>
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="column"
+                  >
+                    <h2 className={`${styles.SubHeader}`} style={{ fontWeight: 'bold', fontSize: '28px', textAlign: 'center', paddingTop: `15px`, paddingBottom:`10px`, fontWeight:`bolder`, color:`#7F95D1`}}>{Get_Title_Name(column)}</h2>
+                    {applications[column].map((application, index) => (
+                      <Draggable
+                        key={application.id}
+                        draggableId={application.id}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="card"
+                            onClick={() => redirectToApplicationReview(application.Title)}
+                          >
+                            <p>{application.Title}</p>
+                            {/* Add more details if needed */}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </div>
         </div>
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+    </Container>
   );
+  
 };
 
 export default TrackingPage2;

@@ -57,7 +57,7 @@ function App() {
                   href="/signup"
                   style={{
                     backgroundColor: `#FFC0BE`,
-                    color: `#black`,
+                    color: `black`,
                     borderColor: `#FF82A9`,
                     borderWidth:'4px',
                     borderRadius: '15px',
@@ -71,7 +71,7 @@ function App() {
                   href="/login"
                   style={{
                     backgroundColor: `#FFC0BE`,
-                    color: `#black`,
+                    color: `black`,
                     borderColor: `#FF82A9`,
                     borderWidth:'4px',
                     borderRadius: '15px',
