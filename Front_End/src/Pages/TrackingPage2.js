@@ -9,7 +9,7 @@ const API_BASE_URL = 'http://127.0.0.1:5000';
 
 const TrackingPage2 = () => {
   const [applications, setApplications] = useState({
-    in_progress: [],
+    applied: [],
     in_progress: [],
     interview: [],
     accepted: [],
@@ -28,12 +28,12 @@ const TrackingPage2 = () => {
           rejected: [],
         };
 
-        console.log(response);
+        // console.log(response);
 
         // Categorize applications based on the 'status' key in the response
         response.data.forEach((application) => {
           const Status  = application.Status;
-          console.log(Status);
+        //   console.log(Status);
           categorizedApplications[Status].push(application);
         });
 
