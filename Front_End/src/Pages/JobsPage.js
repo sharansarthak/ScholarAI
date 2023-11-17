@@ -64,7 +64,7 @@ export default function JobsPage() {
     // }
     const fetchData = async () => {
       try {
-        const response = await Axios.get("http://127.0.0.1:5000/get_all_scholarships_brief?username=zeeshan", {
+        const response = await Axios.get("https://www.scholarshipappplication.online/get_all_scholarships_brief?username=zeeshan", {
         })
         console.log(response);
         setScholarships(response.data);

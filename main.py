@@ -71,7 +71,10 @@ def process_video_and_get_feedback(video_file_path):
             )
         }
     ]
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     request_message = "The question asked in the interview is this: "+str(question)+" The transcribed response is: "+str(answer)+" Provide feedback to improve my response to ace the interview."
     request_message_formatted = {'content': request_message, 'role': 'user'}
     conversations.append(request_message_formatted)
@@ -403,6 +406,23 @@ def update_user_profile():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    try:
+        # Get data from the request
+        data = request.json
+        username = data.get('username')
+        title = data.get('title')
+        new_status = data.get('new_status')
+
+        # Update user profile in the database
+        db.collection('users').document(username).collection('scholarship').document(title).update({'Status':new_status})
+
+        return jsonify({'success': True, 'message': 'User profile updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/test', methods=['GET'])
 def test():
     conversations = [{"role": "system", "content": "You are a helpful assistant who specilaizes in enhancing users scholarship essays"}]
@@ -412,7 +432,7 @@ def test():
         messages=conversations
     )
 
-    return jsonify({"status", "Success"}), 200 
+    return jsonify({}), 200 
 
 
 if __name__ == '__main__':
