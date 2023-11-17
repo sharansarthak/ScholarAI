@@ -5,12 +5,20 @@ import  applelogo  from "../assets/appleicon.png";
 import calgary from "../assets/calgary.png";
 import { styles } from "../styles"
 import { Link } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import "../Styles/loginn.css"
 
 export default function LoginPage() {
   const [usernameValidity, setUsernameValidity] = useState(false);
   const param1 = localStorage.getItem("uofcLogin");
-  const [uofcLogin, setUofcLogin] =useState(param1);
+  const [uofcLogin, setUofcLogin] =useState(false);
+  
+  useEffect(() => {
+    if (param1 == true) {
+      setUofcLogin(true);
+    }
+
+  }, [])
   
   
 
@@ -55,7 +63,13 @@ export default function LoginPage() {
   return (
     <div style={{ minHeight: `73.3vh` }}>
       <Container style={{ maxWidth: `900px`, paddingTop: `4%`, paddingBottom: '6%' }}>
-        <h2 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px' }}>Login</h2>
+        <div className="custom_ctr">
+        <h2 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px' }}> SSO Login
+        </h2>
+        <div className="unibutton" style={{ borderRadius: '20px', fontSize: '1.5em', padding: '10px 20px' }}>
+          <img src={ calgary } alt="UofC Image" className="ucalgary-logo" style={{ height: '90px', width: '90px' , border:'20px'}} /> 
+        </div>
+        </div>
         <Form onSubmit={login} className="custom-signup-panel mx-auto" style={{ maxWidth: `700px` }}>
           <Row className="mb-1">
             <Col>
@@ -111,7 +125,7 @@ export default function LoginPage() {
               <p className="text-center">
                 Don't have an account? <Link to="/signup" style={{ color: 'blue', fontWeight: 'bold' }}>Sign up</Link>
               </p>
-              <Row className="mb-2" style={{ marginTop: '50px' }}>
+              {/* <Row className="mb-2" style={{ marginTop: '50px' }}>
                 <Col>
                   <div className="line-div"></div>
                 </Col>
@@ -121,10 +135,10 @@ export default function LoginPage() {
                 <Col>
                   <div className="line-div"></div>
                 </Col>
-              </Row>
+              </Row> */}
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
           <Col style ={{display:'flex', alignContent:'center', alignItems:'center', justifyContent:'center', justifyItems:'center'}}>
               <Button size="lg" className="GoogleButton" href="/employersignup" style ={{borderRadius: '10px'}}>
                 <img src ={ googlelogo } alt="Google Logo" className="google-logo" style={{ height: '35px', width: '35px'}} /> 
@@ -140,7 +154,7 @@ export default function LoginPage() {
                 <img src={ calgary } alt="UofC Image" className="ucalgary-logo" style={{ height: '35px', width: '35px'}} /> 
               </Button>
             </Col>
-          </Row>
+          </Row> */}
         </Form>
         <p className={`${styles.sectionHeadText}`} style={{ fontSize: '20px', textAlign: 'center', marginTop: '25px' }}>GPT-powered AI scholarship application tool!</p>
       </Container>
