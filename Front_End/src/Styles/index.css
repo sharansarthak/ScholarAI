@@ -140,6 +140,12 @@
     padding: 50px; /* Adjust padding as needed */
 }
 
+.scholarship-card {
+  border-radius: 20px; /* Adjust the border-radius for curved corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0.2, 0.2); /* Add shadow for a subtle effect */
+  padding: 50px; /* Adjust padding as needed */
+}
+
 /* .SignupButton{
   background-color: #3b6b7e;
   color: white;

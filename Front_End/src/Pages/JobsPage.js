@@ -18,6 +18,8 @@ import {
 import "../Styles/JobsPageStyles.css";
 import "../Styles/SearchBar.css";
 import "../Styles/VerticalMenu.css";
+import { styles } from "../styles"
+
 import { scholarships } from "../Constants";
 
 
@@ -214,6 +216,7 @@ export default function JobsPage() {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Enter your search..."
+            style={{ width: '75%', color:`black` }}
           />
           <button type="submit">Search</button>
         </form>
@@ -224,10 +227,10 @@ export default function JobsPage() {
   
 
   return (
-    <Container style={{ minHeight: `100vh` }}>
-      <Row>
+    <Container style={{ minHeight: `100vh`}}>
+     <Row>
         {/* Left Side Vertical Menu */}
-        <Col md={3} className="vertical-menu">
+        <Col md={2} className="vertical-menu">
           <ul>
             <li>Menu Item 1</li>
             <li>Menu Item 2</li>
@@ -236,112 +239,43 @@ export default function JobsPage() {
         </Col>
 
         {/* Right Side Content */}
-        <Col md={9}>
-        <h1 className="JobsHeader">Scholarships</h1>
-          <SearchBar />
-          <Row style={{ justifyContent: `space-evenly` }}>
-            {scholarships.map((scholarship) => {
-              return (
-                <div style={{ width: "18rem", background: '#FFFFFF', margin: `1% 0`, border: '1px solid black', borderRadius: '35px', textAlign: 'center', padding: '10px' }}>
+        <Col md={10} style={{ paddingLeft: `50px`, marginBottom:`90px`}}>
+          <h1 className={`${styles.heroHeadText}`} style={{ fontWeight: 'bold', fontSize: '50px', textAlign: 'center', marginBottom: '35px', paddingTop:`70px` }}>Scholarships</h1>
+          <div style={{width:'100%'}}>
+            <SearchBar />
+          </div>
+          <Row style={{ justifyContent: `space-evenly`, gap:`25px` }}>
+            {scholarships.map((scholarship) => (
+              <div key={scholarship.id} className="scholarship-card" style={{ width: "18rem", height:"370px", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative' }}>
                 {/* Centered Image */}
                 <img
                   src={scholarship.image} // Replace with the actual image URL
                   alt="Scholarship Logo"
-                  style={{ width: '30%', borderRadius: '50%', marginBottom: '10px' }}
+                  style={{ width: '30%', marginBottom: '10px' }}
                 />
-              
                 <Card.Body>
                   <Card.Title>{scholarship.name}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {scholarship.company}
                   </Card.Subtitle>
                   <Card.Text>{scholarship.tags}</Card.Text>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px', marginTop: '10px' }}>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.amount}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.deadline}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.time}</div>
-                    <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>{scholarship.recipients}</div>
+                  <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px' }}>
+                        <div style={{ borderBottom: '1px solid #d3d3d3', borderRight: '1px solid #d3d3d3', padding: '10px' }}>💸​ {scholarship.amount}</div>
+                        <div style={{ borderBottom: '1px solid #d3d3d3', padding: '10px' }}>📆​ {scholarship.deadline}</div>
+                        <div style={{ borderRight: '1px solid #d3d3d3', padding: '10px' }}>⌛​ {scholarship.time}</div>
+                        <div style={{ padding: '10px' }}>📜 {scholarship.recipients}</div>
+                    </div>
                   </div>
-                  {/* <Card.Link
-                    style={{ cursor: `pointer` }}
-                    // onClick={() => apply(job.id)}
-                  >
-                    Apply
-                  </Card.Link> */}
                 </Card.Body>
-              </div>          
-              );
-            })}
+              </div>
+            ))}
           </Row>
+
 
           {/* ... (existing modals and other content) */}
         </Col>
       </Row>
-{/* 
-      <Modal centered show={showApplyJob} onHide={handleCloseApplyJob}>
-        <Modal.Header closeButton>
-          <Modal.Title>Apply</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Col>
-              <FormLabel className="SearchLabel">Resume</FormLabel>
-              <Form.Select style={{ width: `100%` }} id="addResume">
-                {documents.length === 0 ? (
-                  <option>Upload a resume first</option>
-                ) : (
-                  documents.map((doc) => {
-                    if (doc.type === "resume") {
-                      return <option value={doc.dNo}>{doc.fileName}</option>;
-                    }
-                  })
-                )}
-              </Form.Select>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FormLabel className="SearchLabel" style={{ marginTop: `3%` }}>
-                Cover Letter (optional)
-              </FormLabel>
-              <Form.Select style={{ width: `100%` }} id="addCover">
-                {documents.length === 0 ? (
-                  <option>Upload a resume first</option>
-                ) : (
-                  documents.map((doc) => {
-                    if (doc.type === "coverLetter") {
-                      return <option value={doc.dNo}>{doc.fileName}</option>;
-                    }
-                  })
-                )}
-              </Form.Select>
-            </Col>
-          </Row>
-          <Button
-            onClick={() => applyForJob(currJob.id, document.getElementById("addResume").value, document.getElementById("addCover").value)}
-            id="submitButton"
-            style={{ marginTop: `3%` }}
-          >
-            Submit
-          </Button>
-        </Modal.Body>
-      </Modal>
-      <Modal centered show={showAddDoc} onHide={handleCloseAddDoc}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Documents</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{textAlign:`left`}}>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Uploaded Resume</Form.Label>
-            <Form.Control style={{ width: `60%` }} type="file" onChange={(e) => setResume(e.target.files)}/>
-          </Form.Group>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Uploaded Cover Letter</Form.Label>
-            <Form.Control style={{ width: `60%` }} type="file" onChange={(e) => setCoverLetter(e.target.files)}/>
-          </Form.Group>
-          <Button onClick={() => submitDocuments(resume, coverLetter)}>Submit</Button>
-        </Modal.Body>
-      </Modal> */}
     </Container>
   );
 }
