@@ -302,36 +302,37 @@ export default function JobsPage() {
         <Row style={{ justifyContent: `space-evenly`, gap:`25px` }}>
             {scholarships?.map((scholarship) => {
               return (
-                <div key={scholarship.id} className="scholarship-card" style={{ width: "18rem", height:"370px", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '19px', position: 'relative' }}>
+                <div key={scholarship.id} className="scholarship-card" style={{ width: "20rem", height:"100%", background: '#FFFFFF', margin: `1% 0`, borderRadius: '35px', textAlign: 'center', padding: '11px', position: 'relative' }}>
                 {/* Centered Image */}
                 <img
                   src={scholarship.Image} // Replace with the actual image URL
                   alt="Scholarship Logo"
-                  style={{ width: '30%', marginBottom: '10px' }}
+                  style={{ width: '30%', marginBottom: '5px' }}
                 />
               
-                <Card.Body>
+                <Card.Body style={{ cursor: `pointer`, display:`flex`, flexDirection:'column' }} onClick={() => redirectToApplicationReview(scholarship.Title)}>
                   <Card.Title>{scholarship.Title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {scholarship.Institution}
                   </Card.Subtitle>
-                  <Card.Text>{scholarship.Requirements}</Card.Text>
-                  <div style={{ position: 'absolute', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
+                  <div style={{ margin: '15px 0' }}>
+                    {scholarship.Requirements.map((requirement, index) => (
+                      <p key={index}  className="requirement-text">
+                        #{requirement}
+                      </p>
+                    ))}
+                  </div>
+                  <div style={{ position: 'relative', bottom: '0', left: '0', width: '100%', borderTop: '1px solid #ccc', padding: '10px', borderRadius: '0px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '0px' }}>
                       <div style={{ borderBottom: '1px solid #d3d3d3', borderRight: '1px solid #d3d3d3', padding: '10px' }}>💸{scholarship["Scholarship Amount"]}</div>
                       <div style={{ borderBottom: '1px solid #d3d3d3', padding: '10px' }}>📆​ {scholarship.Deadline}</div>
                       <div style={{ borderRight: '1px solid #d3d3d3', padding: '10px' }}>⌛​ {scholarship["Estimated Completion Time"]}</div>
-                      <div style={{ padding: '10px' }}>📜 {scholarship["Number of Recipients"]}</div>
+                      <div style={{ padding: '10px' }}>📜 Upto {scholarship["Number of Recipients"]} Recipients</div>
                     </div>
                   </div>
-                  <Card.Link
-                    style={{ cursor: `pointer` }}
-                    onClick={() => redirectToApplicationReview(scholarship.Title)}
-                  >
-                    Apply
-                  </Card.Link>
                 </Card.Body>
-              </div>          
+              </div>  
+         
               );
             })}
           </Row>
